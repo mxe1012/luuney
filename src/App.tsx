@@ -2,7 +2,8 @@ import './styles/styles.css'
 import './styles/bg.css'
 import './styles/music_dashboard.css'
 
-import { MainPane, MusicDashboard } from './ui/Containers';
+import { MainPane } from './ui/Containers';
+import MusicDashboard from './ui/MusicDashboard';
 
 export default function App() {
 
