@@ -13,6 +13,7 @@
 
 
 .AudioPlayer {
+
     animation-name: music-dashboard-fade;
     animation-duration: 0.5s;
     display: grid;
@@ -30,16 +31,22 @@
     background-color: transparent;
     transform: scale(1);
     transition: transform 0.3s ease;
+    cursor: pointer;
+    padding: 0;
 }
 
 .AudioPlayerButton:active {
     transform: scale(0.8);
 }
 
+.CovertArtImage {
+    border-radius: 15px;
+}
+
 input[type="range"] {
     -webkit-appearance: none; /* Hides default style for WebKit browsers */
     appearance: none;
-    width: 30%;              /* Full-width behavior */
+    width: 100%;              /* Full-width behavior */
     background: transparent;  /* Removes white background in Chrome */
     cursor: pointer;
 }
