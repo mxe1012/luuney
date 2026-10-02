@@ -3,7 +3,7 @@ import './styles/bg.css'
 import './styles/music_dashboard.css'
 
 import { MainPane } from './ui/Containers';
-import MusicDashboard from './ui/MusicDashboard';
+import Dashboard from './ui/Dashboard';
 
 export default function App() {
 
@@ -11,7 +11,7 @@ export default function App() {
 		<div className='bg'>
 			<br />
 			<MainPane>
-				<MusicDashboard coverArt={"/assets/placeholder-cover.svg"}/>
+				<Dashboard coverArt={"/assets/placeholder-cover.svg"}/>
 			</MainPane>
 		</div>	
 	);

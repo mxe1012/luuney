@@ -4,7 +4,7 @@ import AudioPlayer from "./dashboard_components/AudioPlayer";
 
 import type { MusicDashboardProps } from "../utils/types";
 
-export default function MusicDashboard({coverArt}: MusicDashboardProps) {
+export default function Dashboard({coverArt}: MusicDashboardProps) {
 
     return (
         <>
