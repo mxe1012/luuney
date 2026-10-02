@@ -4,6 +4,9 @@ export interface ChildrenProps {
     children: React.ReactNode;
 }
 
-export interface MusicDashboardProps {
+export interface AudioPlayerProps {
     coverArt: string;
+    title: string;
+    artist: string;
+    streamUrl: string;
 }
