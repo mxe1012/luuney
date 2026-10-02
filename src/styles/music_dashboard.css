@@ -1,0 +1,34 @@
+@keyframes music-dashboard-fade {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        transform: scale(1.2);
+        border: 0px solid gray;
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(2px);
+        transform: scale(1);
+        border: 1px solid gray;
+    }
+}
+
+
+.MusicDashboard {
+    animation-name: music-dashboard-fade;
+    animation-duration: 0.5s;
+    display: grid;
+    align-items: center;
+    background-color: rgba(200, 200, 200, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(2px);
+    border: 1px solid gray;
+}
+
+/* .MusicControlsContainer {
+    background-color: rgba(200, 200, 200, 0.3);
+    border-radius: 15px;
+    backdrop-filter: blur(2px);
+    border: 1px solid gray;
+} */
