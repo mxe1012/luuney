@@ -30,3 +30,7 @@ body {
     padding: 0;
     height: 100%;
 }
+
+.CovertArtImage {
+    border-radius: 15px;
+}
