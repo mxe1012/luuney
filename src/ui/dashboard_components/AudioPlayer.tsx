@@ -3,7 +3,7 @@ import type { MusicDashboardProps } from "../../utils/types";
 import { useRef, useState, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
-
+import { CoverArtImage } from "../Containers";
 
 export default function AudioPlayer({coverArt}: MusicDashboardProps) {
 
@@ -95,9 +95,9 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
 
     return (
         <div style={{display: "flex", justifyContent: "center"}}>
-            <div className="MusicDashboard">
+            <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <img src={coverArt} width={256} height={256} alt="Cover Art"/>
+                    <CoverArtImage src={coverArt} />
                 </div>
                 <div>
                     <h2 style={{textAlign: "center"}}>Name of Song</h2>
@@ -112,8 +112,15 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                     >
                         <source src="/assets/test_song.mp3" type="audio/mpeg" />
                     </audio>
-                    <button onClick={handleTogglePlay} aria-label={isPlaying ? "Pause" : "Play"}>
-                        {isPlaying ? "Pause" : "Play"}
+                    <button 
+                        className="AudioPlayerButton" 
+                        onClick={handleTogglePlay} 
+                        aria-label={isPlaying ? "Pause" : "Play"}>
+                        <img 
+                            width={40}
+                            height={40}
+                            src={isPlaying ? "/assets/audio_player_icons/pause.svg" : "/assets/audio_player_icons/play.svg"} 
+                        />
                     </button>
                     <input 
                         type="range"
@@ -134,11 +141,16 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         onChange={handleVolumeChange}
                         aria-label="Volume"
                     />
-                    <button
+                    <button 
+                        className="AudioPlayerButton" 
                         onClick={handleToggleMute}
                         aria-label={isMuted ? "Unmute" : "Mute"}
                     >
-                        {isMuted || volume === 0 ? "Unmute" : "Mute"}
+                        <img 
+                            width={40}
+                            height={40}
+                            src={isMuted || volume === 0 ? "/assets/audio_player_icons/volume-muted.svg" : "/assets/audio_player_icons/volume.svg"}
+                        />
                     </button>
                     <div style={{display: "flex", justifyContent: "center"}}>
                         <p>{formatTime(currentTime) + "/" + formatTime(duration)}</p>
