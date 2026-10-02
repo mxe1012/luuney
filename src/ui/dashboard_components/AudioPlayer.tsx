@@ -1,11 +1,11 @@
-import type { MusicDashboardProps } from "../../utils/types";
+import type { AudioPlayerProps } from "../../utils/types";
 
 import { useRef, useState, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
 import { CoverArtImage } from "../Containers";
 
-export default function AudioPlayer({coverArt}: MusicDashboardProps) {
+export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioPlayerProps) {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -100,9 +100,11 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                     <CoverArtImage src={coverArt} />
                 </div>
                 <div>
-                    <h2 style={{textAlign: "center"}}>Name of Song</h2>
-                    <h3 style={{textAlign: "center"}}>Name of Artist</h3>
-                    <audio ref={audioRef}
+                    <h2 style={{textAlign: "center"}}>{title}</h2>
+                    <h3 style={{textAlign: "center"}}>{artist}</h3>
+                    <audio 
+                        ref={audioRef}
+                        src={streamUrl || undefined}
                         onPlay={() => setIsPlaying(true)}
                         onPause={() => setIsPlaying(false)}
                         onEnded={() => setIsPlaying(false)}
@@ -110,7 +112,6 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         onTimeUpdate={handleTimeUpdate}
                         onVolumeChange={handleElementVolumeChange}
                     >
-                        <source src="/assets/test_song.mp3" type="audio/mpeg" />
                     </audio>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
