@@ -36,6 +36,62 @@
     transform: scale(0.8);
 }
 
+input[type="range"] {
+    -webkit-appearance: none; /* Hides default style for WebKit browsers */
+    appearance: none;
+    width: 30%;              /* Full-width behavior */
+    background: transparent;  /* Removes white background in Chrome */
+    cursor: pointer;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+/* The Track */
+input[type="range"]::-moz-range-track {
+    background: #ddd;
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* The Thumb */
+input[type="range"]::-moz-range-thumb {
+    background: #9c9c9c;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: none; /* Removes automatic Firefox border */
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+    outline: 3px solid rgba(0, 123, 255, 0.4);
+}
+
+/* The Track */
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #ddd;
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* The Thumb */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Resets default thumb */
+    appearance: none;
+    background: #9c9c9c;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    /* Shift thumb vertically to center it on the track: (track_height / 2) - (thumb_height / 2) */
+    margin-top: -6px; 
+}
+
+/* Focus State */
+input[type="range"]:focus::-webkit-slider-thumb {
+    outline: 3px solid rgba(0, 123, 255, 0.4);
+}
+
 /* .MusicControlsContainer {
     background-color: rgba(200, 200, 200, 0.3);
     border-radius: 15px;
