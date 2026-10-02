@@ -1,4 +1,32 @@
-html, body {
+@property --angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --c1 { syntax: '<color>'; inherits: false; initial-value: rgb(145, 50, 240); }
+@property --c2 { syntax: '<color>'; inherits: false; initial-value: rgb(145, 96, 252); }
+@property --c3 { syntax: '<color>'; inherits: false; initial-value: rgb(128, 0, 255); }
+
+
+@keyframes background-gradient-cycle {
+    0%   { --angle: 0deg;   --c1: rgb(145, 50, 240);  --c2: rgb(145, 96, 252);  --c3: rgb(128, 0, 255); }
+    25%  { --angle: 90deg;  --c1: rgb(168, 85, 247);  --c2: rgb(192, 132, 252); --c3: rgb(139, 40, 230); }
+    50%  { --angle: 180deg; --c1: rgb(109, 40, 217);  --c2: rgb(124, 58, 237);  --c3: rgb(167, 100, 255); }
+    75%  { --angle: 270deg; --c1: rgb(192, 100, 255); --c2: rgb(147, 51, 234);  --c3: rgb(88, 28, 200); }
+    100% { --angle: 360deg; --c1: rgb(145, 50, 240);  --c2: rgb(145, 96, 252);  --c3: rgb(128, 0, 255); }
+}
+
+html {
+    animation-name: background-gradient-cycle;
+    animation-duration: 16s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    background-image: linear-gradient(var(--angle), var(--c1) 0%, var(--c2) 50%, var(--c3) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Inter", sans-serif;
     margin: 0;
     padding: 0;
     height: 100%;
