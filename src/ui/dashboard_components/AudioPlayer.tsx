@@ -8,9 +8,13 @@ import { formatTime } from "../../utils/helpers";
 export default function AudioPlayer({coverArt}: MusicDashboardProps) {
 
     const [isPlaying, setIsPlaying] = useState(false);
+
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
+    const [volume, setVolume] = useState(1);
+    const [isMuted, setIsMuted] = useState(false);
+
     const audioRef = useRef<HTMLAudioElement>(null);
     
     async function handleTogglePlay() {
@@ -57,6 +61,38 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
         setCurrentTime(newTime);
     }
 
+    function handleVolumeChange(e: ChangeEvent<HTMLInputElement>) {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const newVolume = Number(e.target.value);
+
+        audio.volume = newVolume;
+
+        if (audio.muted && newVolume > 0) {
+            audio.muted = false;
+        }
+    };
+
+    function handleToggleMute() {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        if (audio.muted && audio.volume === 0) {
+            audio.volume = 0.5;
+        }
+
+        audio.muted = !audio.muted;
+    };
+
+    function handleElementVolumeChange() {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        setVolume(audio.volume);
+        setIsMuted(audio.muted);
+    };
+
     return (
         <div style={{display: "flex", justifyContent: "center"}}>
             <div className="MusicDashboard">
@@ -72,6 +108,7 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         onEnded={() => setIsPlaying(false)}
                         onLoadedData={handleLoadedMetadata}
                         onTimeUpdate={handleTimeUpdate}
+                        onVolumeChange={handleElementVolumeChange}
                     >
                         <source src="/assets/test_song.mp3" type="audio/mpeg" />
                     </audio>
@@ -88,6 +125,21 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         disabled={false}
                         aria-label="Seek"
                     />
+                    <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={isMuted ? 0 : volume}
+                        onChange={handleVolumeChange}
+                        aria-label="Volume"
+                    />
+                    <button
+                        onClick={handleToggleMute}
+                        aria-label={isMuted ? "Unmute" : "Mute"}
+                    >
+                        {isMuted || volume === 0 ? "Unmute" : "Mute"}
+                    </button>
                     <div style={{display: "flex", justifyContent: "center"}}>
                         <p>{formatTime(currentTime) + "/" + formatTime(duration)}</p>
                     </div>
