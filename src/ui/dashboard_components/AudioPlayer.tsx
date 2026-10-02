@@ -112,16 +112,8 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                     >
                         <source src="/assets/test_song.mp3" type="audio/mpeg" />
                     </audio>
-                    <button 
-                        className="AudioPlayerButton" 
-                        onClick={handleTogglePlay} 
-                        aria-label={isPlaying ? "Pause" : "Play"}>
-                        <img 
-                            width={40}
-                            height={40}
-                            src={isPlaying ? "/assets/audio_player_icons/pause.svg" : "/assets/audio_player_icons/play.svg"} 
-                        />
-                    </button>
+                </div>
+                <div style={{display: "flex", justifyContent: "center"}}>
                     <input 
                         type="range"
                         min={0}
@@ -132,15 +124,28 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         disabled={false}
                         aria-label="Seek"
                     />
-                    <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={isMuted ? 0 : volume}
-                        onChange={handleVolumeChange}
-                        aria-label="Volume"
-                    />
+                </div>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    <div>
+                        {formatTime(currentTime)}
+                    </div>
+                    <div>
+                        {formatTime(duration)}
+                    </div>
+                </div>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <button 
+                        className="AudioPlayerButton" 
+                        onClick={handleTogglePlay} 
+                        aria-label={isPlaying ? "Pause" : "Play"}>
+                        <img 
+                            width={64}
+                            height={64}
+                            src={isPlaying ? "/assets/audio_player_icons/pause.svg" : "/assets/audio_player_icons/play.svg"} 
+                        />
+                    </button>
+                </div>
+                <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <button 
                         className="AudioPlayerButton" 
                         onClick={handleToggleMute}
@@ -152,9 +157,15 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                             src={isMuted || volume === 0 ? "/assets/audio_player_icons/volume-muted.svg" : "/assets/audio_player_icons/volume.svg"}
                         />
                     </button>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <p>{formatTime(currentTime) + "/" + formatTime(duration)}</p>
-                    </div>
+                    <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={isMuted ? 0 : volume}
+                        onChange={handleVolumeChange}
+                        aria-label="Volume"
+                    />
                 </div>
             </div>
         </div>
