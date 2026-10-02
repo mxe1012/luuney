@@ -2,13 +2,11 @@
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 
-import type { MusicDashboardProps } from "../utils/types";
-
-export default function Dashboard({coverArt}: MusicDashboardProps) {
+export default function Dashboard() {
 
     return (
         <>
-            <AudioPlayer coverArt={coverArt} />
+            <AudioPlayer coverArt={"/assets/placeholder-cover.svg"} />
         </>
     )
 }

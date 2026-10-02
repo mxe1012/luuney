@@ -11,7 +11,7 @@ export default function App() {
 		<div className='bg'>
 			<br />
 			<MainPane>
-				<Dashboard coverArt={"/assets/placeholder-cover.svg"}/>
+				<Dashboard />
 			</MainPane>
 		</div>	
 	);
