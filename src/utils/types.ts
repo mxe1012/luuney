@@ -6,9 +6,13 @@ export interface ChildrenProps {
 
 export interface AudioPlayerProps {
     coverArt: string;
+    track: TrackObject
+}
+
+export interface TrackObject {
     title: string;
-    artist: string;
-    streamUrl: string;
+    handle: string;
+    url: string;
 }
 
 export interface AudioPlayerButtonProps {
