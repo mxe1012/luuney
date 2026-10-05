@@ -134,8 +134,7 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                         onEnded={() => setIsPlaying(false)}
                         onLoadedData={handleLoadedMetadata}
                         onTimeUpdate={handleTimeUpdate}
-                        onVolumeChange={handleElementVolumeChange}
-                    />   
+                        onVolumeChange={handleElementVolumeChange} />   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 
@@ -146,8 +145,7 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                         value={currentTime}
                         onChange={handleSeek} 
                         disabled={false}
-                        aria-label="Seek"
-                    />
+                        aria-label="Seek" />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div>
@@ -158,24 +156,18 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <button className="AudioPlayerButton" onClick={handleRewind}>
-                        <img src="/assets/audio_player_icons/rewind.svg" width={36} height={36} />
-                    </button>
+                    <AudioPlayerButton onClick={handleRewind} size={36} al="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
-                    onClick={handleTogglePlay} size={64} isPlaying={isPlaying} 
+                    onClick={handleTogglePlay} size={64} alt="Play/Pause Button" isPlaying={isPlaying} 
                     alTrue="Pause" alFalse="Play"
-                    srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg"
-                    />
-                    <button className="AudioPlayerButton" onClick={handleFastForward}>
-                        <img src="/assets/audio_player_icons/fast-forward.svg" width={36} height={36} />
-                    </button>
+                    srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
+                    <AudioPlayerButton onClick={handleFastForward} size={36} al="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton
-                    onClick={handleToggleMute} size={40} isMuted={isMuted}
+                    onClick={handleToggleMute} size={40} alt="Mute/Unmute Button" isMuted={isMuted}
                     alTrue="Unmute" alFalse="Mute"
-                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg"
-                    />
+                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
                     <input
                         type="range"
                         min={0}
@@ -183,8 +175,7 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                         step={0.01}
                         value={isMuted ? 0 : volume}
                         onChange={handleVolumeChange}
-                        aria-label="Volume"
-                    />
+                        aria-label="Volume" />
                 </div>
             </div>
         </div>
