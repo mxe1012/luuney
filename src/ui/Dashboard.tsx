@@ -1,29 +1,36 @@
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 
-import { fetchTrack } from "../utils/data";
+import { fetchTrackById, fetchTrackByQuery } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 import type { TrackObject } from "../utils/types";
 
 export default function Dashboard() {
 
-    const [artwork, setArtwork] = useState("/assets/placeholder-cover.svg");
-
     const [track, setTrack] = useState<TrackObject>({
+        track_id: 0,
+        artwork: "/assets/placeholder-cover.svg",
         title: "Title",
         handle: "Artist",
         url: ""
     });
 
-    async function handleFetch() {
+    const [trackList, setTrackList] = useState<TrackObject[]>([]);
+
+    const [search, setSearch] = useState("");
+
+    const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const searchRef = useRef<string>("");
+
+    async function handleFetch(id: number) {
 
         try {
-            const result = await fetchTrack()
+            const result = await fetchTrackById(id);
 
-            setArtwork(result.data.artwork?.["480x480"] ?? "/assets/placeholder-cover.svg");
-
-            const { title, user: { handle }, stream: { url } } = result.data;
+            const { track_id, artwork, title, user: { handle }, stream: { url } } = result.data;
             setTrack({ 
+                track_id,
+                artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
                 title, 
                 handle, 
                 url 
@@ -35,17 +42,97 @@ export default function Dashboard() {
         
     }
 
+    async function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+
+        const query = e.target.value;
+        setSearch(query);
+
+        if(debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+
+        searchRef.current = query;
+
+        if (query.trim().length == 0) {
+            setTrackList([]);
+            return;
+        }
+
+        debounceTimer.current = setTimeout(() => {
+            debouncedFetchTracks(query)
+        }, 600)
+
+    }
+
+    async function debouncedFetchTracks(query: string) {
+        
+        try {
+            const result = await fetchTrackByQuery(query);
+
+            if(searchRef.current !== query) {
+                return;
+            }
+
+            const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
+
+                const { track_id, artwork, title } = element;
+
+                const { handle } = element.user;
+
+                const { url } = element.stream;
+
+                return {
+                    track_id,
+                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                    title,
+                    handle,
+                    url
+                }
+
+            })
+
+            setTrackList(newList);
+            console.log(newList)
+        }
+        catch(e) {
+            if(searchRef.current !== query) {
+                return;
+            }
+            console.log(e);
+        }
+
+    }
+
     return (
         <>
             <div className="MusicDashboard">
                 <div>
-                    <AudioPlayer coverArt={artwork} track={track}/>
+                    <AudioPlayer track={track}/>
                 </div>
                 <div className="SearchPane">
-                    saddjioajjdaiodios
+                    <input className="SearchInput" value={search} placeholder="Search Track..." onChange={handleSearch}></input>
+                    <br />
+                    <ul className="SearchList">
+                        {trackList.map((element) => (
+                            <li key={element.track_id}>
+                                <button className="SearchListButton" onClick={() => {handleFetch(element.track_id)}}>
+                                    <div>
+                                        <img src={element.artwork} width={64} height={64}/>
+                                    </div>
+                                    <div style={{display: 'grid', alignItems: 'center'}}>
+                                        <div>
+                                            <h4>{element.title.trim()}</h4>
+                                        </div>
+                                        <div>
+                                            {element.handle}
+                                        </div>
+                                    </div>
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
-            <button onClick={handleFetch}>fetch track</button>
         </>
     )
 }
