@@ -5,7 +5,7 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
-import AudioPlayerCoverArtImage from "./audioplayer_components/AudioPlayerCoverArtImage";
+import AudioPlayerCoverArt from "./audioplayer_components/AudioPlayerCoverArt";
 
 export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioPlayerProps) {
 
@@ -99,7 +99,7 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
         <div style={{display: "flex", justifyContent: "center"}}>
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <AudioPlayerCoverArtImage src={coverArt} />
+                    <AudioPlayerCoverArt src={coverArt} />
                 </div>
                 <div>
                     <h2 style={{textAlign: "center"}}>{title}</h2>
