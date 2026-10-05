@@ -26,3 +26,7 @@ export interface AudioPlayerButtonProps {
     srcTrue?: string;
     srcFalse?: string;
 }
+
+export interface SnackbarContextType {
+    showSnackbar: (message: string, duration?: number) => void;
+}

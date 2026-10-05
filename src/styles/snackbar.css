@@ -1,0 +1,46 @@
+@-webkit-keyframes fadein {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1); 
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px; 
+    margin-left: -125px; 
+    background-color: rgba(200, 200, 200, 0.5); 
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    padding: 16px; 
+    position: fixed; 
+    z-index: 3; 
+    left: 50%; 
+    bottom: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 2px whitesmoke;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+#snackbar.show {
+    visibility: visible; 
+    -webkit-animation: fadein 0.2s;
+    animation: fadein 0.2s;
+    white-space: pre-line;
+}

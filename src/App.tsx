@@ -1,15 +1,19 @@
 import './styles/styles.css'
 import './styles/music_dashboard.css'
+import './styles/snackbar.css'
 
 import { MainPane } from './ui/Containers';
 import Dashboard from './ui/Dashboard';
+import SnackbarProvider from './hooks/SnackbarContext';
 
 export default function App() {
 
 	return (
 		<>
 			<MainPane>
-				<Dashboard />
+				<SnackbarProvider>
+					<Dashboard />
+				</SnackbarProvider>
 			</MainPane>
 		</>	
 	);
