@@ -128,56 +128,54 @@ export default function AudioPlayer({coverArt, track}: AudioPlayerProps) {
             onLoadedData={handleLoadedMetadata}
             onTimeUpdate={handleTimeUpdate}
             onVolumeChange={handleElementVolumeChange} />
-            <div style={{display: "flex", justifyContent: "center"}}>
-                <div className="AudioPlayer">
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <AudioPlayerCoverArt src={coverArt} />
+            <div className="AudioPlayer">
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <AudioPlayerCoverArt src={coverArt} />
+                </div>
+                <div>
+                    <h2 style={{textAlign: "center"}}>{track.title}</h2>
+                    <h3 style={{textAlign: "center"}}>{track.handle}</h3>   
+                </div>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <input 
+                        type="range"
+                        min={0}
+                        max={duration}
+                        step={0.1}
+                        value={currentTime}
+                        onChange={handleSeek} 
+                        disabled={false}
+                        aria-label="Seek" />
+                </div>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    <div>
+                        {formatTime(currentTime)}
                     </div>
                     <div>
-                        <h2 style={{textAlign: "center"}}>{track.title}</h2>
-                        <h3 style={{textAlign: "center"}}>{track.handle}</h3>   
+                        {formatTime(duration)}
                     </div>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <input 
-                            type="range"
-                            min={0}
-                            max={duration}
-                            step={0.1}
-                            value={currentTime}
-                            onChange={handleSeek} 
-                            disabled={false}
-                            aria-label="Seek" />
-                    </div>
-                    <div style={{display: "flex", justifyContent: "space-between"}}>
-                        <div>
-                            {formatTime(currentTime)}
-                        </div>
-                        <div>
-                            {formatTime(duration)}
-                        </div>
-                    </div>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <AudioPlayerButton onClick={handleRewind} size={36} label="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
-                        <AudioPlayerButton 
-                        onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
-                        labelTrue="Pause" labelFalse="Play"
-                        srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                        <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
-                    </div>
-                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                        <AudioPlayerButton
-                        onClick={handleToggleMute} size={40} toggleAction={isMuted}
-                        labelTrue="Unmute" labelFalse="Mute"
-                        srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
-                        <input
-                            type="range"
-                            min={0}
-                            max={1}
-                            step={0.01}
-                            value={isMuted ? 0 : volume}
-                            onChange={handleVolumeChange}
-                            aria-label="Volume" />
-                    </div>
+                </div>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <AudioPlayerButton onClick={handleRewind} size={36} label="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
+                    <AudioPlayerButton 
+                    onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
+                    labelTrue="Pause" labelFalse="Play"
+                    srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
+                    <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                </div>
+                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    <AudioPlayerButton
+                    onClick={handleToggleMute} size={40} toggleAction={isMuted}
+                    labelTrue="Unmute" labelFalse="Mute"
+                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
+                    <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={isMuted ? 0 : volume}
+                        onChange={handleVolumeChange}
+                        aria-label="Volume" />
                 </div>
             </div>
         </>
