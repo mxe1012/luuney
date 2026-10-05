@@ -14,8 +14,7 @@ export interface AudioPlayerProps {
 export interface AudioPlayerButtonProps {
     onClick: React.MouseEventHandler<HTMLButtonElement>;
     size: number;
-    isPlaying?: boolean;
-    isMuted?: boolean;
+    toggleAction?: boolean;
     label?: string;
     labelTrue?: string;
     labelFalse?: string;
