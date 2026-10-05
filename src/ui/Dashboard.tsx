@@ -6,13 +6,13 @@ import AudioPlayer from "./dashboard_components/AudioPlayer";
 
 export default function Dashboard() {
 
-    // const [track, setTrack] = useState();
     const [artwork, setArtwork] = useState("/assets/placeholder-cover.svg");
 
-    const [title, setTitle] = useState("Title");
-    const [artist, setArtist] = useState("Artist");
-
-    const [streamUrl, setStreamUrl] = useState("");
+    const [track, setTrack] = useState({
+        title: "Title",
+        handle: "Artist",
+        url: ""
+    });
 
     async function handleFetch() {
 
@@ -21,11 +21,12 @@ export default function Dashboard() {
 
             setArtwork(result.data.artwork?.["480x480"] ?? "/assets/placeholder-cover.svg");
 
-            setTitle(result.data.title);
-            setArtist(result.data.user.handle);
-            
-            setStreamUrl(result.data.stream.url);
-
+            const { title, user: { handle }, stream: { url } } = result.data;
+            setTrack({ 
+                title, 
+                handle, 
+                url 
+            });
         }
         catch(e) {
             console.log(e);
@@ -35,7 +36,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <AudioPlayer coverArt={artwork} title={title} artist={artist} streamUrl={streamUrl}/>
+            <AudioPlayer coverArt={artwork} track={track}/>
             <br />
             <button onClick={handleFetch}>fetch track</button>
         </>
