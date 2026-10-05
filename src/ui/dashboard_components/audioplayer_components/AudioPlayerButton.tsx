@@ -1,10 +1,8 @@
 import type { AudioPlayerButtonProps } from "../../../utils/types";
 
-export default function AudioPlayerButton({onClick, size, isPlaying, isMuted, label, labelTrue, labelFalse, src, srcTrue, srcFalse}: AudioPlayerButtonProps) {
+export default function AudioPlayerButton({onClick, size, toggleAction, label, labelTrue, labelFalse, src, srcTrue, srcFalse}: AudioPlayerButtonProps) {
 
-    const isBooleanAction = isMuted == undefined ? isPlaying : isMuted;
-
-    if(isBooleanAction == undefined) {
+    if(toggleAction == undefined) {
         return (
             <>
                 <button
@@ -24,11 +22,11 @@ export default function AudioPlayerButton({onClick, size, isPlaying, isMuted, la
             <button 
             className="AudioPlayerButton" 
             onClick={onClick} 
-            aria-label={isBooleanAction ? labelTrue : labelFalse}>
+            aria-label={toggleAction ? labelTrue : labelFalse}>
                 <img 
                 width={size}
                 height={size}
-                src={isBooleanAction ? srcTrue : srcFalse} />
+                src={toggleAction ? srcTrue : srcFalse} />
             </button>
         </>
     )
