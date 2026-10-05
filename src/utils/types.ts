@@ -5,11 +5,12 @@ export interface ChildrenProps {
 }
 
 export interface AudioPlayerProps {
-    coverArt: string;
     track: TrackObject
 }
 
 export interface TrackObject {
+    track_id: number;
+    artwork: string;
     title: string;
     handle: string;
     url: string;
