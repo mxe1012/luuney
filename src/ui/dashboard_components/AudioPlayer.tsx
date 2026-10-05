@@ -63,6 +63,28 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
         setCurrentTime(newTime);
     }
 
+    function handleFastForward() {
+        const audio = audioRef.current;
+        if(!audio) return;
+
+        const newTime = audio.currentTime + 5;
+
+        audio.currentTime = newTime;
+
+        setCurrentTime(newTime)
+    }
+
+    function handleRewind() {
+        const audio = audioRef.current;
+        if(!audio) return;
+
+        const newTime = audio.currentTime - 5;
+
+        audio.currentTime = newTime;
+
+        setCurrentTime(newTime)
+    }
+
     function handleVolumeChange(e: ChangeEvent<HTMLInputElement>) {
         const audio = audioRef.current;
         if (!audio) return;
@@ -113,8 +135,7 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                         onLoadedData={handleLoadedMetadata}
                         onTimeUpdate={handleTimeUpdate}
                         onVolumeChange={handleElementVolumeChange}
-                    >
-                    </audio>
+                    />   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 
@@ -137,11 +158,17 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
+                    <button className="AudioPlayerButton" onClick={handleRewind}>
+                        <img src="/assets/audio_player_icons/rewind.svg" width={36} height={36} />
+                    </button>
                     <AudioPlayerButton 
                     onClick={handleTogglePlay} size={64} isPlaying={isPlaying} 
                     alTrue="Pause" alFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg"
                     />
+                    <button className="AudioPlayerButton" onClick={handleFastForward}>
+                        <img src="/assets/audio_player_icons/fast-forward.svg" width={36} height={36} />
+                    </button>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton
