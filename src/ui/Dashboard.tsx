@@ -37,8 +37,14 @@ export default function Dashboard() {
 
     return (
         <>
-            <AudioPlayer coverArt={artwork} track={track}/>
-            <br />
+            <div className="MusicDashboard">
+                <div>
+                    <AudioPlayer coverArt={artwork} track={track}/>
+                </div>
+                <div className="SearchPane">
+                    saddjioajjdaiodios
+                </div>
+            </div>
             <button onClick={handleFetch}>fetch track</button>
         </>
     )
