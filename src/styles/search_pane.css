@@ -8,7 +8,6 @@
     min-width: 295px;
     max-width: 295px;
     max-height: 579px;
-    overflow: scroll;
 }
 
 .SearchInput {
@@ -32,4 +31,6 @@
 ul.SearchList {
     list-style-type: none;
     padding: 0px;
+    max-height: 500px;
+    overflow: scroll;
 }

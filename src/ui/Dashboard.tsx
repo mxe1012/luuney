@@ -121,7 +121,7 @@ export default function Dashboard() {
                                     </div>
                                     <div style={{display: 'grid', alignItems: 'center'}}>
                                         <div>
-                                            <h4>{element.title.trim()}</h4>
+                                            <h4>{element.title}</h4>
                                         </div>
                                         <div>
                                             {element.handle}
