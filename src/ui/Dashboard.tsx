@@ -3,12 +3,13 @@ import { useState } from "react";
 import { fetchTrack } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
+import type { TrackObject } from "../utils/types";
 
 export default function Dashboard() {
 
     const [artwork, setArtwork] = useState("/assets/placeholder-cover.svg");
 
-    const [track, setTrack] = useState({
+    const [track, setTrack] = useState<TrackObject>({
         title: "Title",
         handle: "Artist",
         url: ""
