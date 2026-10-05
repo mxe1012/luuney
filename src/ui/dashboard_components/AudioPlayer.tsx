@@ -3,7 +3,9 @@ import type { AudioPlayerProps } from "../../utils/types";
 import { useRef, useState, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
-import { CoverArtImage } from "../Containers";
+
+import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
+import AudioPlayerCoverArtImage from "./audioplayer_components/AudioPlayerCoverArtImage";
 
 export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioPlayerProps) {
 
@@ -97,7 +99,7 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
         <div style={{display: "flex", justifyContent: "center"}}>
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <CoverArtImage src={coverArt} />
+                    <AudioPlayerCoverArtImage src={coverArt} />
                 </div>
                 <div>
                     <h2 style={{textAlign: "center"}}>{title}</h2>
@@ -135,29 +137,18 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <button 
-                        className="AudioPlayerButton" 
-                        onClick={handleTogglePlay} 
-                        aria-label={isPlaying ? "Pause" : "Play"}>
-                        <img 
-                            width={64}
-                            height={64}
-                            src={isPlaying ? "/assets/audio_player_icons/pause.svg" : "/assets/audio_player_icons/play.svg"} 
-                        />
-                    </button>
+                    <AudioPlayerButton 
+                    onClick={handleTogglePlay} size={64} isPlaying={isPlaying} 
+                    alTrue="Pause" alFalse="Play"
+                    srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg"
+                    />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <button 
-                        className="AudioPlayerButton" 
-                        onClick={handleToggleMute}
-                        aria-label={isMuted ? "Unmute" : "Mute"}
-                    >
-                        <img 
-                            width={40}
-                            height={40}
-                            src={isMuted || volume === 0 ? "/assets/audio_player_icons/volume-muted.svg" : "/assets/audio_player_icons/volume.svg"}
-                        />
-                    </button>
+                    <AudioPlayerButton
+                    onClick={handleToggleMute} size={40} isMuted={isMuted}
+                    alTrue="Unmute" alFalse="Mute"
+                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg"
+                    />
                     <input
                         type="range"
                         min={0}
