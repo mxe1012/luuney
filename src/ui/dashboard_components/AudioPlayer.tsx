@@ -7,7 +7,7 @@ import { formatTime } from "../../utils/helpers";
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 import AudioPlayerCoverArt from "./audioplayer_components/AudioPlayerCoverArt";
 
-export default function AudioPlayer({coverArt, track}: AudioPlayerProps) {
+export default function AudioPlayer({track}: AudioPlayerProps) {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -130,7 +130,7 @@ export default function AudioPlayer({coverArt, track}: AudioPlayerProps) {
             onVolumeChange={handleElementVolumeChange} />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <AudioPlayerCoverArt src={coverArt} />
+                    <AudioPlayerCoverArt src={track.artwork} />
                 </div>
                 <div>
                     <h2 style={{textAlign: "center"}}>{track.title}</h2>
