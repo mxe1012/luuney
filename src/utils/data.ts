@@ -22,7 +22,7 @@
 export async function fetchTrack() {
 
     try {
-       const result = await fetch('https://api.audius.co/v1/tracks/159', {
+       const result = await fetch('https://api.audius.co/v1/tracks/592155', {
             headers: {
                 Authorization: import.meta.env.VITE_AUDIUS_BEARER_TOKEN
             }
