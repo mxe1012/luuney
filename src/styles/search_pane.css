@@ -13,6 +13,7 @@
 .SearchInput {
     background-color: rgba(200, 200, 200, 0.5);
     border-style: none;
+    box-shadow: 0px 0px 2px whitesmoke;
     padding: 15px;
     border-radius: 15px;
     transition: background-color 0.3s ease;
@@ -20,6 +21,7 @@
 
 .SearchInput:focus {
     background-color: whitesmoke;
+    outline: none;
 }
 
 .SearchListButton {
