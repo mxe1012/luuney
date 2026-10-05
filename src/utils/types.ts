@@ -16,9 +16,9 @@ export interface AudioPlayerButtonProps {
     size: number;
     isPlaying?: boolean;
     isMuted?: boolean;
-    al?: string;
-    alTrue?: string;
-    alFalse?: string;
+    label?: string;
+    labelTrue?: string;
+    labelFalse?: string;
     src?: string
     srcTrue?: string;
     srcFalse?: string;
