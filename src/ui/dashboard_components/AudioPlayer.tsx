@@ -158,14 +158,14 @@ export default function AudioPlayer({coverArt, title, artist, streamUrl}: AudioP
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <AudioPlayerButton onClick={handleRewind} size={36} label="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
-                    onClick={handleTogglePlay} size={64} isPlaying={isPlaying} 
+                    onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
                     <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton
-                    onClick={handleToggleMute} size={40} isMuted={isMuted}
+                    onClick={handleToggleMute} size={40} toggleAction={isMuted}
                     labelTrue="Unmute" labelFalse="Mute"
                     srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
                     <input
