@@ -1,11 +1,13 @@
-import type { MusicDashboardProps } from "../../utils/types";
+import type { AudioPlayerProps } from "../../utils/types";
 
 import { useRef, useState, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
-import { CoverArtImage } from "../Containers";
 
-export default function AudioPlayer({coverArt}: MusicDashboardProps) {
+import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
+import AudioPlayerCoverArt from "./audioplayer_components/AudioPlayerCoverArt";
+
+export default function AudioPlayer({coverArt, track}: AudioPlayerProps) {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -61,6 +63,28 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
         setCurrentTime(newTime);
     }
 
+    function handleFastForward() {
+        const audio = audioRef.current;
+        if(!audio) return;
+
+        const newTime = audio.currentTime + 5;
+
+        audio.currentTime = newTime;
+
+        setCurrentTime(newTime)
+    }
+
+    function handleRewind() {
+        const audio = audioRef.current;
+        if(!audio) return;
+
+        const newTime = audio.currentTime - 5;
+
+        audio.currentTime = newTime;
+
+        setCurrentTime(newTime)
+    }
+
     function handleVolumeChange(e: ChangeEvent<HTMLInputElement>) {
         const audio = audioRef.current;
         if (!audio) return;
@@ -94,24 +118,23 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
     };
 
     return (
-        <div style={{display: "flex", justifyContent: "center"}}>
+        <>
+            <audio 
+            ref={audioRef}
+            src={track.url || undefined}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onEnded={() => setIsPlaying(false)}
+            onLoadedData={handleLoadedMetadata}
+            onTimeUpdate={handleTimeUpdate}
+            onVolumeChange={handleElementVolumeChange} />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <CoverArtImage src={coverArt} />
+                    <AudioPlayerCoverArt src={coverArt} />
                 </div>
                 <div>
-                    <h2 style={{textAlign: "center"}}>Name of Song</h2>
-                    <h3 style={{textAlign: "center"}}>Name of Artist</h3>
-                    <audio ref={audioRef}
-                        onPlay={() => setIsPlaying(true)}
-                        onPause={() => setIsPlaying(false)}
-                        onEnded={() => setIsPlaying(false)}
-                        onLoadedData={handleLoadedMetadata}
-                        onTimeUpdate={handleTimeUpdate}
-                        onVolumeChange={handleElementVolumeChange}
-                    >
-                        <source src="/assets/test_song.mp3" type="audio/mpeg" />
-                    </audio>
+                    <h2 style={{textAlign: "center"}}>{track.title}</h2>
+                    <h3 style={{textAlign: "center"}}>{track.handle}</h3>   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 
@@ -122,8 +145,7 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         value={currentTime}
                         onChange={handleSeek} 
                         disabled={false}
-                        aria-label="Seek"
-                    />
+                        aria-label="Seek" />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div>
@@ -134,29 +156,18 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <button 
-                        className="AudioPlayerButton" 
-                        onClick={handleTogglePlay} 
-                        aria-label={isPlaying ? "Pause" : "Play"}>
-                        <img 
-                            width={64}
-                            height={64}
-                            src={isPlaying ? "/assets/audio_player_icons/pause.svg" : "/assets/audio_player_icons/play.svg"} 
-                        />
-                    </button>
+                    <AudioPlayerButton onClick={handleRewind} size={36} label="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
+                    <AudioPlayerButton 
+                    onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
+                    labelTrue="Pause" labelFalse="Play"
+                    srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
+                    <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <button 
-                        className="AudioPlayerButton" 
-                        onClick={handleToggleMute}
-                        aria-label={isMuted ? "Unmute" : "Mute"}
-                    >
-                        <img 
-                            width={40}
-                            height={40}
-                            src={isMuted || volume === 0 ? "/assets/audio_player_icons/volume-muted.svg" : "/assets/audio_player_icons/volume.svg"}
-                        />
-                    </button>
+                    <AudioPlayerButton
+                    onClick={handleToggleMute} size={40} toggleAction={isMuted}
+                    labelTrue="Unmute" labelFalse="Mute"
+                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
                     <input
                         type="range"
                         min={0}
@@ -164,10 +175,9 @@ export default function AudioPlayer({coverArt}: MusicDashboardProps) {
                         step={0.01}
                         value={isMuted ? 0 : volume}
                         onChange={handleVolumeChange}
-                        aria-label="Volume"
-                    />
+                        aria-label="Volume" />
                 </div>
             </div>
-        </div>
+        </>
     )
 }

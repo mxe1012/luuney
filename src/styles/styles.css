@@ -14,7 +14,7 @@
 
 html {
     animation-name: background-gradient-cycle;
-    animation-duration: 16s;
+    animation-duration: 32s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     background-image: linear-gradient(var(--angle), var(--c1) 0%, var(--c2) 50%, var(--c3) 100%);
@@ -30,4 +30,8 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+}
+
+#root {
+    min-height: 100%;
 }
