@@ -1,6 +1,39 @@
+@keyframes audp-fade {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        transform: scale(1.2);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(2px);
+        transform: scale(1);
+    }
+}
+
+@keyframes marquee {
+    0% { 
+        transform: translate(0, 0); 
+    }
+    100% { 
+        transform: translate(-100%, 0); 
+    } 
+}
+
+.scroll-container {
+    width: 100%;             /* Adjust to fit your layout */
+    overflow: hidden;        /* Hides the text when it goes out of bounds */
+    white-space: nowrap;     /* Forces the long name to stay on one line */
+}
+
+.scroll-text {
+    display: inline-block;
+    padding-left: 100%;      /* Starts the name completely off-screen to the right */
+    animation: marquee 15s linear infinite; /* Adjust '15s' to change scrolling speed */
+}
 
 .AudioPlayer {
-    animation-name: music-dashboard-fade;
+    animation-name: audp-fade;
     animation-duration: 0.5s;
     display: grid;
     align-items: center;
@@ -25,10 +58,6 @@
 
 .AudioPlayerButton:active {
     transform: scale(0.8);
-}
-
-.CovertArtImage {
-    border-radius: 15px;
 }
 
 input[type="range"] {
