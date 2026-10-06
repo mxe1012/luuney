@@ -6,10 +6,13 @@ export interface ChildrenProps {
 
 export interface AudioPlayerProps {
     track: TrackObject
+    isPlaying: boolean;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface SearchListPaneProps {
     onHandleFetch: (id: number) => Promise<void>;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface TrackObject {
