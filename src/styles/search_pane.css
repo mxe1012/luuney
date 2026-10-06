@@ -43,7 +43,7 @@
     border-radius: 15px;
     justify-content: flex-start;
     padding: 20px;
-    min-width: 320px;
+    min-width: 330px;
     gap: 5px;
     transition: background-color 0.3s ease;
 }
