@@ -4,8 +4,9 @@ import { fetchTrackByQuery } from "../../utils/data";
 
 import type { SearchListPaneProps, TrackObject } from "../../utils/types";
 import { CoverImage } from "../Containers";
+import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function SearchListPane({onHandleFetch}: SearchListPaneProps) {
+export default function SearchListPane({onHandleFetch, onIsPlaying}: SearchListPaneProps) {
 
     const [trackList, setTrackList] = useState<TrackObject[]>([]);
         
@@ -13,6 +14,8 @@ export default function SearchListPane({onHandleFetch}: SearchListPaneProps) {
 
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchRef = useRef<string>("");
+
+    const { showSnackbar } = useSnackbar();
 
     async function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
 
@@ -69,6 +72,7 @@ export default function SearchListPane({onHandleFetch}: SearchListPaneProps) {
             if(searchRef.current !== query) {
                 return;
             }
+            showSnackbar("Could not search for tracks.");
             console.log(e);
         }
 
@@ -81,7 +85,10 @@ export default function SearchListPane({onHandleFetch}: SearchListPaneProps) {
                 <ul className="SearchList">
                     {trackList.map((element) => (
                         <li className="SearchList" key={element.track_id}>
-                            <button className="SearchListButton" onClick={() => {onHandleFetch(element.track_id)}}>
+                            <button className="SearchListButton" onClick={() => {
+                                onHandleFetch(element.track_id);
+                                onIsPlaying(false);
+                                }}>
                                 <div>
                                     <CoverImage src={element.artwork} size={64}/>
                                 </div>

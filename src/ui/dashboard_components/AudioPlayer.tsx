@@ -8,9 +8,7 @@ import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
 import { CoverImage } from "../Containers";
 
-export default function AudioPlayer({track}: AudioPlayerProps) {
-
-    const [isPlaying, setIsPlaying] = useState(false);
+export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayerProps) {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -123,9 +121,9 @@ export default function AudioPlayer({track}: AudioPlayerProps) {
             <audio 
             ref={audioRef}
             src={track.url || undefined}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            onEnded={() => setIsPlaying(false)}
+            onPlay={() => onIsPlaying(true)}
+            onPause={() => onIsPlaying(false)}
+            onEnded={() => onIsPlaying(false)}
             onLoadedData={handleLoadedMetadata}
             onTimeUpdate={handleTimeUpdate}
             onVolumeChange={handleElementVolumeChange} />
