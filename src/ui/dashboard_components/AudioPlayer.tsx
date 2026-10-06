@@ -131,8 +131,8 @@ export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayer
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <CoverImage styles={{borderRadius: '15px'}} src={track.artwork} size={256}/>
                 </div>
-                <div>
-                    <h2 style={{textAlign: "center"}}>{track.title}</h2>
+                <div className={track.title.length >= 22 ? "scroll-container" : ""}>
+                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center"}}>{track.title}</h2>
                     <h3 style={{textAlign: "center"}}>{track.handle}</h3>   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
