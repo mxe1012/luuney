@@ -1,15 +1,3 @@
-@keyframes music-dashboard-fade {
-    from {
-        opacity: 0;
-        backdrop-filter: blur(0px);
-        transform: scale(1.2);
-    }
-    to {
-        opacity: 1;
-        backdrop-filter: blur(2px);
-        transform: scale(1);
-    }
-}
 
 .MusicDashboard {
     display: flex;
