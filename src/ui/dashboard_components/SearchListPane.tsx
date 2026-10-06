@@ -92,7 +92,7 @@ export default function SearchListPane({onHandleFetch, onIsPlaying}: SearchListP
                                 <div>
                                     <CoverImage src={element.artwork} size={64}/>
                                 </div>
-                                <div style={{display: 'flex', justifyContent: 'center', textAlign: 'left'}}>
+                                <div style={{textAlign: 'left'}}>
                                     <h4>{element.title}</h4>
                                 </div>
                                 <div>
