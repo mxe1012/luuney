@@ -5,7 +5,8 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
-import AudioPlayerCoverArt from "./audioplayer_components/AudioPlayerCoverArt";
+
+import { CoverImage } from "../Containers";
 
 export default function AudioPlayer({track}: AudioPlayerProps) {
 
@@ -130,7 +131,7 @@ export default function AudioPlayer({track}: AudioPlayerProps) {
             onVolumeChange={handleElementVolumeChange} />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <AudioPlayerCoverArt src={track.artwork} />
+                    <CoverImage styles={{borderRadius: '15px'}} src={track.artwork} size={256}/>
                 </div>
                 <div>
                     <h2 style={{textAlign: "center"}}>{track.title}</h2>
