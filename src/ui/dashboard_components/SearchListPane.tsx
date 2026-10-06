@@ -89,15 +89,15 @@ export default function SearchListPane({onHandleFetch, onIsPlaying}: SearchListP
                                 onHandleFetch(element.track_id);
                                 onIsPlaying(false);
                                 }}>
-                                <div>
-                                    <CoverImage src={element.artwork} size={64}/>
+                                <div style={{display: "flex", justifyContent: "flex-start", gap: '5px'}}>
+                                    <div>
+                                        <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
+                                    </div>
+                                    <div style={{textAlign: 'left'}}>
+                                        <h4>{element.title}</h4>
+                                    </div>
                                 </div>
-                                <div style={{textAlign: 'left'}}>
-                                    <h4>{element.title}</h4>
-                                </div>
-                                <div>
-                                    {element.handle}
-                                </div>
+                                    <h5>{element.handle}</h5>
                             </button>
                         </li>
                     ))}

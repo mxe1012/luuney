@@ -37,12 +37,10 @@
 
 .SearchListButton {
     background-color: rgba(200, 200, 200, 0.5);
-    display: flex;
     outline: none;
     border-style: none;
     border-radius: 15px;
-    justify-content: flex-start;
-    padding: 20px;
+    padding: 10px;
     min-width: 330px;
     gap: 5px;
     transition: background-color 0.3s ease;
