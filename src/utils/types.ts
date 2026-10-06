@@ -5,11 +5,19 @@ export interface ChildrenProps {
 }
 
 export interface AudioPlayerProps {
-    coverArt: string;
     track: TrackObject
+    isPlaying: boolean;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface SearchListPaneProps {
+    onHandleFetch: (id: number) => Promise<void>;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface TrackObject {
+    track_id: number;
+    artwork: string;
     title: string;
     handle: string;
     url: string;
@@ -25,6 +33,12 @@ export interface AudioPlayerButtonProps {
     src?: string
     srcTrue?: string;
     srcFalse?: string;
+}
+
+export interface CoverImageProps {
+    styles?: React.CSSProperties
+    src?: string;
+    size: number;
 }
 
 export interface SnackbarContextType {

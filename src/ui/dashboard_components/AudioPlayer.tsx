@@ -5,11 +5,10 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
-import AudioPlayerCoverArt from "./audioplayer_components/AudioPlayerCoverArt";
 
-export default function AudioPlayer({coverArt, track}: AudioPlayerProps) {
+import { CoverImage } from "../Containers";
 
-    const [isPlaying, setIsPlaying] = useState(false);
+export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayerProps) {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -122,18 +121,18 @@ export default function AudioPlayer({coverArt, track}: AudioPlayerProps) {
             <audio 
             ref={audioRef}
             src={track.url || undefined}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            onEnded={() => setIsPlaying(false)}
+            onPlay={() => onIsPlaying(true)}
+            onPause={() => onIsPlaying(false)}
+            onEnded={() => onIsPlaying(false)}
             onLoadedData={handleLoadedMetadata}
             onTimeUpdate={handleTimeUpdate}
             onVolumeChange={handleElementVolumeChange} />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <AudioPlayerCoverArt src={coverArt} />
+                    <CoverImage styles={{borderRadius: '15px'}} src={track.artwork} size={256}/>
                 </div>
-                <div>
-                    <h2 style={{textAlign: "center"}}>{track.title}</h2>
+                <div className={track.title.length >= 22 ? "scroll-container" : ""}>
+                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center"}}>{track.title}</h2>
                     <h3 style={{textAlign: "center"}}>{track.handle}</h3>   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>

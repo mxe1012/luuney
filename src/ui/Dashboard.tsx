@@ -1,35 +1,47 @@
 import { useState } from "react";
 
-import { fetchTrack } from "../utils/data";
+import { fetchTrackById } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 import type { TrackObject } from "../utils/types";
+import SearchListPane from "./dashboard_components/SearchListPane";
+import { useSnackbar } from "../hooks/SnackbarContext";
 
 export default function Dashboard() {
 
-    const [artwork, setArtwork] = useState("/assets/placeholder-cover.svg");
-
     const [track, setTrack] = useState<TrackObject>({
+        track_id: 0,
+        artwork: "/assets/placeholder-cover.svg",
         title: "Title",
         handle: "Artist",
         url: ""
     });
 
-    async function handleFetch() {
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const { showSnackbar } = useSnackbar();
+
+    async function handleFetch(id: number) {
+
+        showSnackbar("Loading track...");
 
         try {
-            const result = await fetchTrack()
+            const result = await fetchTrackById(id);
 
-            setArtwork(result.data.artwork?.["480x480"] ?? "/assets/placeholder-cover.svg");
-
-            const { title, user: { handle }, stream: { url } } = result.data;
+            const { track_id, artwork, title, user: { handle }, stream: { url } } = result.data;
             setTrack({ 
+                track_id,
+                artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
                 title, 
                 handle, 
                 url 
             });
+
+            showSnackbar("Now playing:\n" + title + "\n" + handle)
+
         }
         catch(e) {
+            showSnackbar("Error in loading track!", 12000)
             console.log(e);
         }
         
@@ -39,13 +51,12 @@ export default function Dashboard() {
         <>
             <div className="MusicDashboard">
                 <div>
-                    <AudioPlayer coverArt={artwork} track={track}/>
+                    <AudioPlayer track={track} isPlaying={isPlaying} onIsPlaying={setIsPlaying}/>
                 </div>
-                <div className="SearchPane">
-                    saddjioajjdaiodios
+                <div>
+                    <SearchListPane onHandleFetch={handleFetch} onIsPlaying={setIsPlaying}/>
                 </div>
             </div>
-            <button onClick={handleFetch}>fetch track</button>
         </>
     )
 }

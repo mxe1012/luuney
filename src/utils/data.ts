@@ -19,14 +19,10 @@
 
 // }
 
-export async function fetchTrack() {
+export async function fetchTrackById(id: number) {
 
     try {
-       const result = await fetch('https://api.audius.co/v1/tracks/592155', {
-            headers: {
-                Authorization: import.meta.env.VITE_AUDIUS_BEARER_TOKEN
-            }
-        }) 
+       const result = await fetch(`https://api.audius.co/v1/tracks/${id}`) 
 
         if(result.ok){
             const data = await result.json();
@@ -42,4 +38,24 @@ export async function fetchTrack() {
         throw e;
     }
 
+}
+
+export async function fetchTrackByQuery(query: string) {
+
+    try {
+        const result = await fetch(`https://api.audius.co/v1/tracks/search?limit=20&query=${query}`);
+
+        if(result.ok) {
+            const data = await result.json();
+            console.log(data);
+            return data;
+        }
+
+        throw new Error(`Failed with code ${result.status}`)
+
+    }
+    catch(e) {
+        console.log(e);
+        throw e;
+    }
 }
