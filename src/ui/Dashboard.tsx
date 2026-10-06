@@ -4,6 +4,7 @@ import { fetchTrackById, fetchTrackByQuery } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 import type { TrackObject } from "../utils/types";
+import { CoverImage } from "./Containers";
 
 export default function Dashboard() {
 
@@ -114,18 +115,16 @@ export default function Dashboard() {
                     <br />
                     <ul className="SearchList">
                         {trackList.map((element) => (
-                            <li key={element.track_id}>
+                            <li className="SearchList" key={element.track_id}>
                                 <button className="SearchListButton" onClick={() => {handleFetch(element.track_id)}}>
                                     <div>
-                                        <img src={element.artwork} width={64} height={64}/>
+                                        <CoverImage src={element.artwork} size={64}/>
                                     </div>
-                                    <div style={{display: 'grid', alignItems: 'center'}}>
-                                        <div>
-                                            <h4>{element.title}</h4>
-                                        </div>
-                                        <div>
-                                            {element.handle}
-                                        </div>
+                                    <div style={{display: 'flex', justifyContent: 'center', textAlign: 'left'}}>
+                                        <h4>{element.title}</h4>
+                                    </div>
+                                    <div>
+                                        {element.handle}
                                     </div>
                                 </button>
                             </li>
