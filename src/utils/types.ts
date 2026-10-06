@@ -8,6 +8,10 @@ export interface AudioPlayerProps {
     track: TrackObject
 }
 
+export interface SearchListPaneProps {
+    onHandleFetch: (id: number) => Promise<void>;
+}
+
 export interface TrackObject {
     track_id: number;
     artwork: string;
