@@ -5,6 +5,7 @@ import { fetchTrackById } from "../utils/data";
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 import type { TrackObject } from "../utils/types";
 import SearchListPane from "./dashboard_components/SearchListPane";
+import { useSnackbar } from "../hooks/SnackbarContext";
 
 export default function Dashboard() {
 
@@ -16,7 +17,13 @@ export default function Dashboard() {
         url: ""
     });
 
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const { showSnackbar } = useSnackbar();
+
     async function handleFetch(id: number) {
+
+        showSnackbar("Loading track...");
 
         try {
             const result = await fetchTrackById(id);
@@ -29,8 +36,12 @@ export default function Dashboard() {
                 handle, 
                 url 
             });
+
+            showSnackbar("Now playing:\n" + title + "\n" + handle)
+
         }
         catch(e) {
+            showSnackbar("Error in loading track!", 12000)
             console.log(e);
         }
         
@@ -40,10 +51,10 @@ export default function Dashboard() {
         <>
             <div className="MusicDashboard">
                 <div>
-                    <AudioPlayer track={track}/>
+                    <AudioPlayer track={track} isPlaying={isPlaying} onIsPlaying={setIsPlaying}/>
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} />
+                    <SearchListPane onHandleFetch={handleFetch} onIsPlaying={setIsPlaying}/>
                 </div>
             </div>
         </>
