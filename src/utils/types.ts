@@ -28,6 +28,12 @@ export interface AudioPlayerButtonProps {
     srcFalse?: string;
 }
 
+export interface CoverImageProps {
+    styles?: React.CSSProperties
+    src?: string;
+    size: number;
+}
+
 export interface SnackbarContextType {
     showSnackbar: (message: string, duration?: number) => void;
 }
