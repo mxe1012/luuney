@@ -35,44 +35,44 @@ export default function SearchListPane({onHandleFetch}: SearchListPaneProps) {
         }, 600)
     }
     
-        async function debouncedFetchTracks(query: string) {
-            
-            try {
-                const result = await fetchTrackByQuery(query);
-    
-                if(searchRef.current !== query) {
-                    return;
-                }
-    
-                const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
-    
-                    const { track_id, artwork, title } = element;
-    
-                    const { handle } = element.user;
-    
-                    const { url } = element.stream;
-    
-                    return {
-                        track_id,
-                        artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
-                        title,
-                        handle,
-                        url
-                    }
-    
-                })
-    
-                setTrackList(newList);
-                console.log(newList)
+    async function debouncedFetchTracks(query: string) {
+        
+        try {
+            const result = await fetchTrackByQuery(query);
+
+            if(searchRef.current !== query) {
+                return;
             }
-            catch(e) {
-                if(searchRef.current !== query) {
-                    return;
+
+            const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
+
+                const { track_id, artwork, title } = element;
+
+                const { handle } = element.user;
+
+                const { url } = element.stream;
+
+                return {
+                    track_id,
+                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                    title,
+                    handle,
+                    url
                 }
-                console.log(e);
-            }
-    
+
+            })
+
+            setTrackList(newList);
+            console.log(newList)
         }
+        catch(e) {
+            if(searchRef.current !== query) {
+                return;
+            }
+            console.log(e);
+        }
+
+    }
 
     return (
         <>
