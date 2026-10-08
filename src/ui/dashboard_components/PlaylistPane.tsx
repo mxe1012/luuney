@@ -13,6 +13,8 @@ export default function PlaylistPane({recents, onHandleFetch, onIsPlaying}: Play
             <div className="PlaylistPaneController">
                 <button className="PlaylistPaneControllerButton" onClick={() => setIsRecentsVisible(true)}>Recents</button>
                 <button className="PlaylistPaneControllerButton">Favorites</button>
+                <button className="PlaylistPaneControllerButton">Playlists</button>
+                <button className="PlaylistPaneControllerButton">Trending</button>
             </div>
             <RecentsList recents={recents} visible={isRecentsVisible} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying} />
         </div>
