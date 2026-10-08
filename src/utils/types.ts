@@ -22,6 +22,13 @@ export interface PlaylistPaneProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface RecentListProps {
+    recents: TrackObject[]
+    visible: boolean;
+    onHandleFetch: (id: number) => Promise<void>;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export interface TrackObject {
     track_id: number;
     artwork: string;
