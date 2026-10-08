@@ -12,6 +12,13 @@ export interface AudioPlayerProps {
 
 export interface SearchListPaneProps {
     onHandleFetch: (id: number) => Promise<void>;
+    onAddToRecents: (entry: TrackObject) => void;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface PlaylistPaneProps {
+    recents: TrackObject[]
+    onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
