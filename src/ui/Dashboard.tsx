@@ -7,6 +7,9 @@ import type { TrackObject } from "../utils/types";
 import SearchListPane from "./dashboard_components/SearchListPane";
 import { useSnackbar } from "../hooks/SnackbarContext";
 
+// import { CoverImage } from "./Containers";
+import PlaylistPane from "./dashboard_components/PlaylistPane";
+
 export default function Dashboard() {
 
     const [track, setTrack] = useState<TrackObject>({
@@ -18,6 +21,8 @@ export default function Dashboard() {
     });
 
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const [recents, setRecents] = useState<TrackObject[]>([]);
 
     const { showSnackbar } = useSnackbar();
 
@@ -47,14 +52,27 @@ export default function Dashboard() {
         
     }
 
+    function addToRecents(entry: TrackObject) {
+        const maxed = recents.length > 20 ? recents.slice(0, 19) : recents
+        const filtered = maxed.filter((element) => element.track_id != entry.track_id);
+
+        setRecents([
+            entry,
+            ...filtered
+        ])
+    }
+
     return (
         <>
             <div className="MusicDashboard">
                 <div>
+                    <PlaylistPane recents={recents} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
+                </div>
+                <div>
                     <AudioPlayer track={track} isPlaying={isPlaying} onIsPlaying={setIsPlaying}/>
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} onIsPlaying={setIsPlaying}/>
+                    <SearchListPane onHandleFetch={handleFetch} onAddToRecents={addToRecents} onIsPlaying={setIsPlaying}/>
                 </div>
             </div>
         </>
