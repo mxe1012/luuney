@@ -6,7 +6,7 @@ import type { SearchListPaneProps, TrackObject } from "../../utils/types";
 import { CoverImage } from "../Containers";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function SearchListPane({onHandleFetch, onIsPlaying}: SearchListPaneProps) {
+export default function SearchListPane({onHandleFetch, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
     const [trackList, setTrackList] = useState<TrackObject[]>([]);
         
@@ -87,6 +87,7 @@ export default function SearchListPane({onHandleFetch, onIsPlaying}: SearchListP
                         <li className="SearchList" key={element.track_id}>
                             <button className="SearchListButton" onClick={() => {
                                 onHandleFetch(element.track_id);
+                                onAddToRecents(element)
                                 onIsPlaying(false);
                                 }}>
                                 <div style={{display: "flex", justifyContent: "flex-start", gap: '5px'}}>
