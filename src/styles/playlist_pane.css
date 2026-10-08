@@ -27,7 +27,7 @@ button.PlaylistPaneControllerButton {
     transition: background-color 0.3s ease;
 }
 
-button.PlaylistPaneControllerButton:focus {
+button.PlaylistPaneControllerButton:active {
     background-color: whitesmoke;
     outline: none;
 }
@@ -65,6 +65,13 @@ ul.PlaylistPaneList {
     padding: 0px;
     max-height: 500px;
     overflow: scroll;
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent);
+    mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent);
+}
+
+ul.PlaylistPaneList.hidden {
+    visibility: hidden;
+    display: none;
 }
 
 li.PlaylistPaneList {
