@@ -1,0 +1,74 @@
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.PlaylistPaneController {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 5px;
+    white-space: nowrap;
+    overflow: scroll;
+}
+
+button.PlaylistPaneControllerButton {
+    padding: 20px;
+    background-color: rgba(200, 200, 200, 0.5);
+    border-style: none;
+    box-shadow: 0px 0px 2px whitesmoke;
+    padding: 15px;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+}
+
+button.PlaylistPaneControllerButton:focus {
+    background-color: whitesmoke;
+    outline: none;
+}
+
+.PlaylistPane {
+    background-color: rgba(200, 200, 200, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(2px);
+    box-shadow: 0px 0px 2px whitesmoke;
+    min-width: 340px;
+    max-width: 340px;
+    height: 579px;
+
+}
+
+.PlaylistButton {
+    background-color: rgba(200, 200, 200, 0.5);
+    outline: none;
+    border-style: none;
+    border-radius: 15px;
+    padding: 10px;
+    min-width: 330px;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.PlaylistButton:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+ul.PlaylistPaneList {
+    list-style-type: none;
+    padding: 0px;
+    max-height: 500px;
+    overflow: scroll;
+}
+
+li.PlaylistPaneList {
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    padding: 5px;
+}
