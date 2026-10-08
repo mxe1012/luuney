@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { ChildrenProps, CoverImageProps } from "../utils/types";
 
 export function MainPane({children}: ChildrenProps) {
-    return <div style={{marginTop: "20px"}}>{children}</div>;
+    return <>{children}</>;
 }
 
 export function CoverImage({ styles, src, size }: CoverImageProps) {
