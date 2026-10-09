@@ -95,7 +95,8 @@ export default function Dashboard() {
         <>
             <div className="MusicDashboard">
                 <div>
-                    <PlaylistPane recents={recents} favorites={favorites} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
+                    <PlaylistPane recents={recents} favorites={favorites} isFavorited={isListTrackInFavorites}  
+                    onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
                 </div>
                 <div>
                     <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
