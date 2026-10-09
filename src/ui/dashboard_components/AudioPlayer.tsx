@@ -129,7 +129,7 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
             onVolumeChange={handleElementVolumeChange} />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <CoverImage styles={{borderRadius: '15px'}} src={track.artwork} size={256}/>
+                    <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
                 <div className={track.title.length >= 22 ? "scroll-container" : ""}>
                     <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
