@@ -7,6 +7,8 @@ export interface ChildrenProps {
 export interface AudioPlayerProps {
     track: TrackObject
     isPlaying: boolean;
+    isFavorited: boolean;
+    onAddToFavorites: (entry: TrackObject) => void
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -17,13 +19,14 @@ export interface SearchListPaneProps {
 }
 
 export interface PlaylistPaneProps {
-    recents: TrackObject[]
+    recents: TrackObject[];
+    favorites: TrackObject[];
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface RecentListProps {
-    recents: TrackObject[]
+export interface MainListProps {
+    list: TrackObject[]
     visible: boolean;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
