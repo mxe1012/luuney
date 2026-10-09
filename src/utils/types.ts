@@ -23,6 +23,8 @@ export interface SearchListPaneProps {
 export interface PlaylistPaneProps {
     recents: TrackObject[];
     favorites: TrackObject[];
+    isFavorited: (entry: TrackObject) => boolean;
+    onAddToFavorites: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -30,6 +32,8 @@ export interface PlaylistPaneProps {
 export interface MainListProps {
     list: TrackObject[]
     visible: boolean;
+    isFavorited?: (entry: TrackObject) => boolean;
+    onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
