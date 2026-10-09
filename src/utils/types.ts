@@ -23,12 +23,15 @@ export interface SearchListPaneProps {
 export interface PlaylistPaneProps {
     recents: TrackObject[];
     favorites: TrackObject[];
+    playlist: Playlist[];
     onRecentsList: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onFavoritesList: React.Dispatch<React.SetStateAction<TrackObject[]>>
     isFavorited: (entry: TrackObject) => boolean;
     onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onAddToFavorites: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
+    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -72,4 +75,10 @@ export interface CoverImageProps {
 
 export interface SnackbarContextType {
     showSnackbar: (message: string, duration?: number) => void;
+}
+
+export interface Playlist {
+    id: string;
+    name: string;
+    tracks: TrackObject[];
 }
