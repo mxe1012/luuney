@@ -14,7 +14,7 @@ export function CoverImage({ styles, src, size }: CoverImageProps) {
     return (
         <img
             style={styles}
-            src={showPlaceholder ? "/assets/placeholder-cover.svg" : src}
+            src={showPlaceholder ? "/assets/placeholder-cover-purple.svg" : src}
             width={size}
             height={size}
             alt="Cover Image"

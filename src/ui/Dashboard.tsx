@@ -14,7 +14,7 @@ export default function Dashboard() {
 
     const [track, setTrack] = useState<TrackObject>({
         track_id: 0,
-        artwork: "/assets/placeholder-cover.svg",
+        artwork: "/assets/placeholder-cover-purple.svg",
         title: "Title",
         handle: "Artist",
         url: ""
@@ -36,7 +36,7 @@ export default function Dashboard() {
             const { track_id, artwork, title, user: { handle }, stream: { url } } = result.data;
             setTrack({ 
                 track_id,
-                artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
                 title, 
                 handle, 
                 url 
