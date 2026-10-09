@@ -4,6 +4,7 @@ import './styles/audio_player.css'
 import './styles/search_pane.css'
 import './styles/playlist_pane.css'
 import './styles/snackbar.css'
+import "./styles/favorite.css"
 
 import { MainPane } from './ui/Containers';
 import Dashboard from './ui/Dashboard';
