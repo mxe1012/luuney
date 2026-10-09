@@ -27,7 +27,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
         handle: "Test Artist",
         url: "",
     };
-
+    
     return (
         <div className="PlaylistPane">
             <div className="PlaylistPaneController">
@@ -62,20 +62,18 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             onIsPlaying={onIsPlaying} />
             <FavoritesList list={favorites}  onFavoritesList={onFavoritesList} visible={isFavoritesVisible}
             onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
-            <div>
-                <ul className={isCustomPlaylistVisible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                    <button onClick={() => onHandleCreatePlaylist("aaaa", TEST_TRACK)}>add</button>
-                    <button
-                    onClick={() => playlist[0] && onHandleAddToPlaylist(playlist[0].id, TEST_TRACK_2)}>
-                    add to first
-                    </button>
-                    {playlist.map(playlist => (
-                        <li key={playlist.id}>
-                            {playlist.name} ({playlist.tracks.length} tracks)
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            <ul className={isCustomPlaylistVisible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
+                <button onClick={() => onHandleCreatePlaylist("aaaa", TEST_TRACK)}>add</button>
+                <button
+                onClick={() => playlist[0] && onHandleAddToPlaylist(playlist[0].id, TEST_TRACK_2)}>
+                add to first
+                </button>
+                {playlist.map(playlist => (
+                    <li key={playlist.id}>
+                        <button>{playlist.name} ({playlist.tracks.length} tracks)</button>
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }
