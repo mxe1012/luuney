@@ -106,7 +106,7 @@ export default function SearchListPane({onHandleFetch, isFavorited ,onAddToFavor
                                                 e.stopPropagation();
                                                 onAddToFavorites(element)
                                             }}
-                                        >
+                                            >
                                             <img src={isFavorited(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
                                         </button>
                                     </div>
