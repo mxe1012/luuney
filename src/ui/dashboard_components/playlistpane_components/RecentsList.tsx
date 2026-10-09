@@ -2,7 +2,7 @@ import type { MainListProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function RecentsList({list, visible, onHandleFetch, onIsPlaying}: MainListProps) {
+export default function RecentsList({list, visible, onAddToFavorites, isFavorited, onHandleFetch, onIsPlaying}: MainListProps) {
     
     return (
         <>
@@ -17,9 +17,19 @@ export default function RecentsList({list, visible, onHandleFetch, onIsPlaying}:
                                 <div style={{flexShrink: 0}}>
                                     <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
                                 </div>
-                                <div style={{textAlign: 'left', minWidth: 0}}>
+                                <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                     <h4>{element.title}</h4>
                                     <h5>{element.handle}</h5>
+                                </div>
+                                <div style={{flexShrink: 0}}>
+                                    <button className="ListFavoriteBtn"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onAddToFavorites?.(element)
+                                        }}
+                                        >
+                                        <img src={isFavorited?.(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                                    </button>
                                 </div>
                             </div>
                     </button>
