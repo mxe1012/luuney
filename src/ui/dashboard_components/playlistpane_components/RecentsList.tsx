@@ -13,15 +13,15 @@ export default function RecentsList({recents, visible, onHandleFetch, onIsPlayin
                         onHandleFetch(element.track_id);
                         onIsPlaying(false)
                         }}>
-                            <div style={{display: "flex", justifyContent: "flex-start", gap: '5px'}}>
-                                <div>
+                            <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
+                                <div style={{flexShrink: 0}}>
                                     <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
                                 </div>
-                                <div style={{textAlign: 'left'}}>
+                                <div style={{textAlign: 'left', minWidth: 0}}>
                                     <h4>{element.title}</h4>
+                                    <h5>{element.handle}</h5>
                                 </div>
                             </div>
-                        <h5>{element.handle}</h5>
                     </button>
                 </li>
             ))}
