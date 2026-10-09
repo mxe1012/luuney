@@ -1,6 +1,6 @@
 # Luuney
 
-Luuney is a music player and streaming application built with React, TypeScript, and Vite. Play your favorite songs through Audius API.
+Luuney is a music player and streaming application built with React, TypeScript, and Vite. Play your favorite songs with tracks sourced from Audius API.
 
 ## Features
 
