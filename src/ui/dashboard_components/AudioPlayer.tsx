@@ -8,7 +8,7 @@ import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
 import { CoverImage } from "../Containers";
 
-export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -132,8 +132,15 @@ export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayer
                     <CoverImage styles={{borderRadius: '15px'}} src={track.artwork} size={256}/>
                 </div>
                 <div className={track.title.length >= 22 ? "scroll-container" : ""}>
-                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>{track.title}</h2>
+                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
+                        {track.title}
+                    </h2>
                     <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
+                </div>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <button className="FavoriteBtn" onClick={() => onAddToFavorites(track)}>
+                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                    </button>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 

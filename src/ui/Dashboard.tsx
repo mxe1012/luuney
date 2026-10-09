@@ -24,6 +24,10 @@ export default function Dashboard() {
 
     const [recents, setRecents] = useState<TrackObject[]>([]);
 
+    const [favorites, setFavorites] = useState<TrackObject[]>([]);
+    const [isFavorited, setIsFavorited] = useState(false);
+
+
     const { showSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
@@ -62,14 +66,31 @@ export default function Dashboard() {
         ])
     }
 
+    function addToFavorites(entry: TrackObject) {
+        const isInList = favorites.some((element) => element.track_id === entry.track_id);
+
+        if(isInList) {
+            const filtered = favorites.filter((element) => element.track_id != entry.track_id);
+            setFavorites(filtered) 
+            setIsFavorited(false);
+        }
+        else {
+            setFavorites([
+                ...favorites,
+                entry
+            ])
+            setIsFavorited(true);
+        }
+    }
+
     return (
         <>
             <div className="MusicDashboard">
                 <div>
-                    <PlaylistPane recents={recents} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
+                    <PlaylistPane recents={recents} favorites={favorites} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
                 </div>
                 <div>
-                    <AudioPlayer track={track} isPlaying={isPlaying} onIsPlaying={setIsPlaying}/>
+                    <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isFavorited} onAddToFavorites={addToFavorites} onIsPlaying={setIsPlaying}/>
                 </div>
                 <div>
                     <SearchListPane onHandleFetch={handleFetch} onAddToRecents={addToRecents} onIsPlaying={setIsPlaying}/>

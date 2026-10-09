@@ -1,13 +1,13 @@
-import type { RecentListProps } from "../../../utils/types";
+import type { MainListProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function RecentsList({recents, visible, onHandleFetch, onIsPlaying}: RecentListProps) {
+export default function RecentsList({list, visible, onHandleFetch, onIsPlaying}: MainListProps) {
     
     return (
         <>
             <ul className={visible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                {recents.map((element) => (
+                {list.map((element) => (
                     <li className="PlaylistPaneList" key={element.track_id}>
                         <button className="PlaylistButton" onClick={() => {
                         onHandleFetch(element.track_id);
