@@ -9,6 +9,7 @@ export default function PlaylistPane({recents, favorites, onFavoritesList, onRec
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
+    //const [isCustomPlaylistVisible, setIsCustomPlaylistVisible] = useState(false)
 
     return (
         <div className="PlaylistPane">
