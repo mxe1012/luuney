@@ -2,7 +2,7 @@ import type { MainListProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function FavoritesList({list, visible, onHandleFetch, onIsPlaying}: MainListProps) {
+export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onHandleFetch, onIsPlaying}: MainListProps) {
     
     return (
         <>
@@ -17,9 +17,19 @@ export default function FavoritesList({list, visible, onHandleFetch, onIsPlaying
                                 <div style={{flexShrink: 0}}>
                                     <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
                                 </div>
-                                <div style={{textAlign: 'left', minWidth: 0}}>
+                                <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                     <h4>{element.title}</h4>
                                     <h5>{element.handle}</h5>
+                                </div>
+                                <div style={{display: "flex", justifyContent: "center", flexShrink: 0, gap: '5px'}}>
+                                    <button className="ListFavoriteBtn"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onFavoritesList?.(onDeleteEntry(list, element));
+                                        }}
+                                        >
+                                        <img src="/assets/delete.svg" />
+                                    </button>
                                 </div>
                             </div>
                     </button>

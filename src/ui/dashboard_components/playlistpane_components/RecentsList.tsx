@@ -2,7 +2,7 @@ import type { MainListProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function RecentsList({list, visible, onAddToFavorites, isFavorited, onHandleFetch, onIsPlaying}: MainListProps) {
+export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, isFavorited, onHandleFetch, onIsPlaying}: MainListProps) {
     
     return (
         <>
@@ -21,7 +21,7 @@ export default function RecentsList({list, visible, onAddToFavorites, isFavorite
                                     <h4>{element.title}</h4>
                                     <h5>{element.handle}</h5>
                                 </div>
-                                <div style={{flexShrink: 0}}>
+                                <div style={{display: "flex", justifyContent: "center", flexShrink: 0, gap: '5px'}}>
                                     <button className="ListFavoriteBtn"
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -29,6 +29,14 @@ export default function RecentsList({list, visible, onAddToFavorites, isFavorite
                                         }}
                                         >
                                         <img src={isFavorited?.(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                                    </button>
+                                    <button className="ListFavoriteBtn"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onRecentsList?.(onDeleteEntry(list, element));
+                                        }}
+                                        >
+                                        <img src="/assets/delete.svg" />
                                     </button>
                                 </div>
                             </div>
