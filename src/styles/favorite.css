@@ -1,0 +1,6 @@
+button.FavoriteBtn {
+    outline: none;
+    border-style: none;
+    background-color: transparent;
+    cursor: pointer;
+}
