@@ -66,7 +66,7 @@ export default function Dashboard() {
 
     function handleAddToRecents(entry: TrackObject) {
         const maxed = recents.length >= 20 ? recents.slice(0, 19) : recents
-        const filtered = maxed.filter((element) => element.track_id != entry.track_id);
+        const filtered = maxed.filter((element) => element.track_id !== entry.track_id);
 
         setRecents([
             entry,
@@ -78,7 +78,7 @@ export default function Dashboard() {
         const isInList = favorites.some((element) => isSameEntry(element, entry));
 
         if(isInList) {
-            const filtered = favorites.filter((element) => element.track_id != entry.track_id);
+            const filtered = favorites.filter((element) => element.track_id !== entry.track_id);
             setFavorites(filtered)
             showSnackbar("Track Unfavorited!") 
         }
@@ -91,12 +91,21 @@ export default function Dashboard() {
         }
     }
 
+    function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
+        const filtered = list.filter((element) => element.track_id !== entry.track_id);
+        showSnackbar("Removed track from list.")
+        return filtered;
+    }
+
     return (
         <>
             <div className="MusicDashboard">
                 <div>
-                    <PlaylistPane recents={recents} favorites={favorites} isFavorited={isListTrackInFavorites}  
-                    onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
+                    <PlaylistPane recents={recents} favorites={favorites} 
+                    onRecentsList={setRecents} onFavoritesList={setFavorites}
+                    isFavorited={isListTrackInFavorites}  
+                    onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
+                    onIsPlaying={setIsPlaying} />
                 </div>
                 <div>
                     <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
