@@ -24,11 +24,11 @@ export default function Dashboard() {
 
     const [recents, setRecents] = useState<TrackObject[]>([]);
 
+    const [favorites, setFavorites] = useState<TrackObject[]>([]);
+
     const isSameEntry = (a: TrackObject, b: TrackObject) => {
         return a.track_id === b.track_id
     } 
-
-    const [favorites, setFavorites] = useState<TrackObject[]>([]);
 
     const isCurrentTrackFavorited = favorites.some((element) => isSameEntry(element, track));
 
