@@ -24,9 +24,17 @@ export default function Dashboard() {
 
     const [recents, setRecents] = useState<TrackObject[]>([]);
 
-    const [favorites, setFavorites] = useState<TrackObject[]>([]);
-    const [isFavorited, setIsFavorited] = useState(false);
+    const isSameEntry = (a: TrackObject, b: TrackObject) => {
+        return a.track_id === b.track_id
+    } 
 
+    const [favorites, setFavorites] = useState<TrackObject[]>([]);
+
+    const isCurrentTrackFavorited = favorites.some((element) => isSameEntry(element, track));
+
+    const isListTrackInFavorites = (entry: TrackObject) => {
+        return favorites.some((element) => isSameEntry(element, entry));
+    }
 
     const { showSnackbar } = useSnackbar();
 
@@ -67,19 +75,17 @@ export default function Dashboard() {
     }
 
     function addToFavorites(entry: TrackObject) {
-        const isInList = favorites.some((element) => element.track_id === entry.track_id);
+        const isInList = favorites.some((element) => isSameEntry(element, entry));
 
         if(isInList) {
             const filtered = favorites.filter((element) => element.track_id != entry.track_id);
             setFavorites(filtered) 
-            setIsFavorited(false);
         }
         else {
             setFavorites([
                 ...favorites,
                 entry
             ])
-            setIsFavorited(true);
         }
     }
 
@@ -90,10 +96,10 @@ export default function Dashboard() {
                     <PlaylistPane recents={recents} favorites={favorites} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
                 </div>
                 <div>
-                    <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isFavorited} onAddToFavorites={addToFavorites} onIsPlaying={setIsPlaying}/>
+                    <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} onAddToFavorites={addToFavorites} onIsPlaying={setIsPlaying}/>
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} onAddToRecents={addToRecents} onIsPlaying={setIsPlaying}/>
+                    <SearchListPane onHandleFetch={handleFetch} isFavorited={isListTrackInFavorites} onAddToFavorites={addToFavorites} onAddToRecents={addToRecents} onIsPlaying={setIsPlaying}/>
                 </div>
             </div>
         </>

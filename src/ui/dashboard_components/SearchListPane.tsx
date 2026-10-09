@@ -6,7 +6,7 @@ import type { SearchListPaneProps, TrackObject } from "../../utils/types";
 import { CoverImage } from "../Containers";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function SearchListPane({onHandleFetch, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
+export default function SearchListPane({onHandleFetch, isFavorited ,onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
     const [trackList, setTrackList] = useState<TrackObject[]>([]);
         
@@ -92,13 +92,23 @@ export default function SearchListPane({onHandleFetch, onAddToRecents, onIsPlayi
                                 onAddToRecents(element)
                                 onIsPlaying(false);
                                 }}>
-                                <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
+                                <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", gap: '12px'}}>
                                     <div style={{flexShrink: 0}}>
                                         <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
                                     </div>
-                                    <div style={{textAlign: 'left', minWidth: 0}}>
+                                    <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                         <h4>{element.title}</h4>
                                         <h5>{element.handle}</h5>
+                                    </div>
+                                    <div style={{flexShrink: 0}}>
+                                        <button className="ListFavoriteBtn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onAddToFavorites(element)
+                                            }}
+                                        >
+                                            <img src={isFavorited(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                                        </button>
                                     </div>
                                 </div>
                             </button>
