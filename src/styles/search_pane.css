@@ -163,6 +163,6 @@ ul.SearchList {
 
 li.SearchList {
     animation-name: fade-in;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     padding: 5px;
 }

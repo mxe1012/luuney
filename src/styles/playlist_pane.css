@@ -163,6 +163,6 @@ ul.PlaylistPaneList.hidden {
 
 li.PlaylistPaneList {
     animation-name: fade-in;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     padding: 5px;
 }
