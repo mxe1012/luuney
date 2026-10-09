@@ -5,7 +5,7 @@ import RecentsList from "./playlistpane_components/RecentsList";
 import FavoritesList from "./playlistpane_components/FavoritesList";
 
 
-export default function PlaylistPane({recents, favorites, isFavorited, onAddToFavorites, onHandleFetch, onIsPlaying}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, onFavoritesList, onRecentsList, isFavorited, onDeleteEntry, onAddToFavorites, onHandleFetch, onIsPlaying}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -28,10 +28,12 @@ export default function PlaylistPane({recents, favorites, isFavorited, onAddToFa
                     Favorites
                 </button>
                 <button className="PlaylistPaneControllerButton">Playlists</button>
-                <button className="PlaylistPaneControllerButton">Trending</button>
+                {/* <button className="PlaylistPaneControllerButton">Trending</button> */}
             </div>
-            <RecentsList list={recents} onAddToFavorites={onAddToFavorites} isFavorited={isFavorited} visible={isRecentsVisible} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying} />
-            <FavoritesList list={favorites} visible={isFavoritesVisible} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
+            <RecentsList list={recents} onRecentsList={onRecentsList} onAddToFavorites={onAddToFavorites}
+            onDeleteEntry={onDeleteEntry} isFavorited={isFavorited} visible={isRecentsVisible} onHandleFetch={onHandleFetch}
+            onIsPlaying={onIsPlaying} />
+            <FavoritesList list={favorites}  onFavoritesList={onFavoritesList} visible={isFavoritesVisible} onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
         </div>
     )
 }
