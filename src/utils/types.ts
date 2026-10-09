@@ -14,6 +14,8 @@ export interface AudioPlayerProps {
 
 export interface SearchListPaneProps {
     onHandleFetch: (id: number) => Promise<void>;
+    isFavorited: (entry: TrackObject) => boolean;
+    onAddToFavorites: (entry: TrackObject) => void
     onAddToRecents: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
