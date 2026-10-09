@@ -64,7 +64,7 @@ export default function Dashboard() {
         
     }
 
-    function addToRecents(entry: TrackObject) {
+    function handleAddToRecents(entry: TrackObject) {
         const maxed = recents.length >= 20 ? recents.slice(0, 19) : recents
         const filtered = maxed.filter((element) => element.track_id != entry.track_id);
 
@@ -74,18 +74,20 @@ export default function Dashboard() {
         ])
     }
 
-    function addToFavorites(entry: TrackObject) {
+    function handleAddToFavorites(entry: TrackObject) {
         const isInList = favorites.some((element) => isSameEntry(element, entry));
 
         if(isInList) {
             const filtered = favorites.filter((element) => element.track_id != entry.track_id);
-            setFavorites(filtered) 
+            setFavorites(filtered)
+            showSnackbar("Track Unfavorited!") 
         }
         else {
             setFavorites([
                 ...favorites,
                 entry
             ])
+            showSnackbar("Track Favorited!") 
         }
     }
 
@@ -96,10 +98,12 @@ export default function Dashboard() {
                     <PlaylistPane recents={recents} favorites={favorites} onHandleFetch={handleFetch} onIsPlaying={setIsPlaying} />
                 </div>
                 <div>
-                    <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} onAddToFavorites={addToFavorites} onIsPlaying={setIsPlaying}/>
+                    <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
+                    onAddToFavorites={handleAddToFavorites} onIsPlaying={setIsPlaying}/>
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} isFavorited={isListTrackInFavorites} onAddToFavorites={addToFavorites} onAddToRecents={addToRecents} onIsPlaying={setIsPlaying}/>
+                    <SearchListPane onHandleFetch={handleFetch} isFavorited={isListTrackInFavorites} 
+                    onAddToFavorites={handleAddToFavorites} onAddToRecents={handleAddToRecents} onIsPlaying={setIsPlaying}/>
                 </div>
             </div>
         </>
