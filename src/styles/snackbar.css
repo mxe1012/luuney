@@ -9,7 +9,7 @@
     max-width: min(90vw, 420px);
     box-sizing: border-box;
     padding: 12px 20px;
-
+    white-space: pre-line;
     font-family: "Inter", sans-serif;
     font-size: 0.95rem;
     text-align: center;
