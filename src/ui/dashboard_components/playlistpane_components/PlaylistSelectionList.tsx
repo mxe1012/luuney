@@ -11,27 +11,32 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     return (
         <>
             {!isSelectedPlaylist ? 
-                <ul className={visible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
+                <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {list.map((playlist) => (
-                        <li key={playlist.id}>
-                            <button onClick={() => {
-                                onIsSelectedPlaylist(true)
-                                onSetIsPlaylistSelectionVisible(false);
-                                setPlaylistId(playlist.id);
-                            }}>
-                                {playlist.name} ({playlist.tracks.length} tracks)
-                            </button>
+                        <li key={playlist.id} >
+                                <div>
+                                    <button className="PlaylistButton" onClick={() => {
+                                        onIsSelectedPlaylist(true)
+                                        onSetIsPlaylistSelectionVisible(false);
+                                        setPlaylistId(playlist.id);
+                                    }}>
+                                        {playlist.name} ({playlist.tracks.length} tracks)
+                                    </button>
+                                </div>
                         </li>
                     ))}
                 </ul>
                 :
-                <ul>
-                    <button onClick={() => {
-                        onSetIsPlaylistSelectionVisible(true)
-                        onIsSelectedPlaylist(false)
-                        setPlaylistId("");
-                    }}>
-                        back</button>
+                <ul className="PlaylistPaneFolderList">
+                    <div>
+                        <button id="PlaylistBackBtn"
+                        onClick={() => {
+                            onSetIsPlaylistSelectionVisible(true)
+                            onIsSelectedPlaylist(false)
+                            setPlaylistId("");
+                        }}>
+                            Back</button>
+                    </div>
                     {list.map((playlist) => (
                     <ul key={playlist.id} 
                         style={{
@@ -41,7 +46,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         className={"PlaylistPaneFolderList"}>
                         {playlist.id === playlistId && playlist.tracks.map((element) => (
                             <li key={element.track_id} className="PlaylistPaneFolderList">
-                                <button>
+                                <button className="PlaylistButton">
                                     <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
                                         <div style={{flexShrink: 0}}>
                                             <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
