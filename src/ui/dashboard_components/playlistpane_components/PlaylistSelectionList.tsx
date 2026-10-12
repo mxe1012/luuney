@@ -80,7 +80,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                             <button className="ListFavoriteBtn"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                onDeleteEntry(playlist.tracks, element);
+                                                (onDeleteEntry(playlist.tracks, element));
                                             }}
                                             >
                                             <img src="/assets/delete.svg" />
