@@ -20,7 +20,15 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                         onSetIsPlaylistSelectionVisible(false);
                                         setPlaylistId(playlist.id);
                                     }}>
-                                        {playlist.name} ({playlist.tracks.length} tracks)
+                                        <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
+                                            <div style={{flexShrink: 0}}>
+                                                <CoverImage styles={{borderRadius: '10px'}} src={"/assets/playlist-icon.svg"} size={64}/>
+                                            </div>
+                                            <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
+                                                <h4>{playlist.name}</h4>
+                                                <h5>({playlist.tracks.length} tracks)</h5>
+                                            </div>
+                                        </div>
                                     </button>
                                 </div>
                         </li>
