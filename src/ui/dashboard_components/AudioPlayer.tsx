@@ -1,6 +1,6 @@
 import type { AudioPlayerProps } from "../../utils/types";
 
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
 
@@ -163,7 +163,6 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                         </button>
                         <div
                         ref={playlistWrapperRef} 
-                        onBlur={() => setIsPlaylistMenuVisible(false)}
                         className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
                             <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
                                 <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
