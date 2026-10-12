@@ -1,48 +1,17 @@
 import { useState } from "react";
 
-import type { PlaylistSelectionProps, TrackObject } from "../../../utils/types";
+import type { PlaylistSelectionProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onHandleAddToPlaylist, onHandleCreatePlaylist}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
     
-
-    const TEST_TRACK: TrackObject = {
-        track_id: 111,
-        artwork: "",
-        title: "Test Track",
-        handle: "Test Artist",
-        url: "",
-    };
-
-    const TEST_TRACK_2: TrackObject = {
-        track_id: 222,
-        artwork: "",
-        title: "Test Track 2",
-        handle: "Test Artist 2",
-        url: "",
-    };
-
-    const TEST_TRACK_3: TrackObject = {
-        track_id: 333,
-        artwork: "",
-        title: "Test Track 3",
-        handle: "Test Artist 3",
-        url: "",
-    };
-
     return (
         <>
             {!isSelectedPlaylist ? 
                 <ul className={visible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                    <button onClick={() => onHandleCreatePlaylist("Palylist One", TEST_TRACK)}>add playlist 1</button>
-                    <button onClick={() => onHandleCreatePlaylist("Playlist Two", TEST_TRACK_2)}>add playlist 2</button>
-                    <button
-                    onClick={() => list[1] && onHandleAddToPlaylist(list[1].id, TEST_TRACK_3)}>
-                    add to second
-                    </button>
                     {list.map((playlist) => (
                         <li key={playlist.id}>
                             <button onClick={() => {

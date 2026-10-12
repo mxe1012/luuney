@@ -6,9 +6,12 @@ export interface ChildrenProps {
 
 export interface AudioPlayerProps {
     track: TrackObject
+    playlists: Playlist[];
     isPlaying: boolean;
     isFavorited: boolean;
-    onAddToFavorites: (entry: TrackObject) => void
+    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
+    onAddToFavorites: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -30,8 +33,8 @@ export interface PlaylistPaneProps {
     onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onAddToFavorites: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
-    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
-    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
+    // onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
+    // onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -52,8 +55,8 @@ export interface PlaylistSelectionProps {
     visible: boolean;
     isSelectedPlaylist: boolean;
     onIsSelectedPlaylist:  React.Dispatch<React.SetStateAction<boolean>>;
-    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
-    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    // onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
+    // onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
     onSetIsPlaylistSelectionVisible: React.Dispatch<React.SetStateAction<boolean>>;
     isFavorited?: (entry: TrackObject) => boolean;
     onRecentsList?: React.Dispatch<React.SetStateAction<TrackObject[]>>;

@@ -7,7 +7,7 @@ import FavoritesList from "./playlistpane_components/FavoritesList";
 
 import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionList";
 
-export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onDeleteEntry, onAddToFavorites, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onIsPlaying}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onDeleteEntry, onAddToFavorites, onHandleFetch, onIsPlaying}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -53,8 +53,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
             <PlaylistSelectionList list={playlist} 
             isSelectedPlaylist={isSelectedPlaylist} onIsSelectedPlaylist={setIsSelectedPlaylist}
-            visible={isPlaylistSelectionVisible} onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
-            onHandleAddToPlaylist={onHandleAddToPlaylist} onHandleCreatePlaylist={onHandleCreatePlaylist}/>
+            visible={isPlaylistSelectionVisible} onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}/>
         </div>
     )
 }

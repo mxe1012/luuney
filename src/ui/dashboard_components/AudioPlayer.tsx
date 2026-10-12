@@ -1,14 +1,15 @@
 import type { AudioPlayerProps } from "../../utils/types";
 
-import { useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
 import { CoverImage } from "../Containers";
+import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -16,8 +17,13 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
 
+    const [playlistName, setPlaylistName] = useState("");
+    const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
+
     const audioRef = useRef<HTMLAudioElement>(null);
-    
+    const playlistWrapperRef = useRef<HTMLDivElement>(null);
+
+    const { showSnackbar } = useSnackbar();
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
@@ -116,6 +122,16 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
         setIsMuted(audio.muted);
     };
 
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (!playlistWrapperRef.current?.contains(e.target as Node)) { 
+                setIsPlaylistMenuVisible(false)
+            };
+        }
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, [])
+
     return (
         <>
             <audio 
@@ -141,6 +157,42 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
                     <button className="FavoriteBtn" onClick={() => onAddToFavorites(track)}>
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
                     </button>
+                    <div className="PlaylistMenuWrapper">
+                        <button className="FavoriteBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
+                            <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
+                        </button>
+                        <div
+                        ref={playlistWrapperRef} 
+                        onBlur={() => setIsPlaylistMenuVisible(false)}
+                        className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
+                            <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
+                                <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
+                                onChange={(e) => {
+                                    setPlaylistName(e.target.value)
+                                }} 
+                                onClick={(e) => e.stopPropagation()} 
+                                />
+                                <button className="PlaylistMenuItem" 
+                                disabled={playlistName.length == 0 ? true : false}
+                                onClick={() => { 
+                                    onHandleCreatePlaylist(playlistName, track);
+                                    showSnackbar("Playlist created!")
+                                }}>
+                                        +
+                                    </button>
+                            </div>
+                            <div className="PlaylistMenuList">
+                                {playlists.map((element) => (
+                                    <button className="PlaylistMenuItem" key={element.id} onClick={() => {
+                                        onHandleAddToPlaylist(element.id, track);
+                                        showSnackbar("Track added to " + element.name + "!")
+                                    }}>
+                                        {element.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 

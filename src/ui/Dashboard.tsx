@@ -122,6 +122,12 @@ export default function Dashboard() {
         return filtered;
     }
 
+    function handleDeletePlaylist(entry: Playlist) {
+        const filtered = playlists.filter((element) => element.id !== entry.id);
+        showSnackbar("Removed playlist.")
+        return filtered;
+    }
+
     return (
         <>
             <div className="MusicDashboard">
@@ -130,11 +136,13 @@ export default function Dashboard() {
                     onRecentsList={setRecents} onFavoritesList={setFavorites}
                     isFavorited={isListTrackInFavorites}  
                     onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
-                    onIsPlaying={setIsPlaying} onHandleCreatePlaylist={handleCreatePlaylist} onHandleAddToPlaylist={handleAddToPlaylist}/>
+                    onIsPlaying={setIsPlaying} />
                 </div>
                 <div>
-                    <AudioPlayer track={track} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
-                    onAddToFavorites={handleAddToFavorites} onIsPlaying={setIsPlaying}/>
+                    <AudioPlayer track={track} playlists={playlists} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
+                    onAddToFavorites={handleAddToFavorites} onIsPlaying={setIsPlaying}
+                    onHandleCreatePlaylist={handleCreatePlaylist} onHandleAddToPlaylist={handleAddToPlaylist}
+                    />
                 </div>
                 <div>
                     <SearchListPane onHandleFetch={handleFetch} isFavorited={isListTrackInFavorites} 
