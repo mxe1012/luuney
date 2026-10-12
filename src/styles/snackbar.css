@@ -1,46 +1,37 @@
-@-webkit-keyframes fadein {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1); 
-        opacity: 1;
-    }
-}
-
-@keyframes fadein {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 #snackbar {
-    visibility: hidden;
-    min-width: 250px; 
-    margin-left: -125px; 
-    background-color: rgba(200, 200, 200, 0.5); 
-    font-family: "Inter", sans-serif;
-    text-align: center;
-    padding: 16px; 
-    position: fixed; 
-    z-index: 3; 
-    left: 50%; 
+    position: fixed;
+    z-index: 3;
+    left: 50%;
     bottom: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 2px whitesmoke;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    transform: translate(-50%, 12px);
+
+    min-width: 250px;
+    max-width: min(90vw, 420px);
+    box-sizing: border-box;
+    padding: 12px 20px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    text-align: center;
+    color: #F3D9C7;
+
+    background: rgba(36, 22, 55, 0.55);
+    border: 1px solid rgba(220, 204, 247, 0.25);
+    border-radius: 16px;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 12px 32px rgba(20, 10, 40, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms;
 }
 
 #snackbar.show {
-    visibility: visible; 
-    -webkit-animation: fadein 0.2s;
-    animation: fadein 0.2s;
-    white-space: pre-line;
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: opacity 200ms ease, transform 200ms ease, visibility 0s;
 }
