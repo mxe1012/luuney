@@ -4,7 +4,7 @@ import type { PlaylistSelectionProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
     
@@ -46,7 +46,10 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         className={"PlaylistPaneFolderList"}>
                         {playlist.id === playlistId && playlist.tracks.map((element) => (
                             <li key={element.track_id} className="PlaylistPaneFolderList">
-                                <button className="PlaylistButton">
+                                <button className="PlaylistButton" onClick={() => {
+                                    onHandleFetch(element.track_id);
+                                    onIsPlaying(false);
+                                }}>
                                     <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
                                         <div style={{flexShrink: 0}}>
                                             <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
