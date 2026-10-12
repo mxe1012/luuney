@@ -16,6 +16,8 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
 
+    const [playlistName, setPlaylistName] = useState("");
+
     const audioRef = useRef<HTMLAudioElement>(null);
     
     async function handleTogglePlay() {
