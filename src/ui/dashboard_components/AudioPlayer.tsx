@@ -187,7 +187,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                                         onHandleAddToPlaylist(element.id, track);
                                         showSnackbar("Track added to " + element.name + "!")
                                     }}>
-                                        {element.name}
+                                        <p style={{margin: 0, padding: 0, minWidth: 0, flex: 1}}>{element.name}</p>
                                     </button>
                                 ))}
                             </div>
