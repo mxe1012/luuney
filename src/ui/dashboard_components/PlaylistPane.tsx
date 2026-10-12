@@ -1,46 +1,20 @@
 import { useState } from "react";
+
 import type { PlaylistPaneProps } from "../../utils/types";
-// import { CoverImage } from "../Containers";
+
 import RecentsList from "./playlistpane_components/RecentsList";
 import FavoritesList from "./playlistpane_components/FavoritesList";
 
-import type { TrackObject } from "../../utils/types";
-import { CoverImage } from "../Containers";
+import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionList";
 
 export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onDeleteEntry, onAddToFavorites, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onIsPlaying}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
-
-    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
-
-    const [playlistId, setPlaylistId] = useState<string | null>("");
-    const [isPlaylistSelected, setIsPlaylistSelected] = useState(false);
-
-    const TEST_TRACK: TrackObject = {
-        track_id: 111,
-        artwork: "",
-        title: "Test Track",
-        handle: "Test Artist",
-        url: "",
-    };
-
-    const TEST_TRACK_2: TrackObject = {
-        track_id: 222,
-        artwork: "",
-        title: "Test Track 2",
-        handle: "Test Artist 2",
-        url: "",
-    };
-
-    const TEST_TRACK_3: TrackObject = {
-        track_id: 333,
-        artwork: "",
-        title: "Test Track 3",
-        handle: "Test Artist 3",
-        url: "",
-    };
+    const [isPlaylistSelectionVisible, setIsPlaylistSelectionVisible] = useState(false);
     
+    const [isSelectedPlaylist, setIsSelectedPlaylist] = useState(false);
+
     return (
         <div className="PlaylistPane">
             <div className="PlaylistPaneController">
@@ -48,7 +22,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 onClick={() => {
                     setIsRecentsVisible(true);
                     setIsFavoritesVisible(false);
-                    setIsPlaylistVisible(false);
+                    setIsPlaylistSelectionVisible(false);
+                    setIsSelectedPlaylist(false);
                 }}>
                     Recents
                 </button>
@@ -56,7 +31,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 onClick={() => {
                     setIsRecentsVisible(false);
                     setIsFavoritesVisible(true);
-                    setIsPlaylistVisible(false);
+                    setIsPlaylistSelectionVisible(false);
+                    setIsSelectedPlaylist(false);
                 }}>
                     Favorites
                 </button>
@@ -64,7 +40,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 onClick={() => {
                     setIsRecentsVisible(false);
                     setIsFavoritesVisible(false);
-                    setIsPlaylistVisible(true);
+                    setIsPlaylistSelectionVisible(true);
+                    setIsSelectedPlaylist(false);
                 }} 
                 >
                     Playlists</button>
@@ -74,41 +51,10 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             onIsPlaying={onIsPlaying} />
             <FavoritesList list={favorites}  onFavoritesList={onFavoritesList} visible={isFavoritesVisible}
             onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
-            <ul className={isPlaylistVisible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                <button onClick={() => setPlaylistId("")}>back</button>
-                <button onClick={() => onHandleCreatePlaylist("Palylist One", TEST_TRACK)}>add playlist 1</button>
-                <button onClick={() => onHandleCreatePlaylist("Playlist Two", TEST_TRACK_2)}>add playlist 2</button>
-                <button
-                onClick={() => playlist[1] && onHandleAddToPlaylist(playlist[1].id, TEST_TRACK_3)}>
-                add to first
-                </button>
-                {playlist.map((playlist) => (
-                    <li key={playlist.id}>
-                        <button onClick={() => {
-                            setPlaylistId(playlist.id);
-                        }}>
-                            {playlist.name} ({playlist.tracks.length} tracks)
-                        </button>
-                        <ul className={playlist.id == playlistId ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
-                            {playlist.tracks.map((element) => (
-                                <li key={element.track_id} className="PlaylistPaneFolderList">
-                                    <button>
-                                        <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                            <div style={{flexShrink: 0}}>
-                                                <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={64}/>
-                                            </div>
-                                            <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
-                                                <h4>{element.title}</h4>
-                                                <h5>{element.handle}</h5>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </li>
-                ))}
-            </ul>
+            <PlaylistSelectionList list={playlist} 
+            isSelectedPlaylist={isSelectedPlaylist} onIsSelectedPlaylist={setIsSelectedPlaylist}
+            visible={isPlaylistSelectionVisible} onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
+            onHandleAddToPlaylist={onHandleAddToPlaylist} onHandleCreatePlaylist={onHandleCreatePlaylist}/>
         </div>
     )
 }
