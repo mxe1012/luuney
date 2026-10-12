@@ -175,7 +175,8 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                                 disabled={playlistName.length == 0 ? true : false}
                                 onClick={() => { 
                                     onHandleCreatePlaylist(playlistName, track);
-                                    showSnackbar("Playlist created!")
+                                    setPlaylistName("");
+                                    showSnackbar("Playlist created!");
                                 }}>
                                         +
                                     </button>
