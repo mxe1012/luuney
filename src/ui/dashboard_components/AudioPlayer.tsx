@@ -1,6 +1,6 @@
 import type { AudioPlayerProps } from "../../utils/types";
 
-import { useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
 
@@ -17,9 +17,11 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
     const [isMuted, setIsMuted] = useState(false);
 
     const [playlistName, setPlaylistName] = useState("");
+    const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement>(null);
-    
+    const playlistWrapperRef = useRef<HTMLDivElement>(null);
+
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
@@ -118,6 +120,16 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
         setIsMuted(audio.muted);
     };
 
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (!playlistWrapperRef.current?.contains(e.target as Node)) { 
+                setIsPlaylistMenuVisible(false)
+            };
+        }
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, [])
+
     return (
         <>
             <audio 
@@ -143,6 +155,27 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
                     <button className="FavoriteBtn" onClick={() => onAddToFavorites(track)}>
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
                     </button>
+                    <div className="PlaylistMenuWrapper">
+                        <button className="FavoriteBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
+                            <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
+                        </button>
+                        <div
+                        ref={playlistWrapperRef} 
+                        onBlur={() => setIsPlaylistMenuVisible(false)}
+                        className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
+                            <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
+                            onChange={(e) => {
+                                setPlaylistName(e.target.value)
+                            }} 
+                            onClick={(e) => e.stopPropagation()} 
+                            />
+                            <div className="PlaylistMenuList">
+                                <button className="PlaylistMenuItem">aaa</button>
+                                <button className="PlaylistMenuItem">aaa</button>
+                                <button className="PlaylistMenuItem">aaa</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 
