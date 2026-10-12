@@ -14,23 +14,23 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {list.map((playlist) => (
                         <li key={playlist.id} >
-                                <div>
-                                    <button className="PlaylistButton" onClick={() => {
-                                        onIsSelectedPlaylist(true)
-                                        onSetIsPlaylistSelectionVisible(false);
-                                        setPlaylistId(playlist.id);
-                                    }}>
-                                        <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                            <div style={{flexShrink: 0}}>
-                                                <CoverImage styles={{borderRadius: '10px'}} src={"/assets/playlist-icon.svg"} size={64}/>
-                                            </div>
-                                            <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
-                                                <h4>{playlist.name}</h4>
-                                                <h5>({playlist.tracks.length} tracks)</h5>
-                                            </div>
+                            <div>
+                                <button className="PlaylistButton" onClick={() => {
+                                    onIsSelectedPlaylist(true)
+                                    onSetIsPlaylistSelectionVisible(false);
+                                    setPlaylistId(playlist.id);
+                                }}>
+                                    <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
+                                        <div style={{flexShrink: 0}}>
+                                            <CoverImage styles={{borderRadius: '10px'}} src={"/assets/playlist-icon.svg"} size={64}/>
                                         </div>
-                                    </button>
-                                </div>
+                                        <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
+                                            <h4>{playlist.name}</h4>
+                                            <h5>({playlist.tracks.length} tracks)</h5>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
                         </li>
                     ))}
                 </ul>
