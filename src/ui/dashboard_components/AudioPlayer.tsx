@@ -8,7 +8,7 @@ import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
 import { CoverImage } from "../Containers";
 
-export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -163,16 +163,27 @@ export default function AudioPlayer({track, isPlaying, isFavorited, onAddToFavor
                         ref={playlistWrapperRef} 
                         onBlur={() => setIsPlaylistMenuVisible(false)}
                         className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
-                            <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
-                            onChange={(e) => {
-                                setPlaylistName(e.target.value)
-                            }} 
-                            onClick={(e) => e.stopPropagation()} 
-                            />
+                            <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
+                                <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
+                                onChange={(e) => {
+                                    setPlaylistName(e.target.value)
+                                }} 
+                                onClick={(e) => e.stopPropagation()} 
+                                />
+                                <button className="PlaylistMenuItem" onClick={() => { 
+                                    onHandleCreatePlaylist(playlistName, track)}
+                                    }>
+                                        +
+                                    </button>
+                            </div>
                             <div className="PlaylistMenuList">
-                                <button className="PlaylistMenuItem">aaa</button>
-                                <button className="PlaylistMenuItem">aaa</button>
-                                <button className="PlaylistMenuItem">aaa</button>
+                                {playlists.map((element) => (
+                                    <button className="PlaylistMenuItem" key={element.id} onClick={() => {
+                                        onHandleAddToPlaylist(element.id, track);
+                                    }}>
+                                        {element.name}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
