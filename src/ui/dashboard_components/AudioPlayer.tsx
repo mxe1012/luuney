@@ -170,7 +170,9 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                                 }} 
                                 onClick={(e) => e.stopPropagation()} 
                                 />
-                                <button className="PlaylistMenuItem" onClick={() => { 
+                                <button className="PlaylistMenuItem" 
+                                disabled={playlistName.length == 0 ? true : false}
+                                onClick={() => { 
                                     onHandleCreatePlaylist(playlistName, track)}
                                     }>
                                         +

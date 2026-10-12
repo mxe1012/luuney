@@ -80,3 +80,9 @@
     background: rgba(167, 139, 250, 0.3);
     border-color: rgba(220, 204, 247, 0.3);
 }
+
+.PlaylistMenuItem:disabled {
+    background: rgba(255, 255, 255, 0.08);
+    color: #8d8b8b;
+    cursor: not-allowed;
+}
