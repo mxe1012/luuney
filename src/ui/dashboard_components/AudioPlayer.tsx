@@ -1,14 +1,15 @@
 import type { AudioPlayerProps } from "../../utils/types";
 
-import { useRef, useState, type ChangeEvent } from "react";
+import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
 import { CoverImage } from "../Containers";
+import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -16,8 +17,13 @@ export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayer
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
 
+    const [playlistName, setPlaylistName] = useState("");
+    const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
+
     const audioRef = useRef<HTMLAudioElement>(null);
-    
+    const playlistWrapperRef = useRef<HTMLDivElement>(null);
+
+    const { showSnackbar } = useSnackbar();
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
@@ -116,6 +122,16 @@ export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayer
         setIsMuted(audio.muted);
     };
 
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (!playlistWrapperRef.current?.contains(e.target as Node)) { 
+                setIsPlaylistMenuVisible(false)
+            };
+        }
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, [])
+
     return (
         <>
             <audio 
@@ -129,11 +145,54 @@ export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayer
             onVolumeChange={handleElementVolumeChange} />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <CoverImage styles={{borderRadius: '15px'}} src={track.artwork} size={256}/>
+                    <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
                 <div className={track.title.length >= 22 ? "scroll-container" : ""}>
-                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center"}}>{track.title}</h2>
-                    <h3 style={{textAlign: "center"}}>{track.handle}</h3>   
+                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
+                        {track.title}
+                    </h2>
+                    <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
+                </div>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <button className="FavoriteBtn" onClick={() => onAddToFavorites(track)}>
+                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                    </button>
+                    <div className="PlaylistMenuWrapper">
+                        <button className="FavoriteBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
+                            <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
+                        </button>
+                        <div
+                        ref={playlistWrapperRef} 
+                        className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
+                            <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
+                                <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
+                                onChange={(e) => {
+                                    setPlaylistName(e.target.value)
+                                }} 
+                                onClick={(e) => e.stopPropagation()} 
+                                />
+                                <button className="PlaylistMenuItem" 
+                                disabled={playlistName.length == 0 ? true : false}
+                                onClick={() => { 
+                                    onHandleCreatePlaylist(playlistName, track);
+                                    setPlaylistName("");
+                                    showSnackbar("Playlist created!");
+                                }}>
+                                        +
+                                    </button>
+                            </div>
+                            <div className="PlaylistMenuList">
+                                {playlists.map((element) => (
+                                    <button className="PlaylistMenuItem" key={element.id} onClick={() => {
+                                        onHandleAddToPlaylist(element.id, track);
+                                        showSnackbar("Track added to " + element.name + "!")
+                                    }}>
+                                        {element.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <input 
@@ -148,10 +207,10 @@ export default function AudioPlayer({track, isPlaying, onIsPlaying}: AudioPlayer
                 </div>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div>
-                        {formatTime(currentTime)}
+                        <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(currentTime)}</h4>
                     </div>
                     <div>
-                        {formatTime(duration)}
+                        <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(duration)}</h4>
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>

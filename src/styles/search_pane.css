@@ -1,3 +1,14 @@
+@keyframes pane-slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;
@@ -9,57 +20,149 @@
     }
 }
 
+.SearchController {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 20px;
+    white-space: nowrap;
+    overflow: scroll;
+}
 
 .SearchPane {
-    background-color: rgba(200, 200, 200, 0.3);
+    animation: pane-slide-in-right 1.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    background:
+        radial-gradient(circle at 20% 0%, rgba(167, 139, 250, 0.18), transparent 55%),
+        rgba(36, 22, 55, 0.5);
     padding: 20px;
-    border-radius: 15px;
-    backdrop-filter: blur(2px);
-    box-shadow: 0px 0px 2px whitesmoke;
-    min-width: 340px;
-    max-width: 340px;
-    max-height: 579px;
+    border-radius: 24px;
+    border: 1px solid rgba(220, 204, 247, 0.18);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow:
+        0 8px 32px rgba(10, 5, 20, 0.45),
+        0 0 24px rgba(167, 139, 250, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    width: 340px;
+    height: 650px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .SearchPane {
+        animation: none;
+    }
 }
 
 .SearchInput {
-    background-color: rgba(200, 200, 200, 0.5);
-    border-style: none;
-    box-shadow: 0px 0px 2px whitesmoke;
-    padding: 15px;
-    border-radius: 15px;
-    transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    color: #DCCCF7;
+    background-color: rgba(167, 139, 250, 0.15);
+    border: 1px solid rgba(220, 204, 247, 0.3);
+    border-radius: 50px;
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    box-shadow:
+        0 0 12px rgba(167, 139, 250, 0.45),
+        0 0 30px rgba(167, 139, 250, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.SearchInput:hover {
+    background-color: rgba(167, 139, 250, 0.25);
+    border-color: rgba(220, 204, 247, 0.5);
+    box-shadow:
+        0 0 16px rgba(167, 139, 250, 0.6),
+        0 0 40px rgba(167, 139, 250, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .SearchInput:focus {
-    background-color: whitesmoke;
+    background-color: rgba(167, 139, 250, 0.25);
+    border-color: rgba(220, 204, 247, 0.5);
+    box-shadow:
+        0 0 16px rgba(167, 139, 250, 0.6),
+        0 0 40px rgba(167, 139, 250, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
     outline: none;
+}
+
+.SearchInput:focus-visible {
+    outline: 2px solid #DCCCF7;
+    outline-offset: 3px;
 }
 
 .SearchListButton {
-    background-color: rgba(200, 200, 200, 0.5);
-    outline: none;
-    border-style: none;
+    background-color: rgba(88, 69, 133, 0.7);
+    text-align: left;
+    color: #DCCCF7;
+    border: 1px solid rgba(220, 204, 247, 0.15);
     border-radius: 15px;
     padding: 10px;
-    min-width: 330px;
-    gap: 5px;
-    transition: background-color 0.3s ease;
+    width: 100%;
+    box-shadow:
+        0 4px 14px rgba(10, 5, 20, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease,
+                box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.SearchListButton h4 {
+    margin: 0 0 4px;
+    color: #F3D9C7;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.SearchListButton h5 {
+    margin: 0;
+    color: rgba(220, 204, 247, 0.75);
+    font-weight: 400;
 }
 
 .SearchListButton:hover {
-    background-color: whitesmoke;
+    background-color: rgba(124, 100, 190, 0.85);
+    border-color: rgba(220, 204, 247, 0.35);
+    box-shadow:
+        0 6px 20px rgba(10, 5, 20, 0.35),
+        0 0 18px rgba(167, 139, 250, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
     cursor: pointer;
+}
+
+.SearchListButton:active {
+    background-color: rgba(167, 139, 250, 0.6);
+    transform: translateY(0);
+}
+
+.SearchListButton:focus-visible {
+    outline: 2px solid #DCCCF7;
+    outline-offset: 3px;
 }
 
 ul.SearchList {
     list-style-type: none;
     padding: 0px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     max-height: 500px;
     overflow: scroll;
+   -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent);
+    mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 32px,
+    black calc(100% - 48px),
+    transparent
+  );
 }
 
 li.SearchList {
     animation-name: fade-in;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     padding: 5px;
 }

@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { ChildrenProps, CoverImageProps } from "../utils/types";
 
 export function MainPane({children}: ChildrenProps) {
-    return <div style={{marginTop: "20px"}}>{children}</div>;
+    return <>{children}</>;
 }
 
 export function CoverImage({ styles, src, size }: CoverImageProps) {
@@ -14,7 +14,7 @@ export function CoverImage({ styles, src, size }: CoverImageProps) {
     return (
         <img
             style={styles}
-            src={showPlaceholder ? "/assets/placeholder-cover.svg" : src}
+            src={showPlaceholder ? "/assets/placeholder-cover-purple.svg" : src}
             width={size}
             height={size}
             alt="Cover Image"
