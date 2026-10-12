@@ -47,6 +47,23 @@ export interface MainListProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface PlaylistSelectionProps {
+    list: Playlist[]
+    visible: boolean;
+    isSelectedPlaylist: boolean;
+    onIsSelectedPlaylist:  React.Dispatch<React.SetStateAction<boolean>>;
+    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onSetIsPlaylistSelectionVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    isFavorited?: (entry: TrackObject) => boolean;
+    onRecentsList?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onFavoritesList?: React.Dispatch<React.SetStateAction<TrackObject[]>>
+    // onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
+    onAddToFavorites?: (entry: TrackObject) => void
+    // onHandleFetch: (id: number) => Promise<void>;
+    // onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export interface TrackObject {
     track_id: number;
     artwork: string;
