@@ -55,7 +55,6 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 }} 
                 >
                     Playlists</button>
-                {/* <button className="PlaylistPaneControllerButton">Trending</button> */}
             </div>
             <RecentsList list={recents} onRecentsList={onRecentsList} onAddToFavorites={onAddToFavorites}
             onDeleteEntry={onDeleteEntry} isFavorited={isFavorited} visible={isRecentsVisible} onHandleFetch={onHandleFetch}
