@@ -83,7 +83,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                                 onAddToFavorites?.(element)
                                             }}
                                             >
-                                            <img src={isFavorited?.(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                                                <img src={isFavorited?.(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
                                             </button>
                                         </div>
                                         <div>
@@ -93,7 +93,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                                 (onDeleteEntry(playlist.tracks, element));
                                             }}
                                             >
-                                            <img src="/assets/delete.svg" />
+                                                <img src="/assets/delete.svg" />
                                             </button>
                                         </div>
                                     </div>
