@@ -4,7 +4,7 @@ import type { PlaylistSelectionProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylistEntry, onSetPlaylist, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylistEntry, onDeleteEntry, onSetPlaylist, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
     
@@ -75,6 +75,16 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                         <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                             <h4>{element.title}</h4>
                                             <h5>{element.handle}</h5>
+                                        </div>
+                                        <div>
+                                            <button className="ListFavoriteBtn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDeleteEntry(playlist.tracks, element);
+                                            }}
+                                            >
+                                            <img src="/assets/delete.svg" />
+                                            </button>
                                         </div>
                                     </div>
                                 </button>

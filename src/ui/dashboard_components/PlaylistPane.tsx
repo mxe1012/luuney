@@ -53,7 +53,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
             <PlaylistSelectionList list={playlist} onSetPlaylist={onSetPlaylist}
             isSelectedPlaylist={isSelectedPlaylist} onIsSelectedPlaylist={setIsSelectedPlaylist}
-            visible={isPlaylistSelectionVisible} onDeletePlaylistEntry={onDeletePlaylistEntry}
+            visible={isPlaylistSelectionVisible} 
+            onDeletePlaylistEntry={onDeletePlaylistEntry} onDeleteEntry={onDeleteEntry}
             onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
             onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}
             />
