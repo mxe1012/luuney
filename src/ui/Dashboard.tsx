@@ -7,7 +7,6 @@ import type { Playlist, TrackObject } from "../utils/types";
 import SearchListPane from "./dashboard_components/SearchListPane";
 import { useSnackbar } from "../hooks/SnackbarContext";
 
-// import { CoverImage } from "./Containers";
 import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 export default function Dashboard() {
@@ -133,8 +132,8 @@ export default function Dashboard() {
             <div className="MusicDashboard">
                 <div>
                     <PlaylistPane recents={recents} favorites={favorites} playlist={playlists}
-                    onRecentsList={setRecents} onFavoritesList={setFavorites}
-                    isFavorited={isListTrackInFavorites}  
+                    onRecentsList={setRecents} onFavoritesList={setFavorites} onSetPlaylist={setPlaylists}
+                    isFavorited={isListTrackInFavorites} onDeletePlaylistEntry={handleDeletePlaylist}
                     onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
                     onIsPlaying={setIsPlaying} />
                 </div>
