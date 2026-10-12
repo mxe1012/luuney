@@ -7,6 +7,7 @@ import { formatTime } from "../../utils/helpers";
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
 import { CoverImage } from "../Containers";
+import { useSnackbar } from "../../hooks/SnackbarContext";
 
 export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
 
@@ -22,6 +23,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
+    const { showSnackbar } = useSnackbar();
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
@@ -173,8 +175,9 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                                 <button className="PlaylistMenuItem" 
                                 disabled={playlistName.length == 0 ? true : false}
                                 onClick={() => { 
-                                    onHandleCreatePlaylist(playlistName, track)}
-                                    }>
+                                    onHandleCreatePlaylist(playlistName, track);
+                                    showSnackbar("Playlist created!")
+                                }}>
                                         +
                                     </button>
                             </div>
@@ -182,6 +185,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                                 {playlists.map((element) => (
                                     <button className="PlaylistMenuItem" key={element.id} onClick={() => {
                                         onHandleAddToPlaylist(element.id, track);
+                                        showSnackbar("Track added to " + element.name + "!")
                                     }}>
                                         {element.name}
                                     </button>

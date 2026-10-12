@@ -122,6 +122,12 @@ export default function Dashboard() {
         return filtered;
     }
 
+    function handleDeletePlaylist(entry: Playlist) {
+        const filtered = playlists.filter((element) => element.id !== entry.id);
+        showSnackbar("Removed playlist.")
+        return filtered;
+    }
+
     return (
         <>
             <div className="MusicDashboard">
