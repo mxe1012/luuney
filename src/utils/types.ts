@@ -63,8 +63,8 @@ export interface PlaylistSelectionProps {
     onFavoritesList?: React.Dispatch<React.SetStateAction<TrackObject[]>>
     // onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onAddToFavorites?: (entry: TrackObject) => void
-    // onHandleFetch: (id: number) => Promise<void>;
-    // onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onHandleFetch: (id: number) => Promise<void>;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface TrackObject {
