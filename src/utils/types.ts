@@ -119,6 +119,7 @@ export interface Playlist {
 export interface ListButtonProps {
     list: TrackObject[];
     track: TrackObject;
+    playlist?: Playlist;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onAddToRecents?: (entry: TrackObject) => void;
@@ -126,6 +127,7 @@ export interface ListButtonProps {
     isFavorited?: (entry: TrackObject) => boolean;
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => TrackObject[];
+    onDeletePlaylistEntry?: (playlistId: string, entry: TrackObject) => void
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
 }
