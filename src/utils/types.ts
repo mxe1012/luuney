@@ -41,6 +41,16 @@ export interface PlaylistPaneProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface PlaylistPaneControllerProps {
+    isRecentsVisible: boolean;
+    isFavoritesVisible: boolean;
+    isPlaylistSelectionVisible: boolean;
+    onSetIsRecentsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetIsFavoritesVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetIsPlaylistSelectionVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetIsSelectedPlaylist: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export interface MainListProps {
     list: TrackObject[]
     visible: boolean;
