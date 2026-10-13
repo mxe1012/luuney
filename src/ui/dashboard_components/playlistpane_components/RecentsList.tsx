@@ -10,16 +10,16 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                 {list.map((element) => (
                     <li className="PlaylistPaneList" key={element.track_id}>
                         <ListButton 
-                        list={list}
-                        track={element}
-                        onHandleFetch={onHandleFetch}
-                        onAddToFavorites={onAddToFavorites}
-                        onListDeleteEntry={onRecentsList}
-                        onDeleteEntry={onDeleteEntry}
-                        onIsPlaying={onIsPlaying}
-                        isFavorited={isFavorited}
-                        hasDeleteButton={true}
-                        hasFavoriteButton={true}
+                            list={list}
+                            track={element}
+                            onHandleFetch={onHandleFetch}
+                            onAddToFavorites={onAddToFavorites}
+                            onListDeleteEntry={onRecentsList}
+                            onDeleteEntry={onDeleteEntry}
+                            onIsPlaying={onIsPlaying}
+                            isFavorited={isFavorited}
+                            hasDeleteButton={true}
+                            hasFavoriteButton={true}
                         />
                     </li>
                 ))}
