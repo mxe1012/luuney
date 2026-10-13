@@ -81,14 +81,14 @@ export default function Dashboard() {
         if(isInList) {
             const filtered = favorites.filter((element) => element.track_id !== entry.track_id);
             setFavorites(filtered)
-            showSnackbar("Track Unfavorited!") 
+            showSnackbar("Removed track from favorites!") 
         }
         else {
             setFavorites([
                 ...favorites,
                 entry
             ])
-            showSnackbar("Track Favorited!") 
+            showSnackbar("Added track to favorites!") 
         }
     }
 
