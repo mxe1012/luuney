@@ -1,4 +1,4 @@
-button.FavoriteBtn {
+button.ActionBtn {
     outline: none;
     border-style: none;
     background-color: transparent;
@@ -6,17 +6,17 @@ button.FavoriteBtn {
     transition: transform 0.5s ease;
 }
 
-button.FavoriteBtn:active {
+button.ActionBtn:active {
     transform: scale(0.8);
 }
 
-button.ListFavoriteBtn {
+button.ListActionBtn {
     background-color: rgba(88, 69, 133, 0.7);
     text-align: left;
     color: #DCCCF7;
     border: 1px solid rgba(220, 204, 247, 0.15);
     border-radius: 100%;
-    padding: 10px;
+    padding: 5px;
     width: 100%;
     box-shadow:
         0 4px 14px rgba(10, 5, 20, 0.3),
@@ -24,4 +24,20 @@ button.ListFavoriteBtn {
     transition: background-color 0.3s ease, border-color 0.3s ease,
                 box-shadow 0.3s ease, transform 0.3s ease;
     cursor: pointer;
+}
+
+button.ListActionBtn:hover {
+    background-color: rgba(124, 100, 190, 0.85);
+    border-color: rgba(220, 204, 247, 0.35);
+    box-shadow:
+        0 6px 20px rgba(10, 5, 20, 0.35),
+        0 0 18px rgba(167, 139, 250, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+button.ListActionBtn:active {
+    background-color: rgba(167, 139, 250, 0.6);
+    transform: translateY(0);
 }
