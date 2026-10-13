@@ -146,7 +146,7 @@ export default function Dashboard() {
                 <div>
                     <PlaylistPane recents={recents} favorites={favorites} playlist={playlists}
                     onRecentsList={setRecents} onFavoritesList={setFavorites} onSetPlaylist={setPlaylists}
-                    isFavorited={isListTrackInFavorites} onDeletePlaylist={handleDeletePlaylist}
+                    isFavorited={isListTrackInFavorites} onDeletePlaylist={handleDeletePlaylist} onDeletePlaylistEntry={handleDeletePlaylistEntry}
                     onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
                     onIsPlaying={setIsPlaying} />
                 </div>
