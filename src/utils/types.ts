@@ -121,10 +121,11 @@ export interface ListButtonProps {
     track: TrackObject;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onAddToRecents?: (entry: TrackObject) => void;
     onAddToFavorites?: (entry: TrackObject) => void
     isFavorited?: (entry: TrackObject) => boolean;
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
-    onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
+    onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
 }
