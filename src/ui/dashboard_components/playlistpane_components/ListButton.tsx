@@ -2,7 +2,7 @@ import type { ListButtonProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function ListButton({list, track, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
+export default function ListButton({list, track, playlist, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
 
     return (
         <>
@@ -39,6 +39,9 @@ export default function ListButton({list, track, onHandleFetch, onIsPlaying, onA
                                 onClick={() => {
                                     if (onDeleteEntry) {
                                         onListDeleteEntry?.(onDeleteEntry(list, track));
+                                    }
+                                    if (playlist?.id) {
+                                    onDeletePlaylistEntry?.(playlist?.id, track)
                                     }
                                 }}
                                 >
