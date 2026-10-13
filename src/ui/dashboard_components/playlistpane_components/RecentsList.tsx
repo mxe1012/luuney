@@ -13,8 +13,8 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                         list={list}
                         track={element}
                         onHandleFetch={onHandleFetch}
-                        onRecentsList={onRecentsList}
                         onAddToFavorites={onAddToFavorites}
+                        onListDeleteEntry={onRecentsList}
                         onDeleteEntry={onDeleteEntry}
                         onIsPlaying={onIsPlaying}
                         isFavorited={isFavorited}
