@@ -29,7 +29,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                             <h5>({playlist.tracks.length} tracks)</h5>
                                         </div>
                                         <div>
-                                            <button className="ListFavoriteBtn"
+                                            <button className="ListActionBtn"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 onSetPlaylist(onDeletePlaylist(playlist));
@@ -77,7 +77,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                             <h5>{element.handle}</h5>
                                         </div>
                                         <div>
-                                            <button className="ListFavoriteBtn"
+                                            <button className="ListActionBtn"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 onAddToFavorites?.(element)
@@ -87,7 +87,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                             </button>
                                         </div>
                                         <div>
-                                            <button className="ListFavoriteBtn"
+                                            <button className="ListActionBtn"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 onDeletePlaylistEntry(playlist.id, element);
