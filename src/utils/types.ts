@@ -32,7 +32,7 @@ export interface PlaylistPaneProps {
     onSetPlaylist: React.Dispatch<React.SetStateAction<Playlist[]>>
     isFavorited: (entry: TrackObject) => boolean;
     onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
-    onDeletePlaylistEntry: (entry: Playlist) => Playlist[];
+    onDeletePlaylist: (entry: Playlist) => Playlist[];
     onAddToFavorites: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     // onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
@@ -62,7 +62,7 @@ export interface PlaylistSelectionProps {
     isFavorited?: (entry: TrackObject) => boolean;
     onRecentsList?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onFavoritesList?: React.Dispatch<React.SetStateAction<TrackObject[]>>
-    onDeletePlaylistEntry: (entry: Playlist) => Playlist[];
+    onDeletePlaylist: (entry: Playlist) => Playlist[];
     onDeleteEntry: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
