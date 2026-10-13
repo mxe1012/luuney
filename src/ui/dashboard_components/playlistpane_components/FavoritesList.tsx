@@ -10,14 +10,14 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                 {list.map((element) => (
                     <li className="PlaylistPaneList" key={element.track_id}>
                         <ListButton 
-                        list={list}
-                        track={element}
-                        onHandleFetch={onHandleFetch}
-                        onListDeleteEntry={onFavoritesList}
-                        onDeleteEntry={onDeleteEntry}
-                        onIsPlaying={onIsPlaying}
-                        hasDeleteButton={true}
-                        hasFavoriteButton={false}
+                            list={list}
+                            track={element}
+                            onHandleFetch={onHandleFetch}
+                            onListDeleteEntry={onFavoritesList}
+                            onDeleteEntry={onDeleteEntry}
+                            onIsPlaying={onIsPlaying}
+                            hasDeleteButton={true}
+                            hasFavoriteButton={false}
                         />        
                     </li>
                 ))}
