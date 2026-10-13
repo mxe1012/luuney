@@ -101,7 +101,7 @@ export default function SearchListPane({onHandleFetch, isFavorited ,onAddToFavor
                                         <h5>{element.handle}</h5>
                                     </div>
                                     <div style={{flexShrink: 0}}>
-                                        <button className="ListFavoriteBtn"
+                                        <button className="ListActionBtn"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 onAddToFavorites(element)
