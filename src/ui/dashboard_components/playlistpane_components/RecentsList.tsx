@@ -20,9 +20,9 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                         isFavorited={isFavorited}
                         hasDeleteButton={true}
                         hasFavoriteButton={true}
-                    />
-                </li>
-            ))}
+                        />
+                    </li>
+                ))}
             </ul>
         </>
     )
