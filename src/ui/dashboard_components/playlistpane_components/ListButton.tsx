@@ -2,13 +2,14 @@ import type { ListButtonProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function ListButton({list, track, onHandleFetch, onIsPlaying, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
+export default function ListButton({list, track, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
 
     return (
         <>
             <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                 <div style={{flex: 1, minWidth: 0, gap: '2px'}}>
                     <button className="PlaylistButton" onClick={() => {
+                        onAddToRecents?.(track)
                         onHandleFetch(track.track_id);
                         onIsPlaying(false)
                         }}>
@@ -36,7 +37,9 @@ export default function ListButton({list, track, onHandleFetch, onIsPlaying, onA
                         {hasDeleteButton && 
                             <button className="ListActionBtn" aria-label="Delete Entry"
                                 onClick={() => {
-                                    onListDeleteEntry?.(onDeleteEntry(list, track));
+                                    if (onDeleteEntry) {
+                                        onListDeleteEntry?.(onDeleteEntry(list, track));
+                                    }
                                 }}
                                 >
                                 <img src="/assets/delete.svg" alt="Delete" />
