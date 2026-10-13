@@ -7,7 +7,7 @@ import FavoritesList from "./playlistpane_components/FavoritesList";
 
 import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionList";
 
-export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onDeleteEntry, onAddToFavorites, onHandleFetch, onIsPlaying}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onDeleteEntry, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -18,7 +18,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
     return (
         <div className="PlaylistPane">
             <div className="PlaylistPaneController">
-                <button className="PlaylistPaneControllerButton" 
+                <button className={isRecentsVisible ? "PlaylistPaneControllerButton is-selected" : "PlaylistPaneControllerButton"} 
                 onClick={() => {
                     setIsRecentsVisible(true);
                     setIsFavoritesVisible(false);
@@ -27,7 +27,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 }}>
                     Recents
                 </button>
-                <button className="PlaylistPaneControllerButton" 
+                <button className={isFavoritesVisible ? "PlaylistPaneControllerButton is-selected" : "PlaylistPaneControllerButton"}  
                 onClick={() => {
                     setIsRecentsVisible(false);
                     setIsFavoritesVisible(true);
@@ -36,7 +36,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 }}>
                     Favorites
                 </button>
-                <button className="PlaylistPaneControllerButton"
+                <button className={isPlaylistSelectionVisible ? "PlaylistPaneControllerButton is-selected" : "PlaylistPaneControllerButton"} 
                 onClick={() => {
                     setIsRecentsVisible(false);
                     setIsFavoritesVisible(false);
@@ -51,9 +51,11 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             onIsPlaying={onIsPlaying} />
             <FavoritesList list={favorites}  onFavoritesList={onFavoritesList} visible={isFavoritesVisible}
             onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}/>
-            <PlaylistSelectionList list={playlist} 
+            <PlaylistSelectionList list={playlist} onSetPlaylist={onSetPlaylist}
             isSelectedPlaylist={isSelectedPlaylist} onIsSelectedPlaylist={setIsSelectedPlaylist}
-            visible={isPlaylistSelectionVisible} onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
+            visible={isPlaylistSelectionVisible} isFavorited={isFavorited} onAddToFavorites={onAddToFavorites}
+            onDeletePlaylist={onDeletePlaylist} onDeletePlaylistEntry={onDeletePlaylistEntry}
+            onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
             onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}
             />
         </div>

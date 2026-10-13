@@ -4,10 +4,10 @@ import type { PlaylistSelectionProps } from "../../../utils/types";
 
 import { CoverImage } from "../../Containers";
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
-    
+
     return (
         <>
             {!isSelectedPlaylist ? 
@@ -27,6 +27,16 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                         <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                             <h4>{playlist.name}</h4>
                                             <h5>({playlist.tracks.length} tracks)</h5>
+                                        </div>
+                                        <div>
+                                            <button className="ListFavoriteBtn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onSetPlaylist(onDeletePlaylist(playlist));
+                                            }}
+                                            >
+                                            <img src="/assets/delete.svg" />
+                                            </button>
                                         </div>
                                     </div>
                                 </button>
@@ -65,6 +75,26 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                         <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                             <h4>{element.title}</h4>
                                             <h5>{element.handle}</h5>
+                                        </div>
+                                        <div>
+                                            <button className="ListFavoriteBtn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onAddToFavorites?.(element)
+                                            }}
+                                            >
+                                                <img src={isFavorited?.(element) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button className="ListFavoriteBtn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDeletePlaylistEntry(playlist.id, element);
+                                            }}
+                                            >
+                                                <img src="/assets/delete.svg" />
+                                            </button>
                                         </div>
                                     </div>
                                 </button>

@@ -7,7 +7,6 @@ import type { Playlist, TrackObject } from "../utils/types";
 import SearchListPane from "./dashboard_components/SearchListPane";
 import { useSnackbar } from "../hooks/SnackbarContext";
 
-// import { CoverImage } from "./Containers";
 import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 export default function Dashboard() {
@@ -128,13 +127,26 @@ export default function Dashboard() {
         return filtered;
     }
 
+    function handleDeletePlaylistEntry(playlistId: string, entry: TrackObject) {
+    setPlaylists(prev =>
+        prev.map(playlist =>
+            playlist.id === playlistId
+                ? {
+                    ...playlist,
+                    tracks: playlist.tracks.filter(t => t.track_id !== entry.track_id),
+                  }
+                : playlist
+            )
+        );
+    }
+
     return (
         <>
             <div className="MusicDashboard">
                 <div>
                     <PlaylistPane recents={recents} favorites={favorites} playlist={playlists}
-                    onRecentsList={setRecents} onFavoritesList={setFavorites}
-                    isFavorited={isListTrackInFavorites}  
+                    onRecentsList={setRecents} onFavoritesList={setFavorites} onSetPlaylist={setPlaylists}
+                    isFavorited={isListTrackInFavorites} onDeletePlaylist={handleDeletePlaylist} onDeletePlaylistEntry={handleDeletePlaylistEntry}
                     onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
                     onIsPlaying={setIsPlaying} />
                 </div>

@@ -70,6 +70,9 @@
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.08);
     color: #F3D9C7;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
     font: inherit;
     text-align: left;
     cursor: pointer;
