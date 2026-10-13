@@ -19,27 +19,45 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
     return (
         <div className="PlaylistPane">
             <PlaylistPaneController
-            isRecentsVisible={isRecentsVisible}
-            isFavoritesVisible={isFavoritesVisible}
-            isPlaylistSelectionVisible={isPlaylistSelectionVisible} 
-            onSetIsRecentsVisible={setIsRecentsVisible}
-            onSetIsFavoritesVisible={setIsFavoritesVisible}
-            onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
-            onSetIsSelectedPlaylist={setIsSelectedPlaylist}
+                isRecentsVisible={isRecentsVisible}
+                isFavoritesVisible={isFavoritesVisible}
+                isPlaylistSelectionVisible={isPlaylistSelectionVisible} 
+                onSetIsRecentsVisible={setIsRecentsVisible}
+                onSetIsFavoritesVisible={setIsFavoritesVisible}
+                onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
+                onSetIsSelectedPlaylist={setIsSelectedPlaylist}
             />
-            <RecentsList list={recents} onRecentsList={onRecentsList} onAddToFavorites={onAddToFavorites}
-            onDeleteEntry={onDeleteEntry} isFavorited={isFavorited} visible={isRecentsVisible} onHandleFetch={onHandleFetch}
-            onIsPlaying={onIsPlaying} 
+            <RecentsList 
+                list={recents} 
+                onRecentsList={onRecentsList} 
+                onAddToFavorites={onAddToFavorites}
+                onDeleteEntry={onDeleteEntry} 
+                isFavorited={isFavorited} 
+                visible={isRecentsVisible} 
+                onHandleFetch={onHandleFetch}
+                onIsPlaying={onIsPlaying} 
             />
-            <FavoritesList list={favorites}  onFavoritesList={onFavoritesList} visible={isFavoritesVisible}
-            onDeleteEntry={onDeleteEntry} onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying}
+            <FavoritesList 
+                list={favorites}  
+                onFavoritesList={onFavoritesList} 
+                visible={isFavoritesVisible}
+                onDeleteEntry={onDeleteEntry} 
+                onHandleFetch={onHandleFetch} 
+                onIsPlaying={onIsPlaying}
             />
-            <PlaylistSelectionList list={playlist} onSetPlaylist={onSetPlaylist}
-            isSelectedPlaylist={isSelectedPlaylist} onIsSelectedPlaylist={setIsSelectedPlaylist}
-            visible={isPlaylistSelectionVisible} isFavorited={isFavorited} onAddToFavorites={onAddToFavorites}
-            onDeletePlaylist={onDeletePlaylist} onDeletePlaylistEntry={onDeletePlaylistEntry}
-            onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
-            onHandleFetch={onHandleFetch} onIsPlaying={onIsPlaying} 
+            <PlaylistSelectionList 
+                list={playlist} 
+                onSetPlaylist={onSetPlaylist}
+                isSelectedPlaylist={isSelectedPlaylist} 
+                onIsSelectedPlaylist={setIsSelectedPlaylist}
+                visible={isPlaylistSelectionVisible} 
+                isFavorited={isFavorited} 
+                onAddToFavorites={onAddToFavorites}
+                onDeletePlaylist={onDeletePlaylist} 
+                onDeletePlaylistEntry={onDeletePlaylistEntry}
+                onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
+                onHandleFetch={onHandleFetch} 
+                onIsPlaying={onIsPlaying} 
             />
         </div>
     )
