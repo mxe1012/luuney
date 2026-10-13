@@ -18,7 +18,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
     return (
         <div className="PlaylistPane">
             <div className="PlaylistPaneController">
-                <button className="PlaylistPaneControllerButton" 
+                <button className={isRecentsVisible ? "PlaylistPaneControllerButton is-selected" : "PlaylistPaneControllerButton"} 
                 onClick={() => {
                     setIsRecentsVisible(true);
                     setIsFavoritesVisible(false);
@@ -27,7 +27,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 }}>
                     Recents
                 </button>
-                <button className="PlaylistPaneControllerButton" 
+                <button className={isFavoritesVisible ? "PlaylistPaneControllerButton is-selected" : "PlaylistPaneControllerButton"}  
                 onClick={() => {
                     setIsRecentsVisible(false);
                     setIsFavoritesVisible(true);
@@ -36,7 +36,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 }}>
                     Favorites
                 </button>
-                <button className="PlaylistPaneControllerButton"
+                <button className={isPlaylistSelectionVisible ? "PlaylistPaneControllerButton is-selected" : "PlaylistPaneControllerButton"} 
                 onClick={() => {
                     setIsRecentsVisible(false);
                     setIsFavoritesVisible(false);
