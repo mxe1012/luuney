@@ -6,7 +6,7 @@ import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
-import { CoverImage } from "../Containers";
+import CoverImage from "../CoverImage";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 
 export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {

@@ -1,6 +1,6 @@
 import type { ListButtonProps } from "../../../utils/types";
 
-import { CoverImage } from "../../Containers";
+import CoverImage from "../../CoverImage";
 
 export default function ListButton({list, track, playlist, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
 

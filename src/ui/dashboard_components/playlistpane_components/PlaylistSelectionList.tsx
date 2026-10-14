@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import type { PlaylistSelectionProps } from "../../../utils/types";
 
-import { CoverImage } from "../../Containers";
+import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
 
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
