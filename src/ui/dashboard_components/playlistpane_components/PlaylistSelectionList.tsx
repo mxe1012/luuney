@@ -15,7 +15,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {list.map((playlist) => (
                         <li key={playlist.id} >
-                            <div>
+                            <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                                 <button className="PlaylistButton" onClick={() => {
                                     onIsSelectedPlaylist(true)
                                     onSetIsPlaylistSelectionVisible(false);
@@ -29,18 +29,18 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                             <h4>{playlist.name}</h4>
                                             <h5>({playlist.tracks.length} tracks)</h5>
                                         </div>
-                                        <div>
-                                            <button className="ListActionBtn"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                onSetPlaylist(onDeletePlaylist(playlist));
-                                            }}
-                                            >
-                                            <img src="/assets/delete.svg" />
-                                            </button>
-                                        </div>
                                     </div>
                                 </button>
+                                <div style={{display: "grid", alignItems: "center"}}>
+                                    <button className="ListActionBtn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSetPlaylist(onDeletePlaylist(playlist));
+                                    }}
+                                    >
+                                    <img src="/assets/delete.svg" />
+                                    </button>
+                                </div>
                             </div>
                         </li>
                     ))}
