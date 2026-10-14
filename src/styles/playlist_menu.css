@@ -82,6 +82,10 @@
 .PlaylistMenuItem:hover {
     background: rgba(167, 139, 250, 0.3);
     border-color: rgba(220, 204, 247, 0.3);
+    box-shadow:
+        0 6px 20px rgba(10, 5, 20, 0.35),
+        0 0 18px rgba(167, 139, 250, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .PlaylistMenuItem:disabled {
