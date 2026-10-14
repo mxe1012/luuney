@@ -46,7 +46,12 @@ export default function Dashboard() {
         try {
             const result = await fetchTrackById(id);
 
-            const { track_id, artwork, title, user: { handle }, stream: { url } } = result.data;
+            const { track_id, artwork, title } = result.data;
+
+            const { handle } = result.data.user;
+
+            const { url } = result.data.stream
+
             setTrack({ 
                 track_id,
                 artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
