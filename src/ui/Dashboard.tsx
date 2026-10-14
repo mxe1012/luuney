@@ -179,11 +179,12 @@ export default function Dashboard() {
                 </div>
                 <div>
                     <SearchListPane 
-                    onHandleFetch={handleFetch} 
-                    isFavorited={isListTrackInFavorites} 
-                    onAddToFavorites={handleAddToFavorites} 
-                    onAddToRecents={handleAddToRecents} 
-                    onIsPlaying={setIsPlaying}/>
+                        onHandleFetch={handleFetch} 
+                        isFavorited={isListTrackInFavorites} 
+                        onAddToFavorites={handleAddToFavorites} 
+                        onAddToRecents={handleAddToRecents} 
+                        onIsPlaying={setIsPlaying}
+                    />
                 </div>
             </div>
         </>
