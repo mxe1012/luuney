@@ -178,7 +178,8 @@ export default function Dashboard() {
                     />
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} 
+                    <SearchListPane 
+                    onHandleFetch={handleFetch} 
                     isFavorited={isListTrackInFavorites} 
                     onAddToFavorites={handleAddToFavorites} 
                     onAddToRecents={handleAddToRecents} 
