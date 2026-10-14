@@ -144,21 +144,40 @@ export default function Dashboard() {
         <>
             <div className="MusicDashboard">
                 <div>
-                    <PlaylistPane recents={recents} favorites={favorites} playlist={playlists}
-                    onRecentsList={setRecents} onFavoritesList={setFavorites} onSetPlaylist={setPlaylists}
-                    isFavorited={isListTrackInFavorites} onDeletePlaylist={handleDeletePlaylist} onDeletePlaylistEntry={handleDeletePlaylistEntry}
-                    onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
-                    onIsPlaying={setIsPlaying} />
-                </div>
-                <div>
-                    <AudioPlayer track={track} playlists={playlists} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
-                    onAddToFavorites={handleAddToFavorites} onIsPlaying={setIsPlaying}
-                    onHandleCreatePlaylist={handleCreatePlaylist} onHandleAddToPlaylist={handleAddToPlaylist}
+                    <PlaylistPane 
+                        recents={recents} 
+                        favorites={favorites} 
+                        playlist={playlists}
+                        onRecentsList={setRecents} 
+                        onFavoritesList={setFavorites} 
+                        onSetPlaylist={setPlaylists}
+                        isFavorited={isListTrackInFavorites} 
+                        onDeletePlaylist={handleDeletePlaylist} 
+                        onDeletePlaylistEntry={handleDeletePlaylistEntry}
+                        onDeleteEntry={handleDeleteEntry} 
+                        onAddToFavorites={handleAddToFavorites} 
+                        onHandleFetch={handleFetch} 
+                        onIsPlaying={setIsPlaying} 
                     />
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} isFavorited={isListTrackInFavorites} 
-                    onAddToFavorites={handleAddToFavorites} onAddToRecents={handleAddToRecents} onIsPlaying={setIsPlaying}/>
+                    <AudioPlayer 
+                        track={track} 
+                        playlists={playlists} 
+                        isPlaying={isPlaying} 
+                        isFavorited={isCurrentTrackFavorited} 
+                        onAddToFavorites={handleAddToFavorites} 
+                        onIsPlaying={setIsPlaying}
+                        onHandleCreatePlaylist={handleCreatePlaylist} 
+                        onHandleAddToPlaylist={handleAddToPlaylist}
+                    />
+                </div>
+                <div>
+                    <SearchListPane onHandleFetch={handleFetch} 
+                    isFavorited={isListTrackInFavorites} 
+                    onAddToFavorites={handleAddToFavorites} 
+                    onAddToRecents={handleAddToRecents} 
+                    onIsPlaying={setIsPlaying}/>
                 </div>
             </div>
         </>
