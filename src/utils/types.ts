@@ -131,3 +131,8 @@ export interface ListButtonProps {
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
 }
+
+export interface ExtraListPaneProps {
+    list: TrackObject[];
+    heading: string;
+}
