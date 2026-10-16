@@ -28,8 +28,14 @@ export default function Dashboard() {
     );
 
     const [favorites, setFavorites] = useState<TrackObject[]>(
-        localStorage.getItem("favorite_tracks")
+        localStorage.getItem("favorite_tracks") != null
         ? JSON.parse(String(localStorage.getItem("favorite_tracks")))
+        : []
+    );
+
+    const [playlists, setPlaylists] = useState<Playlist[]>(
+        localStorage.getItem("user_playlists") != null
+        ? JSON.parse(String(localStorage.getItem("user_playlists")))
         : []
     );
 
@@ -43,7 +49,7 @@ export default function Dashboard() {
         return favorites.some((element) => isSameEntry(element, entry));
     }
 
-    const [playlists, setPlaylists] = useState<Playlist[]>([]);
+    
 
     const { showSnackbar } = useSnackbar();
 
@@ -156,7 +162,8 @@ export default function Dashboard() {
     useEffect(() => {
         localStorage.setItem("recent_tracks", JSON.stringify(recents));
         localStorage.setItem("favorite_tracks", JSON.stringify(favorites));
-    }, [recents, favorites])
+        localStorage.setItem("user_playlists", JSON.stringify(playlists));
+    }, [recents, favorites, playlists])
 
     return (
         <>
