@@ -12,7 +12,7 @@ import { useSnackbar } from "../hooks/SnackbarContext";
 
 import PlaylistPane from "./dashboard_components/PlaylistPane";
 
-import { useLocalStorage } from "../hooks/Storage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export default function Dashboard() {
 
