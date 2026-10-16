@@ -88,13 +88,15 @@ export default function Dashboard() {
 
         if (trendingResult.status === "fulfilled") {
             setTrending(toTrackObjects(trendingResult.value.data));
-        } else {
+        } 
+        else {
             console.error("Failed to fetch trending tracks:", trendingResult.reason);
         }
 
         if (latestResult.status === "fulfilled") {
             setLatest(toTrackObjects(latestResult.value.data));
-        } else {
+        } 
+        else {
             console.error("Failed to fetch latest tracks:", latestResult.reason);
         }
     }
