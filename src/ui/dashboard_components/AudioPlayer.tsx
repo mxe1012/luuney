@@ -214,7 +214,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <AudioPlayerButton onClick={handleRewind} size={36} label="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
+                    <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
                     onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
