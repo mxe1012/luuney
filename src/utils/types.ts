@@ -41,6 +41,16 @@ export interface PlaylistPaneProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface PlaylistPaneControllerProps {
+    isRecentsVisible: boolean;
+    isFavoritesVisible: boolean;
+    isPlaylistSelectionVisible: boolean;
+    onSetIsRecentsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetIsFavoritesVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetIsPlaylistSelectionVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetIsSelectedPlaylist: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export interface MainListProps {
     list: TrackObject[]
     visible: boolean;
@@ -104,4 +114,20 @@ export interface Playlist {
     id: string;
     name: string;
     tracks: TrackObject[];
+}
+
+export interface ListButtonProps {
+    list: TrackObject[];
+    track: TrackObject;
+    playlist?: Playlist;
+    onHandleFetch: (id: number) => Promise<void>;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onAddToRecents?: (entry: TrackObject) => void;
+    onAddToFavorites?: (entry: TrackObject) => void
+    isFavorited?: (entry: TrackObject) => boolean;
+    onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => TrackObject[];
+    onDeletePlaylistEntry?: (playlistId: string, entry: TrackObject) => void
+    hasDeleteButton: boolean;
+    hasFavoriteButton: boolean;
 }

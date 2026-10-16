@@ -46,7 +46,12 @@ export default function Dashboard() {
         try {
             const result = await fetchTrackById(id);
 
-            const { track_id, artwork, title, user: { handle }, stream: { url } } = result.data;
+            const { track_id, artwork, title } = result.data;
+
+            const { handle } = result.data.user;
+
+            const { url } = result.data.stream
+
             setTrack({ 
                 track_id,
                 artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
@@ -81,14 +86,14 @@ export default function Dashboard() {
         if(isInList) {
             const filtered = favorites.filter((element) => element.track_id !== entry.track_id);
             setFavorites(filtered)
-            showSnackbar("Track Unfavorited!") 
+            showSnackbar("Removed track from favorites!") 
         }
         else {
             setFavorites([
                 ...favorites,
                 entry
             ])
-            showSnackbar("Track Favorited!") 
+            showSnackbar("Added track to favorites!") 
         }
     }
 
@@ -144,21 +149,42 @@ export default function Dashboard() {
         <>
             <div className="MusicDashboard">
                 <div>
-                    <PlaylistPane recents={recents} favorites={favorites} playlist={playlists}
-                    onRecentsList={setRecents} onFavoritesList={setFavorites} onSetPlaylist={setPlaylists}
-                    isFavorited={isListTrackInFavorites} onDeletePlaylist={handleDeletePlaylist} onDeletePlaylistEntry={handleDeletePlaylistEntry}
-                    onDeleteEntry={handleDeleteEntry} onAddToFavorites={handleAddToFavorites} onHandleFetch={handleFetch} 
-                    onIsPlaying={setIsPlaying} />
-                </div>
-                <div>
-                    <AudioPlayer track={track} playlists={playlists} isPlaying={isPlaying} isFavorited={isCurrentTrackFavorited} 
-                    onAddToFavorites={handleAddToFavorites} onIsPlaying={setIsPlaying}
-                    onHandleCreatePlaylist={handleCreatePlaylist} onHandleAddToPlaylist={handleAddToPlaylist}
+                    <PlaylistPane 
+                        recents={recents} 
+                        favorites={favorites} 
+                        playlist={playlists}
+                        onRecentsList={setRecents} 
+                        onFavoritesList={setFavorites} 
+                        onSetPlaylist={setPlaylists}
+                        isFavorited={isListTrackInFavorites} 
+                        onDeletePlaylist={handleDeletePlaylist} 
+                        onDeletePlaylistEntry={handleDeletePlaylistEntry}
+                        onDeleteEntry={handleDeleteEntry} 
+                        onAddToFavorites={handleAddToFavorites} 
+                        onHandleFetch={handleFetch} 
+                        onIsPlaying={setIsPlaying} 
                     />
                 </div>
                 <div>
-                    <SearchListPane onHandleFetch={handleFetch} isFavorited={isListTrackInFavorites} 
-                    onAddToFavorites={handleAddToFavorites} onAddToRecents={handleAddToRecents} onIsPlaying={setIsPlaying}/>
+                    <AudioPlayer 
+                        track={track} 
+                        playlists={playlists} 
+                        isPlaying={isPlaying} 
+                        isFavorited={isCurrentTrackFavorited} 
+                        onAddToFavorites={handleAddToFavorites} 
+                        onIsPlaying={setIsPlaying}
+                        onHandleCreatePlaylist={handleCreatePlaylist} 
+                        onHandleAddToPlaylist={handleAddToPlaylist}
+                    />
+                </div>
+                <div>
+                    <SearchListPane 
+                        onHandleFetch={handleFetch} 
+                        isFavorited={isListTrackInFavorites} 
+                        onAddToFavorites={handleAddToFavorites} 
+                        onAddToRecents={handleAddToRecents} 
+                        onIsPlaying={setIsPlaying}
+                    />
                 </div>
             </div>
         </>

@@ -4,7 +4,7 @@ import './styles/audio_player.css'
 import './styles/search_pane.css'
 import './styles/playlist_pane.css'
 import './styles/snackbar.css'
-import './styles/favorite.css'
+import './styles/action.css'
 import './styles/playlist_folder.css'
 import './styles/playlist_menu.css'
 

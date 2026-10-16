@@ -6,7 +6,7 @@ import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 
-import { CoverImage } from "../Containers";
+import CoverImage from "../CoverImage";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 
 export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
@@ -154,11 +154,11 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                     <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <button className="FavoriteBtn" onClick={() => onAddToFavorites(track)}>
+                    <button className="ActionBtn" onClick={() => onAddToFavorites(track)}>
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
                     </button>
                     <div className="PlaylistMenuWrapper">
-                        <button className="FavoriteBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
+                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
                             <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
                         </button>
                         <div
@@ -214,7 +214,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <AudioPlayerButton onClick={handleRewind} size={36} label="Fast Forward" src="/assets/audio_player_icons/rewind.svg" />
+                    <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
                     onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
