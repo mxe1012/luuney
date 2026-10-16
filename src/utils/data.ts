@@ -80,3 +80,23 @@ export async function fetchTrackTrending() {
     }
 }
 
+export async function fetchTrackLatest() {
+
+    try {
+        const result = await fetch(`https://api.audius.co/v1/tracks/latest`);
+
+        if(result.ok) {
+            const data = await result.json();
+            console.log(data);
+            return data;
+        }
+
+        throw new Error(`Failed with code ${result.status}`)
+
+    }
+    catch(e) {
+        console.log(e);
+        throw e;
+    }
+}
+
