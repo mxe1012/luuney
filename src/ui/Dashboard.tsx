@@ -3,11 +3,16 @@ import { useState } from "react";
 import { fetchTrackById } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
+
 import type { Playlist, TrackObject } from "../utils/types";
+
 import SearchListPane from "./dashboard_components/SearchListPane";
+
 import { useSnackbar } from "../hooks/SnackbarContext";
 
 import PlaylistPane from "./dashboard_components/PlaylistPane";
+
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export default function Dashboard() {
 
@@ -21,9 +26,11 @@ export default function Dashboard() {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [recents, setRecents] = useState<TrackObject[]>([]);
+    const [recents, setRecents] = useLocalStorage<TrackObject[]>("recent_tracks", []);
 
-    const [favorites, setFavorites] = useState<TrackObject[]>([]);
+    const [favorites, setFavorites] = useLocalStorage<TrackObject[]>("favorite_tracks", [])
+
+    const [playlists, setPlaylists] = useLocalStorage<Playlist[]>("user_playlists", []);
 
     const isSameEntry = (a: TrackObject, b: TrackObject) => {
         return a.track_id === b.track_id
@@ -34,8 +41,6 @@ export default function Dashboard() {
     const isListTrackInFavorites = (entry: TrackObject) => {
         return favorites.some((element) => isSameEntry(element, entry));
     }
-
-    const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
     const { showSnackbar } = useSnackbar();
 
