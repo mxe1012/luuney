@@ -131,3 +131,11 @@ export interface ListButtonProps {
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
 }
+
+export interface ExtraListPaneProps {
+    list: TrackObject[];
+    heading: string;
+    onHandleFetch: (id: number) => Promise<void>;
+    onAddToRecents: (entry: TrackObject) => void;
+    onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+}

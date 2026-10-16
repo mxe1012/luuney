@@ -34,3 +34,48 @@ body {
 #root {
     min-height: 100%;
 }
+
+:root {
+  --scroll-track: rgba(36, 22, 55, 0.35);
+  --scroll-thumb: rgba(167, 139, 250, 0.65);
+  --scroll-thumb-hover: rgba(220, 204, 247, 0.85);
+  --scroll-thumb-active: #F3D9C7;
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-thumb-hover);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: var(--scroll-thumb-active);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox only */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+}
