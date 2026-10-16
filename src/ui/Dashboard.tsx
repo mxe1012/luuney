@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { fetchTrackById } from "../utils/data";
+import { fetchTrackById, fetchTrackTrending } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 
@@ -13,6 +13,7 @@ import { useSnackbar } from "../hooks/SnackbarContext";
 import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import ExtraListPane from "./dashboard_components/ExtraListPane";
 
 export default function Dashboard() {
 
@@ -34,13 +35,15 @@ export default function Dashboard() {
 
     const isSameEntry = (a: TrackObject, b: TrackObject) => {
         return a.track_id === b.track_id
-    } 
+    }
 
     const isCurrentTrackFavorited = favorites.some((element) => isSameEntry(element, track));
 
     const isListTrackInFavorites = (entry: TrackObject) => {
         return favorites.some((element) => isSameEntry(element, entry));
     }
+
+    const [trending, setTrending] = useState<TrackObject[]>([])
 
     const { showSnackbar } = useSnackbar();
 
@@ -73,6 +76,37 @@ export default function Dashboard() {
             console.log(e);
         }
         
+    }
+
+    async function handleGetTrending() {
+
+        try {
+
+            const result = await fetchTrackTrending();
+
+            const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
+
+                const { track_id, artwork, title } = element;
+
+                const { handle } = element.user;
+
+                const { url } = element.stream;
+
+                return {
+                    track_id,
+                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                    title,
+                    handle,
+                    url
+                }
+
+            })
+            setTrending(newList);
+        }
+        catch(e) {
+            console.error(e)
+            // showSnackbar("Unable to get list of trending tracks.")
+        }
     }
 
     function handleAddToRecents(entry: TrackObject) {
@@ -150,6 +184,16 @@ export default function Dashboard() {
         );
     }
 
+    useEffect(() => {
+
+        const id = setTimeout(() => {
+            handleGetTrending()
+        }, 600)
+
+        return () => clearTimeout(id)
+
+    }, [])
+
     return (
         <>
             <div className="MusicDashboard">
@@ -192,6 +236,10 @@ export default function Dashboard() {
                     />
                 </div>
             </div>
+            <ExtraListPane 
+                list={trending}
+                heading="Trending"
+            />
         </>
     )
 }
