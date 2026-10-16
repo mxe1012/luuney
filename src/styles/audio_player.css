@@ -77,7 +77,7 @@ input[type="range"]:focus {
 
 /* The Track */
 input[type="range"]::-moz-range-track {
-    background: #ddd;
+    background: #F3D9C7;
     height: 8px;
     border-radius: 4px;
 }
@@ -97,7 +97,7 @@ input[type="range"]:focus::-moz-range-thumb {
 
 /* The Track */
 input[type="range"]::-webkit-slider-runnable-track {
-    background: #ddd;
+    background: #F3D9C7;
     height: 8px;
     border-radius: 4px;
 }
