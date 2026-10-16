@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { fetchTrackById } from "../utils/data";
 
@@ -21,7 +21,11 @@ export default function Dashboard() {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [recents, setRecents] = useState<TrackObject[]>([]);
+    const [recents, setRecents] = useState<TrackObject[]>(
+        localStorage.getItem("recent_tracks") != null 
+        ? JSON.parse(String(localStorage.getItem("recent_tracks"))) 
+        : []
+    );
 
     const [favorites, setFavorites] = useState<TrackObject[]>([]);
 
@@ -144,6 +148,10 @@ export default function Dashboard() {
             )
         );
     }
+
+    useEffect(() => {
+        localStorage.setItem("recent_tracks", JSON.stringify(recents));
+    }, [recents])
 
     return (
         <>
