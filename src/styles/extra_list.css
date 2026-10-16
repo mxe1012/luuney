@@ -1,5 +1,7 @@
 
 .ExtraListPane {
+    display: grid;
+    align-items: flex-start;
     background:
         radial-gradient(circle at 20% 0%, rgba(167, 139, 250, 0.18), transparent 55%),
         rgba(36, 22, 55, 0.5);
@@ -67,6 +69,7 @@ ul.ExtraListItems {
     list-style: none;
     padding: 0;
     margin: 0;
+    overflow: auto;
 }
 
 li.ExtraListItems {
