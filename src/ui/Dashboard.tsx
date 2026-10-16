@@ -27,7 +27,11 @@ export default function Dashboard() {
         : []
     );
 
-    const [favorites, setFavorites] = useState<TrackObject[]>([]);
+    const [favorites, setFavorites] = useState<TrackObject[]>(
+        localStorage.getItem("favorite_tracks")
+        ? JSON.parse(String(localStorage.getItem("favorite_tracks")))
+        : []
+    );
 
     const isSameEntry = (a: TrackObject, b: TrackObject) => {
         return a.track_id === b.track_id
@@ -151,7 +155,8 @@ export default function Dashboard() {
 
     useEffect(() => {
         localStorage.setItem("recent_tracks", JSON.stringify(recents));
-    }, [recents])
+        localStorage.setItem("favorite_tracks", JSON.stringify(favorites));
+    }, [recents, favorites])
 
     return (
         <>
