@@ -7,6 +7,7 @@ import './styles/snackbar.css'
 import './styles/action.css'
 import './styles/playlist_folder.css'
 import './styles/playlist_menu.css'
+import './styles/extra_list.css'
 
 import { MainPane } from './ui/Containers';
 import Dashboard from './ui/Dashboard';
