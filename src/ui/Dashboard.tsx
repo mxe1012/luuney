@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { fetchTrackById } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
+
 import type { Playlist, TrackObject } from "../utils/types";
+
 import SearchListPane from "./dashboard_components/SearchListPane";
+
 import { useSnackbar } from "../hooks/SnackbarContext";
 
 import PlaylistPane from "./dashboard_components/PlaylistPane";
+
+import { useLocalStorage } from "../hooks/Storage";
 
 export default function Dashboard() {
 
@@ -21,23 +26,11 @@ export default function Dashboard() {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [recents, setRecents] = useState<TrackObject[]>(
-        localStorage.getItem("recent_tracks") != null 
-        ? JSON.parse(String(localStorage.getItem("recent_tracks"))) 
-        : []
-    );
+    const [recents, setRecents] = useLocalStorage<TrackObject[]>("recent_tracks", []);
 
-    const [favorites, setFavorites] = useState<TrackObject[]>(
-        localStorage.getItem("favorite_tracks") != null
-        ? JSON.parse(String(localStorage.getItem("favorite_tracks")))
-        : []
-    );
+    const [favorites, setFavorites] = useLocalStorage<TrackObject[]>("favorite_tracks", [])
 
-    const [playlists, setPlaylists] = useState<Playlist[]>(
-        localStorage.getItem("user_playlists") != null
-        ? JSON.parse(String(localStorage.getItem("user_playlists")))
-        : []
-    );
+    const [playlists, setPlaylists] = useLocalStorage<Playlist[]>("user_playlists", []);
 
     const isSameEntry = (a: TrackObject, b: TrackObject) => {
         return a.track_id === b.track_id
@@ -48,8 +41,6 @@ export default function Dashboard() {
     const isListTrackInFavorites = (entry: TrackObject) => {
         return favorites.some((element) => isSameEntry(element, entry));
     }
-
-    
 
     const { showSnackbar } = useSnackbar();
 
@@ -158,12 +149,6 @@ export default function Dashboard() {
             )
         );
     }
-
-    useEffect(() => {
-        localStorage.setItem("recent_tracks", JSON.stringify(recents));
-        localStorage.setItem("favorite_tracks", JSON.stringify(favorites));
-        localStorage.setItem("user_playlists", JSON.stringify(playlists));
-    }, [recents, favorites, playlists])
 
     return (
         <>
