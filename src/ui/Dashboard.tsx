@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { fetchTrackById, fetchTrackTrending } from "../utils/data";
+import { fetchTrackById, fetchTrackLatest, fetchTrackTrending } from "../utils/data";
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 
@@ -43,7 +43,8 @@ export default function Dashboard() {
         return favorites.some((element) => isSameEntry(element, entry));
     }
 
-    const [trending, setTrending] = useState<TrackObject[]>([])
+    const [trending, setTrending] = useState<TrackObject[]>([]);
+    const [latest, setLatest] = useState<TrackObject[]>([]);
 
     const { showSnackbar } = useSnackbar();
 
@@ -78,18 +79,34 @@ export default function Dashboard() {
         
     }
 
-    async function handleGetTrending() {
+    async function handleGetTrendingAndLatest() {
 
-        try {
+        const [trendingResult, latestResult] = await Promise.allSettled([
+            fetchTrackTrending(),
+            fetchTrackLatest(),
+        ]);
 
-            const result = await fetchTrackTrending();
+        if (trendingResult.status === "fulfilled") {
+            setTrending(toTrackObjects(trendingResult.value.data));
+        } else {
+            console.error("Failed to fetch trending tracks:", trendingResult.reason);
+        }
 
-            const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
+        if (latestResult.status === "fulfilled") {
+            setLatest(toTrackObjects(latestResult.value.data));
+        } else {
+            console.error("Failed to fetch latest tracks:", latestResult.reason);
+        }
+    }
 
+    type TrackResponse = Awaited<ReturnType<typeof fetchTrackTrending>>;
+
+    function toTrackObjects(data: TrackResponse["data"]): TrackObject[] {
+        return data
+            .filter((element) => element.stream?.url)
+            .map((element) => {
                 const { track_id, artwork, title } = element;
-
                 const { handle } = element.user;
-
                 const { url } = element.stream;
 
                 return {
@@ -97,16 +114,9 @@ export default function Dashboard() {
                     artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
                     title,
                     handle,
-                    url
-                }
-
-            })
-            setTrending(newList);
-        }
-        catch(e) {
-            console.error(e)
-            // showSnackbar("Unable to get list of trending tracks.")
-        }
+                    url,
+                };
+            });
     }
 
     function handleAddToRecents(entry: TrackObject) {
@@ -187,7 +197,7 @@ export default function Dashboard() {
     useEffect(() => {
 
         const id = setTimeout(() => {
-            handleGetTrending()
+            handleGetTrendingAndLatest()
         }, 600)
 
         return () => clearTimeout(id)
@@ -238,7 +248,14 @@ export default function Dashboard() {
             </div>
             <ExtraListPane 
                 list={trending}
-                heading="Trending (Top 100)"
+                heading="Trending Tracks (Top 100)"
+                onHandleFetch={handleFetch}
+                onAddToRecents={handleAddToRecents}
+                onIsPlaying={setIsPlaying}
+            />
+            <ExtraListPane 
+                list={latest}
+                heading="Latest Tracks"
                 onHandleFetch={handleFetch}
                 onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
