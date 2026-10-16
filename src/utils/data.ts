@@ -63,7 +63,7 @@ export async function fetchTrackByQuery(query: string) {
 export async function fetchTrackTrending() {
 
     try {
-        const result = await fetch(`https://api.audius.co/v1/tracks/trending?limit=5`);
+        const result = await fetch(`https://api.audius.co/v1/tracks/trending`);
 
         if(result.ok) {
             const data = await result.json();
