@@ -238,7 +238,10 @@ export default function Dashboard() {
             </div>
             <ExtraListPane 
                 list={trending}
-                heading="Trending"
+                heading="Trending (Top 100)"
+                onHandleFetch={handleFetch}
+                onAddToRecents={handleAddToRecents}
+                onIsPlaying={setIsPlaying}
             />
         </>
     )
