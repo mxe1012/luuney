@@ -22,7 +22,8 @@ export default function Dashboard() {
         artwork: "/assets/placeholder-cover-purple.svg",
         title: "Title",
         handle: "Artist",
-        url: ""
+        url: "",
+        duration: 0
     });
 
     const [isPlaying, setIsPlaying] = useState(false);
@@ -58,7 +59,7 @@ export default function Dashboard() {
         try {
             const result = await fetchTrackById(id);
 
-            const { track_id, artwork, title } = result.data;
+            const { track_id, artwork, title, duration } = result.data;
 
             const { handle } = result.data.user;
 
@@ -69,7 +70,8 @@ export default function Dashboard() {
                 artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
                 title, 
                 handle, 
-                url 
+                url,
+                duration
             });
 
             showSnackbar("Now playing:\n" + title + "\n" + handle)
