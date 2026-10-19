@@ -46,6 +46,9 @@ export default function Dashboard() {
     const [trending, setTrending] = useState<TrackObject[]>([]);
     const [latest, setLatest] = useState<TrackObject[]>([]);
 
+    const [isLoadedTrending, setIsLoadedTrending] = useState(false);
+    const [isLoadedLatest, setIsLoadedLatest] = useState(false);
+
     const { showSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
@@ -88,15 +91,19 @@ export default function Dashboard() {
 
         if (trendingResult.status === "fulfilled") {
             setTrending(toTrackObjects(trendingResult.value.data));
+            setIsLoadedTrending(true);
         } 
         else {
+            showSnackbar("Failed to fetch trending tracks.");
             console.error("Failed to fetch trending tracks:", trendingResult.reason);
         }
 
         if (latestResult.status === "fulfilled") {
             setLatest(toTrackObjects(latestResult.value.data));
+            setIsLoadedLatest(true);
         } 
         else {
+            showSnackbar("Failed to fetch latest tracks.");
             console.error("Failed to fetch latest tracks:", latestResult.reason);
         }
     }
@@ -249,6 +256,7 @@ export default function Dashboard() {
                 </div>
             </div>
             <ExtraListPane 
+                isLoaded={isLoadedTrending}
                 list={trending}
                 heading="Trending Tracks (Top 100)"
                 onHandleFetch={handleFetch}
@@ -256,6 +264,7 @@ export default function Dashboard() {
                 onIsPlaying={setIsPlaying}
             />
             <ExtraListPane 
+                isLoaded={isLoadedLatest}
                 list={latest}
                 heading="Latest Tracks"
                 onHandleFetch={handleFetch}
