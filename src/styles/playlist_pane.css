@@ -23,10 +23,10 @@
 .PlaylistPaneController {
     display: flex;
     justify-content: space-evenly;
-    gap: 10px;
+    gap: 5px;
     padding: 20px;
     white-space: nowrap;
-    overflow: scroll;
+    overflow: auto;
 }
 
 button.PlaylistPaneControllerButton {
@@ -166,7 +166,7 @@ ul.PlaylistPaneList {
     padding-top: 16px;
     padding-bottom: 16px;
     max-height: 500px;
-    overflow: scroll;
+    overflow: auto;
     -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent);
     mask-image: linear-gradient(
     to bottom,
