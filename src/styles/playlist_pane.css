@@ -133,6 +133,12 @@ button.PlaylistPaneControllerButton.is-selected {
     font-weight: 400;
 }
 
+.PlaylistButton h6 {
+    margin: 0;
+    color: rgba(220, 204, 247, 0.75);
+    font-weight: 400;
+}
+
 .PlaylistButton:hover {
     background-color: rgba(124, 100, 190, 0.85);
     border-color: rgba(220, 204, 247, 0.35);
