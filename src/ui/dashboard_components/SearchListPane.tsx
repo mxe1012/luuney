@@ -6,6 +6,7 @@ import type { SearchListPaneProps, TrackObject } from "../../utils/types";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import ListButton from "./playlistpane_components/ListButton";
+import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
 
 export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
@@ -13,12 +14,16 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
         
     const [search, setSearch] = useState("");
 
+    const [isLoaded, setIsLoaded] = useState(true);
+
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchRef = useRef<string>("");
 
     const { showSnackbar } = useSnackbar();
 
     async function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+
+        setIsLoaded(false);
 
         const query = e.target.value;
         setSearch(query);
@@ -31,6 +36,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
 
         if (query.trim().length == 0) {
             setTrackList([]);
+            setIsLoaded(true);
             return;
         }
 
@@ -40,11 +46,12 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
     }
     
     async function debouncedFetchTracks(query: string) {
-        
+
         try {
             const result = await fetchTrackByQuery(query);
 
             if(searchRef.current !== query) {
+                setIsLoaded(true);
                 return;
             }
 
@@ -67,14 +74,16 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
             })
 
             setTrackList(newList);
+            setIsLoaded(true);
             console.log(newList)
         }
         catch(e) {
             if(searchRef.current !== query) {
+                setIsLoaded(true);
                 return;
             }
             showSnackbar("Could not search for tracks.");
-            console.log(e);
+            console.error(e);
         }
 
     }
@@ -85,23 +94,25 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                 <div className="SearchController">
                     <input className="SearchInput" value={search} placeholder="Search Track..." onChange={handleSearch}></input>
                 </div>
-                <ul className="SearchList">
-                    {trackList.map((element) => (
-                        <li className="SearchList" key={element.track_id}>
-                            <ListButton 
-                                list={trackList}
-                                track={element}
-                                onHandleFetch={onHandleFetch}
-                                onAddToFavorites={onAddToFavorites}
-                                onAddToRecents={onAddToRecents}
-                                onIsPlaying={onIsPlaying}
-                                isFavorited={isFavorited}
-                                hasDeleteButton={false}
-                                hasFavoriteButton={true}
-                            />
-                        </li>
-                    ))}
-                </ul>
+                <SkeletonSearchListPane isLoaded={isLoaded}>
+                    <ul className="SearchList">
+                        {trackList.map((element) => (
+                            <li className="SearchList" key={element.track_id}>
+                                <ListButton 
+                                    list={trackList}
+                                    track={element}
+                                    onHandleFetch={onHandleFetch}
+                                    onAddToFavorites={onAddToFavorites}
+                                    onAddToRecents={onAddToRecents}
+                                    onIsPlaying={onIsPlaying}
+                                    isFavorited={isFavorited}
+                                    hasDeleteButton={false}
+                                    hasFavoriteButton={true}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </SkeletonSearchListPane>
             </div>
         </>
     );
