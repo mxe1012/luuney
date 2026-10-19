@@ -20,6 +20,8 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
     const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
 
+    const [isLoop, setIsLoop] = useState(false);
+
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -134,7 +136,8 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
 
     return (
         <>
-            <audio 
+            <audio
+            loop={isLoop} 
             ref={audioRef}
             src={track.url || undefined}
             onPlay={() => onIsPlaying(true)}
@@ -213,13 +216,17 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                         <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(duration)}</h4>
                     </div>
                 </div>
-                <div style={{display: "flex", justifyContent: "center"}}>
+                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    <AudioPlayerButton onClick={undefined} size={36} label="Shuffle" src="/assets/audio_player_icons/shuffle.svg" />
                     <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
                     onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
                     <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                    <AudioPlayerButton onClick={() => {setIsLoop(!isLoop)}} size={36} toggleAction={isLoop}
+                    labelTrue="Repeat Once" labelFalse="Repeat Off"
+                    srcTrue="/assets/audio_player_icons/repeat-once.svg" srcFalse="/assets/audio_player_icons/repeat-off.svg" />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton
