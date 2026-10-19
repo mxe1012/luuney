@@ -8,12 +8,12 @@ export function formatTime(seconds: number): string {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-export function getDurationSum(current: Playlist): number {
+export function getDurationSum(playlist: Playlist): number {
 
     let durationSum = 0;
 
-    for (let index = 0; index < current.tracks.length; index++) {
-        durationSum += (current.tracks[index].duration)
+    for (let index = 0; index < playlist.tracks.length; index++) {
+        durationSum += (playlist.tracks[index].duration)
     }
     return durationSum;
 }
