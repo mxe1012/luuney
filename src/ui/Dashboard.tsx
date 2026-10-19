@@ -90,6 +90,7 @@ export default function Dashboard() {
             setTrending(toTrackObjects(trendingResult.value.data));
         } 
         else {
+            showSnackbar("Failed to fetch trending tracks.");
             console.error("Failed to fetch trending tracks:", trendingResult.reason);
         }
 
@@ -97,6 +98,7 @@ export default function Dashboard() {
             setLatest(toTrackObjects(latestResult.value.data));
         } 
         else {
+            showSnackbar("Failed to fetch latest tracks.");
             console.error("Failed to fetch latest tracks:", latestResult.reason);
         }
     }
