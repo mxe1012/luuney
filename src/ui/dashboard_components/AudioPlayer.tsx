@@ -137,15 +137,16 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
     return (
         <>
             <audio
-            loop={isLoop} 
-            ref={audioRef}
-            src={track.url || undefined}
-            onPlay={() => onIsPlaying(true)}
-            onPause={() => onIsPlaying(false)}
-            onEnded={() => onIsPlaying(false)}
-            onLoadedData={handleLoadedMetadata}
-            onTimeUpdate={handleTimeUpdate}
-            onVolumeChange={handleElementVolumeChange} />
+                loop={isLoop} 
+                ref={audioRef}
+                src={track.url || undefined}
+                onPlay={() => onIsPlaying(true)}
+                onPause={() => onIsPlaying(false)}
+                onEnded={() => onIsPlaying(false)}
+                onLoadedData={handleLoadedMetadata}
+                onTimeUpdate={handleTimeUpdate}
+                onVolumeChange={handleElementVolumeChange} 
+            />
             <div className="AudioPlayer">
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
