@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import type { Playlist, PlaylistSelectionProps } from "../../../utils/types";
+import type { PlaylistSelectionProps } from "../../../utils/types";
 
-import { formatTime } from "../../../utils/helpers";
+import { formatTime, getDurationSum } from "../../../utils/helpers";
 
 import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
@@ -10,16 +10,6 @@ import ListButton from "./ListButton";
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
-
-    function getDurationSum(current: Playlist) {
-
-        let durationSum = 0;
-
-        for (let index = 0; index < current.tracks.length; index++) {
-            durationSum += (current.tracks[index].duration)
-        }
-        return durationSum;
-    }
 
     return (
         <>
