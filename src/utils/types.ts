@@ -138,4 +138,10 @@ export interface ExtraListPaneProps {
     onHandleFetch: (id: number) => Promise<void>;
     onAddToRecents: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    isLoaded: boolean;
+}
+
+export interface SkeletonProps {
+    children: React.ReactNode;
+    isLoaded: boolean;
 }
