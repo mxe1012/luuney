@@ -4,6 +4,15 @@ export interface ChildrenProps {
     children: React.ReactNode;
 }
 
+export interface TrackObject {
+    track_id: number;
+    artwork: string;
+    title: string;
+    handle: string;
+    url: string;
+    duration: number;
+}
+
 export interface AudioPlayerProps {
     track: TrackObject
     playlists: Playlist[];
@@ -78,14 +87,6 @@ export interface PlaylistSelectionProps {
     onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface TrackObject {
-    track_id: number;
-    artwork: string;
-    title: string;
-    handle: string;
-    url: string;
 }
 
 export interface AudioPlayerButtonProps {

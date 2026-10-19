@@ -57,7 +57,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
 
             const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
 
-                const { track_id, artwork, title } = element;
+                const { track_id, artwork, title, duration } = element;
 
                 const { handle } = element.user;
 
@@ -68,7 +68,8 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                     artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
                     title,
                     handle,
-                    url
+                    url,
+                    duration
                 }
 
             })

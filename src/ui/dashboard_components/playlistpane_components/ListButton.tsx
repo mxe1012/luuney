@@ -1,5 +1,7 @@
 import type { ListButtonProps } from "../../../utils/types";
 
+import { formatTime } from "../../../utils/helpers";
+
 import CoverImage from "../../CoverImage";
 
 export default function ListButton({list, track, playlist, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
@@ -20,6 +22,9 @@ export default function ListButton({list, track, playlist, onHandleFetch, onIsPl
                                 <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                     <h4>{track.title}</h4>
                                     <h5>{track.handle}</h5>
+                                </div>
+                                <div style={{textAlign: 'right', minWidth: 0}}>
+                                    <h6><time>{formatTime(track.duration)}</time></h6>
                                 </div>
                             </div>
                     </button>

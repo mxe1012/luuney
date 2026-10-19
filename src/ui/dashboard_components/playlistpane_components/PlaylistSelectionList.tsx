@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import type { PlaylistSelectionProps } from "../../../utils/types";
 
+import { formatTime, getDurationSum } from "../../../utils/helpers";
+
 import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
 
@@ -14,7 +16,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
             {!isSelectedPlaylist ? 
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {list.map((playlist) => (
-                        <li key={playlist.id} >
+                        <li key={playlist.id}>
                             <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                                 <button className="PlaylistButton" onClick={() => {
                                     onIsSelectedPlaylist(true)
@@ -28,6 +30,9 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                         <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                             <h4>{playlist.name}</h4>
                                             <h5>({playlist.tracks.length} tracks)</h5>
+                                        </div>
+                                        <div style={{textAlign: 'right', minWidth: 0}}>
+                                            <h6>{formatTime(getDurationSum(playlist))}</h6>
                                         </div>
                                     </div>
                                 </button>
