@@ -30,3 +30,9 @@
 	width: 200px;
 	border-radius: 15px;
 }
+
+.skeleton-search-list-button {
+	height: 88px;
+	width: 100%;
+	border-radius: 15px;
+}
