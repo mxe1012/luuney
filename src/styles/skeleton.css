@@ -8,15 +8,15 @@
 }
 
 .skeleton {
-	background: linear-gradient(
-		90deg,
-		rgba(255, 255, 255, 0.25) 25%,
-		rgba(255, 255, 255, 0.5) 50%,
-		rgba(255, 255, 255, 0.25) 75%
-	);
-	background-size: 200% 100%;
-	border: 1px solid rgba(255, 255, 255, 0.3);
-	animation: loading 1.5s infinite;
+    background: linear-gradient(
+        90deg,
+        rgba(167, 139, 250, 0.25) 25%,
+        rgba(220, 204, 247, 0.5) 50%,
+        rgba(167, 139, 250, 0.25) 75%
+    );
+    background-size: 200% 100%;
+    border: 1px solid rgba(220, 204, 247, 0.3);
+    animation: loading 1.5s infinite;
 }
 
 .skeleton-heading {
