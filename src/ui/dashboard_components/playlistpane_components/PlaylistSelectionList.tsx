@@ -7,7 +7,7 @@ import { formatTime, getDurationSum } from "../../../utils/helpers";
 import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
 
@@ -68,12 +68,13 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                             visibility: playlist.id !== playlistId ? "hidden" : "visible"
                         }} 
                         className={"PlaylistPaneFolderList"}>
-                        {playlist.id === playlistId && playlist.tracks.map((element) => (
+                        {playlist.id === playlistId && playlist.tracks.map((element, index) => (
                             <li key={element.track_id} className="PlaylistPaneFolderList">
                                 <ListButton
                                     list={playlist.tracks}
                                     track={element}
                                     playlist={playlist}
+                                    index={index}
                                     onHandleFetch={onHandleFetch}
                                     onAddToFavorites={onAddToFavorites}
                                     hasDeleteButton={true}
@@ -81,6 +82,8 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                     isFavorited={isFavorited}
                                     onIsPlaying={onIsPlaying}
                                     onDeletePlaylistEntry={onDeletePlaylistEntry}
+                                    onSetCurrentTrackIndex={onSetCurrentTrackIndex}
+                                    onSetTrackQueue={onSetTrackQueue}
                                 />
                             </li>
                         ))}

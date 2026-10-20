@@ -7,11 +7,12 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
     return (
         <>
             <ul className={visible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                {list.map((element) => (
+                {list.map((element, index) => (
                     <li className="PlaylistPaneList" key={element.track_id}>
                         <ListButton 
                             list={list}
                             track={element}
+                            index={index}
                             onHandleFetch={onHandleFetch}
                             onListDeleteEntry={onFavoritesList}
                             onDeleteEntry={onDeleteEntry}

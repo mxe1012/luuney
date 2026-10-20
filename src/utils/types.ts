@@ -93,6 +93,8 @@ export interface PlaylistSelectionProps {
     onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
+    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
 }
 
 export interface AudioPlayerButtonProps {
@@ -127,6 +129,7 @@ export interface ListButtonProps {
     list: TrackObject[];
     track: TrackObject;
     playlist?: Playlist;
+    index: number;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onAddToRecents?: (entry: TrackObject) => void;
