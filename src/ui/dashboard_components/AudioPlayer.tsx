@@ -9,8 +9,8 @@ import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
 import CoverImage from "../CoverImage";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
-
+export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
+    
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
@@ -21,6 +21,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
 
     const [isLoop, setIsLoop] = useState(false);
+    const [isShuffle, setIsShuffle] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
@@ -142,7 +143,18 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
                 onPause={() => onIsPlaying(false)}
-                onEnded={() => onIsPlaying(false)}
+                onEnded={() => {
+                    onIsPlaying(false);
+                    const nextIndex = currentTrackIndex + 1;
+
+                    if (nextIndex >= tracks.length) {
+                        onIsPlaying(false); // end of queue
+                        return;
+                    }
+
+                    onSetCurrentTrackIndex(nextIndex);
+                    onHandleFetch(tracks[nextIndex].track_id);
+                }}
                 onLoadedData={handleLoadedMetadata}
                 onTimeUpdate={handleTimeUpdate}
                 onVolumeChange={handleElementVolumeChange} 
@@ -218,7 +230,10 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <AudioPlayerButton onClick={handleRewind} size={36} label="Shuffle" src="/assets/audio_player_icons/shuffle.svg" />
+                    <AudioPlayerButton 
+                    onClick={() => {setIsShuffle(!isShuffle)}} size={36} toggleAction={isShuffle} 
+                    labelTrue="Shuffle On" labelFalse="Shuffle Off"
+                    srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
                     <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
                     onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
