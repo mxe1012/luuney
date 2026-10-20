@@ -61,6 +61,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
                 onHandleFetch={onHandleFetch} 
                 onIsPlaying={onIsPlaying} 
+                onSetCurrentTrackIndex={onSetCurrentTrackIndex}
+                onSetTrackQueue={onSetTrackQueue}
             />
         </div>
     )
