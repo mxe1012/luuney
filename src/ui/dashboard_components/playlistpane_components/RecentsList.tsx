@@ -2,7 +2,7 @@ import type { MainListProps } from "../../../utils/types";
 
 import ListButton from "./ListButton";
 
-export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, isFavorited, onHandleFetch, onIsPlaying}: MainListProps) {
+export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, isFavorited, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
     
     return (
         <>
@@ -20,6 +20,8 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                             isFavorited={isFavorited}
                             hasDeleteButton={true}
                             hasFavoriteButton={true}
+                            onSetTrackQueue={onSetTrackQueue}
+                            onSetCurrentTrackIndex={onSetCurrentTrackIndex}
                         />
                     </li>
                 ))}
