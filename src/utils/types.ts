@@ -15,9 +15,13 @@ export interface TrackObject {
 
 export interface AudioPlayerProps {
     track: TrackObject
+    tracks: TrackObject[];
+    currentTrackIndex: number;
     playlists: Playlist[];
     isPlaying: boolean;
     isFavorited: boolean;
+    onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
+    onHandleFetch: (id: number) => Promise<void>;
     onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onAddToFavorites: (entry: TrackObject) => void;
@@ -45,9 +49,9 @@ export interface PlaylistPaneProps {
     onDeletePlaylistEntry: (playlistId: string, entry: TrackObject) => void
     onAddToFavorites: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
-    // onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
-    // onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
+    onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onSetTrackQueue:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
 }
 
 export interface PlaylistPaneControllerProps {
@@ -70,6 +74,8 @@ export interface MainListProps {
     onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
+    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
 }
 
 export interface PlaylistSelectionProps {
@@ -129,6 +135,8 @@ export interface ListButtonProps {
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onDeletePlaylistEntry?: (playlistId: string, entry: TrackObject) => void
+    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
 }
