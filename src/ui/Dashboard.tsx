@@ -50,6 +50,10 @@ export default function Dashboard() {
     const [isLoadedTrending, setIsLoadedTrending] = useState(false);
     const [isLoadedLatest, setIsLoadedLatest] = useState(false);
 
+    const [trackQueue, setTrackQueue] = useState<TrackObject[]>([]);
+    
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+
     const { showSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
@@ -215,6 +219,11 @@ export default function Dashboard() {
 
     }, [])
 
+    useEffect(() => {
+        console.log("Track Queue\n--------")
+        console.log(trackQueue)
+    }, [trackQueue])
+
     return (
         <>
             <div className="MusicDashboard">
@@ -233,14 +242,20 @@ export default function Dashboard() {
                         onAddToFavorites={handleAddToFavorites} 
                         onHandleFetch={handleFetch} 
                         onIsPlaying={setIsPlaying} 
+                        onSetTrackQueue={setTrackQueue}
+                        onSetCurrentTrackIndex={setCurrentTrackIndex}
                     />
                 </div>
                 <div>
                     <AudioPlayer 
                         track={track} 
+                        tracks={trackQueue}
+                        currentTrackIndex={currentTrackIndex}
+                        onSetCurrentTrackIndex={setCurrentTrackIndex}
                         playlists={playlists} 
                         isPlaying={isPlaying} 
                         isFavorited={isCurrentTrackFavorited} 
+                        onHandleFetch={handleFetch}
                         onAddToFavorites={handleAddToFavorites} 
                         onIsPlaying={setIsPlaying}
                         onHandleCreatePlaylist={handleCreatePlaylist} 
