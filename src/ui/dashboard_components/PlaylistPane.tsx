@@ -8,7 +8,7 @@ import FavoritesList from "./playlistpane_components/FavoritesList";
 import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionList";
 import PlaylistPaneController from "./playlistpane_components/PlaylistPaneController";
 
-export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onDeleteEntry, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onDeleteEntry, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -35,7 +35,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 isFavorited={isFavorited} 
                 visible={isRecentsVisible} 
                 onHandleFetch={onHandleFetch}
-                onIsPlaying={onIsPlaying} 
+                onIsPlaying={onIsPlaying}
+                onSetTrackQueue={onSetTrackQueue} 
             />
             <FavoritesList 
                 list={favorites}  
@@ -44,6 +45,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 onDeleteEntry={onDeleteEntry} 
                 onHandleFetch={onHandleFetch} 
                 onIsPlaying={onIsPlaying}
+                onSetTrackQueue={onSetTrackQueue} 
+                onSetCurrentTrackIndex={onSetCurrentTrackIndex}
             />
             <PlaylistSelectionList 
                 list={playlist} 
