@@ -37,6 +37,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     );
 
     const { showSnackbar } = useSnackbar();
+    
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
