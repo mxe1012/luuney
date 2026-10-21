@@ -18,8 +18,8 @@
     background: rgba(36, 22, 55, 0.55);
     border: 1px solid rgba(220, 204, 247, 0.25);
     border-radius: 16px;
-    backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
     box-shadow: 0 12px 32px rgba(20, 10, 40, 0.45),
                 inset 0 1px 0 rgba(255, 255, 255, 0.12);
 
