@@ -155,7 +155,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onPlay={() => onIsPlaying(true)}
                 onPause={() => onIsPlaying(false)}
                 onEnded={() => {
-                    onIsPlaying(false);
                     let nextIndex = currentTrackIndex + 1;
 
                     if(tracks.length <= 1 && repeatMode === "all") {
