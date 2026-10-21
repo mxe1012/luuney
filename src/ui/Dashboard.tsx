@@ -120,7 +120,7 @@ export default function Dashboard() {
         return data
             .filter((element) => element.stream?.url)
             .map((element) => {
-                const { track_id, artwork, title } = element;
+                const { track_id, artwork, title, duration } = element;
                 const { handle } = element.user;
                 const { url } = element.stream;
 
@@ -130,6 +130,7 @@ export default function Dashboard() {
                     title,
                     handle,
                     url,
+                    duration,
                 };
             });
     }
