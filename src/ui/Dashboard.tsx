@@ -82,7 +82,7 @@ export default function Dashboard() {
 
         }
         catch(e) {
-            showSnackbar("Error in loading track!", 12000)
+            showSnackbar("Error loading track!", 12000)
             console.log(e);
         }
         
