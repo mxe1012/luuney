@@ -36,7 +36,8 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 visible={isRecentsVisible} 
                 onHandleFetch={onHandleFetch}
                 onIsPlaying={onIsPlaying}
-                onSetTrackQueue={onSetTrackQueue} 
+                onSetTrackQueue={onSetTrackQueue}
+                onSetCurrentTrackIndex={onSetCurrentTrackIndex} 
             />
             <FavoritesList 
                 list={favorites}  
