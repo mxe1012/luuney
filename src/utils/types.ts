@@ -107,6 +107,13 @@ export interface AudioPlayerButtonProps {
     src?: string
     srcTrue?: string;
     srcFalse?: string;
+    states?: AudioPlayerButtonStateProps[]
+    stateIndex?: number;
+}
+
+export interface AudioPlayerButtonStateProps {
+    label: string;
+    src: string;
 }
 
 export interface CoverImageProps {
