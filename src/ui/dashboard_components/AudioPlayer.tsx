@@ -261,7 +261,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
                     <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                     <AudioPlayerModeButton
-                        size={32}
+                        size={36}
                         onClick={cycleRepeatMode}
                         states={[
                             { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
