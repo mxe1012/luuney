@@ -5,6 +5,7 @@ import { useRef, useState, useEffect, type ChangeEvent } from "react";
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
+import AudioPlayerModeButton from "./audioplayer_components/AudioPlayerModeButton";
 
 import CoverImage from "../CoverImage";
 import { useSnackbar } from "../../hooks/SnackbarContext";
@@ -20,11 +21,20 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
 
-    const [isLoop, setIsLoop] = useState(false);
     const [isShuffle, setIsShuffle] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
+
+    const REPEAT_MODES = ["off", "one", "all"] as const;
+    type RepeatMode = (typeof REPEAT_MODES)[number];
+
+    const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
+
+    const cycleRepeatMode = () =>
+    setRepeatMode(
+        (m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % REPEAT_MODES.length]
+    );
 
     const { showSnackbar } = useSnackbar();
     async function handleTogglePlay() {
@@ -138,18 +148,23 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     return (
         <>
             <audio
-                loop={isLoop} 
+                loop={repeatMode === "one"} 
                 ref={audioRef}
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
                 onPause={() => onIsPlaying(false)}
                 onEnded={() => {
                     onIsPlaying(false);
-                    const nextIndex = currentTrackIndex + 1;
+                    let nextIndex = currentTrackIndex + 1;
 
                     if (nextIndex >= tracks.length) {
-                        onIsPlaying(false); // end of queue
-                        return;
+                        if (repeatMode === "off") {
+                            onIsPlaying(false); // end of queue
+                            return;
+                        }
+                        else if (repeatMode === "all") {
+                            nextIndex = 0;
+                        }
                     }
 
                     onSetCurrentTrackIndex(nextIndex);
@@ -240,9 +255,16 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                     labelTrue="Pause" labelFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
                     <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
-                    <AudioPlayerButton onClick={() => {setIsLoop(!isLoop)}} size={36} toggleAction={isLoop}
-                    labelTrue="Repeat Once" labelFalse="Repeat Off"
-                    srcTrue="/assets/audio_player_icons/repeat-once.svg" srcFalse="/assets/audio_player_icons/repeat-off.svg" />
+                    <AudioPlayerModeButton
+                        size={32}
+                        onClick={cycleRepeatMode}
+                        states={[
+                            { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
+                            { label: "Repeat one", src: "/assets/audio_player_icons/repeat-once.svg" },
+                            { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
+                        ]}
+                        stateIndex={REPEAT_MODES.indexOf(repeatMode)}
+                    />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton
