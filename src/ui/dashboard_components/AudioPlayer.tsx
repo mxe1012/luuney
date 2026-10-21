@@ -48,6 +48,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             }
             catch (e) {
                 console.error("Playback failed: ", e);
+                showSnackbar("Playback failed!");
             }
         }
         else {
@@ -85,7 +86,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         const audio = audioRef.current;
         if(!audio) return;
 
-        const newTime = audio.currentTime + 5;
+        const newTime = audio.currentTime + 10;
 
         audio.currentTime = newTime;
 
@@ -96,7 +97,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         const audio = audioRef.current;
         if(!audio) return;
 
-        const newTime = audio.currentTime - 5;
+        const newTime = audio.currentTime - 10;
 
         audio.currentTime = newTime;
 
@@ -157,6 +158,12 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                     onIsPlaying(false);
                     let nextIndex = currentTrackIndex + 1;
 
+                    if(tracks.length <= 1 && repeatMode === "all") {
+                        setCurrentTime(0);
+                        audioRef.current?.play();
+                        return
+                    }
+
                     if (nextIndex >= tracks.length) {
                         if (repeatMode === "off") {
                             onIsPlaying(false); // end of queue
@@ -166,7 +173,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                             nextIndex = 0;
                         }
                     }
-
                     onSetCurrentTrackIndex(nextIndex);
                     onHandleFetch(tracks[nextIndex].track_id);
                 }}
