@@ -220,11 +220,6 @@ export default function Dashboard() {
 
     }, [])
 
-    useEffect(() => {
-        console.log("Track Queue\n--------")
-        console.log(trackQueue)
-    }, [trackQueue])
-
     return (
         <>
             <div className="MusicDashboard">
