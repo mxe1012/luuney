@@ -53,7 +53,7 @@
 ul.PlaylistPaneFolderList {
     display: grid;
     align-items: flex-start;
-    gap: 4px;
+    
     list-style-type: none;
     padding: 0px;
     padding-top: 16px;
