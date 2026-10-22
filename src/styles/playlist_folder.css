@@ -75,6 +75,24 @@ ul.PlaylistPaneFolderList.hidden {
     display: none;
 }
 
+ul.PlaylistPaneList {
+    display: grid;
+    align-items: flex-start;
+    list-style-type: none;
+    padding: 0px;
+    padding-bottom: 16px;
+    max-height: 500px;
+    overflow: auto;
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent);
+    mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 32px,
+    black calc(100% - 48px),
+    transparent
+  );
+}
+
 li.PlaylistPaneFolderList {
     animation-name: fade-in;
     animation-duration: 0.3s;

@@ -61,7 +61,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         display: playlist.id !== playlistId ? "none" : "",
                         visibility: playlist.id !== playlistId ? "hidden" : "visible"
                     }} 
-                    className={"PlaylistPaneFolderList"}>
+                    className={"PlaylistPaneList"}>
                     {playlist.id === playlistId && playlist.tracks.map((element, index) => (
                         <li key={element.track_id} className="PlaylistPaneFolderList">
                             <ListButton
