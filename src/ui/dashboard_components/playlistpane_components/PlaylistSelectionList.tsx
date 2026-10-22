@@ -40,8 +40,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                 </button>
                                 <div style={{display: "grid", alignItems: "center"}}>
                                     <button className="ListActionBtn"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
+                                    onClick={() => {
                                         onSetPlaylist(onDeletePlaylist(playlist));
                                     }}
                                     >
