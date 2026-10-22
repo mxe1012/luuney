@@ -75,7 +75,7 @@ ul.PlaylistPaneFolderList.hidden {
     display: none;
 }
 
-ul.PlaylistPaneList {
+ul.PlaylistPaneFolderSelection {
     display: grid;
     align-items: flex-start;
     list-style-type: none;
