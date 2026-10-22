@@ -1,6 +1,6 @@
 import type { PlaylistPaneControllerProps } from "../../../utils/types";
 
-export default function PlaylistPaneController({isRecentsVisible, isFavoritesVisible, isPlaylistSelectionVisible, onSetIsRecentsVisible, onSetIsFavoritesVisible, onSetIsPlaylistSelectionVisible, onSetIsSelectedPlaylist}: PlaylistPaneControllerProps) {
+export default function PlaylistPaneController({isRecentsVisible, isFavoritesVisible, isPlaylistSelectionVisible, isSelectedPlaylist, onSetIsRecentsVisible, onSetIsFavoritesVisible, onSetIsPlaylistSelectionVisible, onSetIsSelectedPlaylist}: PlaylistPaneControllerProps) {
 
     return (
         <>
@@ -31,7 +31,7 @@ export default function PlaylistPaneController({isRecentsVisible, isFavoritesVis
                     onSetIsSelectedPlaylist(false);
                 }} 
                 >
-                    Playlists</button>
+                    {(!isPlaylistSelectionVisible || isPlaylistSelectionVisible) && !isSelectedPlaylist ? "Playlists" : "< Back"}</button>
             </div>
         </>
     )
