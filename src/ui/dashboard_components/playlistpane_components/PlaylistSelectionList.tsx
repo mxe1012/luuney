@@ -56,32 +56,32 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         <>
             <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{list[playlistIndex].name}</h2>
             {list.map((playlist) => (
-            <ul key={playlist.id} 
-                style={{
-                    display: playlist.id !== playlistId ? "none" : "",
-                    visibility: playlist.id !== playlistId ? "hidden" : "visible"
-                }} 
-                className={"PlaylistPaneFolderList"}>
-                {playlist.id === playlistId && playlist.tracks.map((element, index) => (
-                    <li key={element.track_id} className="PlaylistPaneFolderList">
-                        <ListButton
-                            list={playlist.tracks}
-                            track={element}
-                            playlist={playlist}
-                            index={index}
-                            onHandleFetch={onHandleFetch}
-                            onAddToFavorites={onAddToFavorites}
-                            hasDeleteButton={true}
-                            hasFavoriteButton={true}
-                            isFavorited={isFavorited}
-                            onIsPlaying={onIsPlaying}
-                            onDeletePlaylistEntry={onDeletePlaylistEntry}
-                            onSetCurrentTrackIndex={onSetCurrentTrackIndex}
-                            onSetTrackQueue={onSetTrackQueue}
-                        />
-                    </li>
-                ))}
-            </ul>
+                <ul key={playlist.id} 
+                    style={{
+                        display: playlist.id !== playlistId ? "none" : "",
+                        visibility: playlist.id !== playlistId ? "hidden" : "visible"
+                    }} 
+                    className={"PlaylistPaneFolderList"}>
+                    {playlist.id === playlistId && playlist.tracks.map((element, index) => (
+                        <li key={element.track_id} className="PlaylistPaneFolderList">
+                            <ListButton
+                                list={playlist.tracks}
+                                track={element}
+                                playlist={playlist}
+                                index={index}
+                                onHandleFetch={onHandleFetch}
+                                onAddToFavorites={onAddToFavorites}
+                                hasDeleteButton={true}
+                                hasFavoriteButton={true}
+                                isFavorited={isFavorited}
+                                onIsPlaying={onIsPlaying}
+                                onDeletePlaylistEntry={onDeletePlaylistEntry}
+                                onSetCurrentTrackIndex={onSetCurrentTrackIndex}
+                                onSetTrackQueue={onSetTrackQueue}
+                            />
+                        </li>
+                    ))}
+                </ul>
             ))}
         </>
     )
