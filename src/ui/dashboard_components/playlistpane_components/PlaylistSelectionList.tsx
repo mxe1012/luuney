@@ -16,7 +16,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
             {!isSelectedPlaylist ? 
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {list.map((playlist) => (
-                        <li key={playlist.id}>
+                        <li key={playlist.id} className="PlaylistPaneFolderList">
                             <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                                 <button className="PlaylistButton" onClick={() => {
                                     onIsSelectedPlaylist(true)
