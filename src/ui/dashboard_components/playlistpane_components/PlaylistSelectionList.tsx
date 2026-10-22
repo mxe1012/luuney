@@ -10,18 +10,20 @@ import ListButton from "./ListButton";
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
+    const [playlistIndex, setPlaylistIndex] = useState(0);
 
     return (
         <>
             {!isSelectedPlaylist ? 
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
-                    {list.map((playlist) => (
+                    {list.map((playlist, index) => (
                         <li key={playlist.id} className="PlaylistPaneFolderList">
                             <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                                 <button className="PlaylistButton" onClick={() => {
                                     onIsSelectedPlaylist(true)
                                     onSetIsPlaylistSelectionVisible(false);
                                     setPlaylistId(playlist.id);
+                                    setPlaylistIndex(index);
                                 }}>
                                     <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
                                         <div style={{flexShrink: 0}}>
@@ -52,6 +54,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                 </ul>
                 :
                 <ul className="PlaylistPaneFolderList">
+                    <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{list[playlistIndex].name}</h2>
                     {list.map((playlist) => (
                     <ul key={playlist.id} 
                         style={{
