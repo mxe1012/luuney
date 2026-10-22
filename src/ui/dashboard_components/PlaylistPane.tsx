@@ -22,6 +22,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 isRecentsVisible={isRecentsVisible}
                 isFavoritesVisible={isFavoritesVisible}
                 isPlaylistSelectionVisible={isPlaylistSelectionVisible} 
+                isSelectedPlaylist={isSelectedPlaylist}
                 onSetIsRecentsVisible={setIsRecentsVisible}
                 onSetIsFavoritesVisible={setIsFavoritesVisible}
                 onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
