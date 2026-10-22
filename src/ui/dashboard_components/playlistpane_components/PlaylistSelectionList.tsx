@@ -52,15 +52,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                 </ul>
                 :
                 <ul className="PlaylistPaneFolderList">
-                    <div>
-                        <button id="PlaylistBackBtn"
-                        onClick={() => {
-                            onSetIsPlaylistSelectionVisible(true)
-                            onIsSelectedPlaylist(false)
-                            setPlaylistId("");
-                        }}>
-                            Back</button>
-                    </div>
                     {list.map((playlist) => (
                     <ul key={playlist.id} 
                         style={{
