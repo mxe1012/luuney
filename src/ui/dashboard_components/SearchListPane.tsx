@@ -17,7 +17,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
 
     const [isLoaded, setIsLoaded] = useState(true);
 
-    const { pageItems, start, page, pageCount, hasPrev, hasNext, next, prev } =
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
     usePagination(trackList, 10);
 
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

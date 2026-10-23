@@ -5,7 +5,7 @@ import ListButton from "./ListButton";
 
 export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, isFavorited, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
     
-    const { pageItems, start, page, pageCount, hasPrev, hasNext, next, prev } =
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
         usePagination(list, 10);
 
     return (

@@ -17,7 +17,6 @@ export default function usePagination<T>(items: T[], pageSize: number) {
         page,
         pageCount,
         pageItems,
-        start, // offset of the first item on this page
         hasPrev: page > 0,
         hasNext: page < pageCount - 1,
         next: () => setPage((p) => Math.min(p + 1, pageCount - 1)),
