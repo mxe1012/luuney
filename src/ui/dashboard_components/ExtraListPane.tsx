@@ -13,14 +13,20 @@ export default function ExtraListPane({list, heading, onHandleFetch, onAddToRece
             <SkeletonExtraListPane isLoaded={isLoaded}>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <div className="ExtraListPane">
-                        <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
-                        {pageCount > 1 && (
-                            <div className="Pagination">
-                                <button className="PlaylistPaneControllerButton" onClick={prev} disabled={!hasPrev}>Prev</button>
-                                <span>{page + 1} / {pageCount}</span>
-                                <button className="PlaylistPaneControllerButton" onClick={next} disabled={!hasNext}>Next</button>
+                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                            <div>
+                                <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
                             </div>
-                        )}
+                            <div>
+                                {pageCount > 1 && (
+                                    <div className="Pagination Extra List">
+                                        <button className="PlaylistPaneControllerButton" onClick={prev} disabled={!hasPrev}>Prev</button>
+                                        <span>{page + 1} / {pageCount}</span>
+                                        <button className="PlaylistPaneControllerButton" onClick={next} disabled={!hasNext}>Next</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                         <ul className="ExtraListItems">
                             {pageItems.map((element) => (
                                 <li className="ExtraListItems" key={element.track_id}>
