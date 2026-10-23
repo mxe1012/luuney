@@ -1,0 +1,8 @@
+.Pagination {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.Pagination span {
+    color: #F3D9C7;
+}
