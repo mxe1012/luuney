@@ -15,9 +15,13 @@ export interface TrackObject {
 
 export interface AudioPlayerProps {
     track: TrackObject
+    tracks: TrackObject[];
+    currentTrackIndex: number;
     playlists: Playlist[];
     isPlaying: boolean;
     isFavorited: boolean;
+    onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
+    onHandleFetch: (id: number) => Promise<void>;
     onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onAddToFavorites: (entry: TrackObject) => void;
@@ -45,15 +49,16 @@ export interface PlaylistPaneProps {
     onDeletePlaylistEntry: (playlistId: string, entry: TrackObject) => void
     onAddToFavorites: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
-    // onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
-    // onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
+    onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onSetTrackQueue:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
 }
 
 export interface PlaylistPaneControllerProps {
     isRecentsVisible: boolean;
     isFavoritesVisible: boolean;
     isPlaylistSelectionVisible: boolean;
+    isSelectedPlaylist: boolean;
     onSetIsRecentsVisible: React.Dispatch<React.SetStateAction<boolean>>;
     onSetIsFavoritesVisible: React.Dispatch<React.SetStateAction<boolean>>;
     onSetIsPlaylistSelectionVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,6 +75,8 @@ export interface MainListProps {
     onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
+    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
 }
 
 export interface PlaylistSelectionProps {
@@ -87,6 +94,8 @@ export interface PlaylistSelectionProps {
     onAddToFavorites?: (entry: TrackObject) => void
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
+    onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
+    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
 }
 
 export interface AudioPlayerButtonProps {
@@ -99,6 +108,13 @@ export interface AudioPlayerButtonProps {
     src?: string
     srcTrue?: string;
     srcFalse?: string;
+    states?: AudioPlayerButtonStateProps[]
+    stateIndex?: number;
+}
+
+export interface AudioPlayerButtonStateProps {
+    label: string;
+    src: string;
 }
 
 export interface CoverImageProps {
@@ -121,6 +137,7 @@ export interface ListButtonProps {
     list: TrackObject[];
     track: TrackObject;
     playlist?: Playlist;
+    index: number;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onAddToRecents?: (entry: TrackObject) => void;
@@ -129,6 +146,8 @@ export interface ListButtonProps {
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onDeletePlaylistEntry?: (playlistId: string, entry: TrackObject) => void
+    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
 }

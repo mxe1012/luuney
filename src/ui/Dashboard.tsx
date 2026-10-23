@@ -50,6 +50,10 @@ export default function Dashboard() {
     const [isLoadedTrending, setIsLoadedTrending] = useState(false);
     const [isLoadedLatest, setIsLoadedLatest] = useState(false);
 
+    const [trackQueue, setTrackQueue] = useState<TrackObject[]>([]);
+    
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+
     const { showSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
@@ -78,7 +82,7 @@ export default function Dashboard() {
 
         }
         catch(e) {
-            showSnackbar("Error in loading track!", 12000)
+            showSnackbar("Error loading track!", 12000)
             console.log(e);
         }
         
@@ -116,7 +120,7 @@ export default function Dashboard() {
         return data
             .filter((element) => element.stream?.url)
             .map((element) => {
-                const { track_id, artwork, title } = element;
+                const { track_id, artwork, title, duration } = element;
                 const { handle } = element.user;
                 const { url } = element.stream;
 
@@ -126,6 +130,7 @@ export default function Dashboard() {
                     title,
                     handle,
                     url,
+                    duration,
                 };
             });
     }
@@ -213,6 +218,7 @@ export default function Dashboard() {
 
         return () => clearTimeout(id)
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -233,14 +239,20 @@ export default function Dashboard() {
                         onAddToFavorites={handleAddToFavorites} 
                         onHandleFetch={handleFetch} 
                         onIsPlaying={setIsPlaying} 
+                        onSetTrackQueue={setTrackQueue}
+                        onSetCurrentTrackIndex={setCurrentTrackIndex}
                     />
                 </div>
                 <div>
                     <AudioPlayer 
                         track={track} 
+                        tracks={trackQueue}
+                        currentTrackIndex={currentTrackIndex}
+                        onSetCurrentTrackIndex={setCurrentTrackIndex}
                         playlists={playlists} 
                         isPlaying={isPlaying} 
                         isFavorited={isCurrentTrackFavorited} 
+                        onHandleFetch={handleFetch}
                         onAddToFavorites={handleAddToFavorites} 
                         onIsPlaying={setIsPlaying}
                         onHandleCreatePlaylist={handleCreatePlaylist} 

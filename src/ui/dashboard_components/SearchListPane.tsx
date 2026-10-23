@@ -97,11 +97,12 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                 </div>
                 <SkeletonSearchListPane isLoaded={isLoaded}>
                     <ul className="SearchList">
-                        {trackList.map((element) => (
+                        {trackList.map((element, index) => (
                             <li className="SearchList" key={element.track_id}>
                                 <ListButton 
                                     list={trackList}
                                     track={element}
+                                    index={index}
                                     onHandleFetch={onHandleFetch}
                                     onAddToFavorites={onAddToFavorites}
                                     onAddToRecents={onAddToRecents}

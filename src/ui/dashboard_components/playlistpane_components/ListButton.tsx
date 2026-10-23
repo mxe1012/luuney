@@ -4,16 +4,18 @@ import { formatTime } from "../../../utils/helpers";
 
 import CoverImage from "../../CoverImage";
 
-export default function ListButton({list, track, playlist, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
+export default function ListButton({list, track, playlist, index, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton, onSetTrackQueue, onSetCurrentTrackIndex}: ListButtonProps) {
 
     return (
         <>
             <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                 <div style={{flex: 1, minWidth: 0, gap: '2px'}}>
                     <button className="PlaylistButton" onClick={() => {
-                        onAddToRecents?.(track)
+                        onAddToRecents?.(track);
                         onHandleFetch(track.track_id);
-                        onIsPlaying(false)
+                        onIsPlaying(false);
+                        onSetCurrentTrackIndex?.(index);
+                        onSetTrackQueue?.(list.map((element) => element))
                         }}>
                             <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
                                 <div style={{flexShrink: 0}}>

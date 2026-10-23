@@ -1,16 +1,17 @@
-import type { AudioPlayerProps } from "../../utils/types";
+import type { AudioPlayerProps, TrackObject } from "../../utils/types";
 
 import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
 import { formatTime } from "../../utils/helpers";
 
 import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
+import AudioPlayerModeButton from "./audioplayer_components/AudioPlayerModeButton";
 
 import CoverImage from "../CoverImage";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 
-export default function AudioPlayer({track, playlists, isPlaying, isFavorited, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
-
+export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
+    
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
@@ -20,12 +21,54 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
     const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
 
-    const [isLoop, setIsLoop] = useState(false);
+    const [isShuffle, setIsShuffle] = useState(false);
+    
+    const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
+    const REPEAT_MODES = ["off", "one", "all"] as const;
+    type RepeatMode = (typeof REPEAT_MODES)[number];
+
+    const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
+
+    const cycleRepeatMode = () => {
+        setRepeatMode(
+            (m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % REPEAT_MODES.length]
+        );
+    }
+    
     const { showSnackbar } = useSnackbar();
+    
+    function handleShuffle() {
+
+        const nextIsShuffle = !isShuffle;
+        const activeQueue = isShuffle ? shuffleTrackQueue : tracks;
+        const playing = activeQueue[currentTrackIndex];
+
+        setIsShuffle(nextIsShuffle);
+
+        if (nextIsShuffle) {
+            const rest = tracks
+                .filter(track => track.track_id !== playing?.track_id)
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value);
+
+            // playing track goes first, so the rest of the shuffle follows it
+            setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+            onSetCurrentTrackIndex(0);
+            showSnackbar("Shuffle Enabled!")
+        } 
+        else {
+            const originalIndex = tracks.findIndex(track => track.track_id === playing?.track_id);
+            if (originalIndex !== -1) onSetCurrentTrackIndex(originalIndex);
+            showSnackbar("Shuffle Disabled!")
+        }
+
+    }
+
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
@@ -37,6 +80,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
             }
             catch (e) {
                 console.error("Playback failed: ", e);
+                showSnackbar("Playback failed!");
             }
         }
         else {
@@ -74,7 +118,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
         const audio = audioRef.current;
         if(!audio) return;
 
-        const newTime = audio.currentTime + 5;
+        const newTime = audio.currentTime + 10;
 
         audio.currentTime = newTime;
 
@@ -85,7 +129,7 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
         const audio = audioRef.current;
         if(!audio) return;
 
-        const newTime = audio.currentTime - 5;
+        const newTime = audio.currentTime - 10;
 
         audio.currentTime = newTime;
 
@@ -137,12 +181,33 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
     return (
         <>
             <audio
-                loop={isLoop} 
+                loop={repeatMode === "one"} 
                 ref={audioRef}
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
                 onPause={() => onIsPlaying(false)}
-                onEnded={() => onIsPlaying(false)}
+                onEnded={() => {
+                    const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+                    let nextIndex = currentTrackIndex + 1;
+
+                    if(currentQueue.length <= 1 && repeatMode === "all") {
+                        setCurrentTime(0);
+                        audioRef.current?.play();
+                        return
+                    }
+
+                    if (nextIndex >= currentQueue.length) {
+                        if (repeatMode === "off") {
+                            onIsPlaying(false); // end of queue
+                            return;
+                        }
+                        else if (repeatMode === "all") {
+                            nextIndex = 0;
+                        }
+                    }
+                    onSetCurrentTrackIndex(nextIndex);
+                    onHandleFetch(currentQueue[nextIndex].track_id);
+                }}
                 onLoadedData={handleLoadedMetadata}
                 onTimeUpdate={handleTimeUpdate}
                 onVolumeChange={handleElementVolumeChange} 
@@ -218,16 +283,26 @@ export default function AudioPlayer({track, playlists, isPlaying, isFavorited, o
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <AudioPlayerButton onClick={handleRewind} size={36} label="Shuffle" src="/assets/audio_player_icons/shuffle.svg" />
+                    <AudioPlayerButton 
+                    onClick={handleShuffle} size={36} toggleAction={isShuffle} 
+                    labelTrue="Shuffle On" labelFalse="Shuffle Off"
+                    srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
                     <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
                     <AudioPlayerButton 
                     onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
                     <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
-                    <AudioPlayerButton onClick={() => {setIsLoop(!isLoop)}} size={36} toggleAction={isLoop}
-                    labelTrue="Repeat Once" labelFalse="Repeat Off"
-                    srcTrue="/assets/audio_player_icons/repeat-once.svg" srcFalse="/assets/audio_player_icons/repeat-off.svg" />
+                    <AudioPlayerModeButton
+                        size={36}
+                        onClick={cycleRepeatMode}
+                        states={[
+                            { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
+                            { label: "Repeat one", src: "/assets/audio_player_icons/repeat-once.svg" },
+                            { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
+                        ]}
+                        stateIndex={REPEAT_MODES.indexOf(repeatMode)}
+                    />
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton
