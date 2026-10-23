@@ -64,8 +64,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             if (originalIndex !== -1) onSetCurrentTrackIndex(originalIndex);
         }
 
-        console.log(nextIsShuffle)
-
     }
 
     async function handleTogglePlay() {
