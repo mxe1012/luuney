@@ -44,7 +44,7 @@
         0 0 24px rgba(167, 139, 250, 0.12),
         inset 0 1px 0 rgba(255, 255, 255, 0.12);
     width: 340px;
-    height: 650px;
+    height: 670px;
 }
 
 @media (prefers-reduced-motion: reduce) {
