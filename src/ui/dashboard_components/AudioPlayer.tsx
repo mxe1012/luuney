@@ -1,4 +1,4 @@
-import type { AudioPlayerProps } from "../../utils/types";
+import type { AudioPlayerProps, TrackObject } from "../../utils/types";
 
 import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
@@ -22,6 +22,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
 
     const [isShuffle, setIsShuffle] = useState(false);
+    
+    const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
@@ -38,6 +40,34 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const { showSnackbar } = useSnackbar();
     
+    function handleShuffle() {
+
+        const nextIsShuffle = !isShuffle;
+        const activeQueue = isShuffle ? shuffleTrackQueue : tracks;
+        const playing = activeQueue[currentTrackIndex];
+
+        setIsShuffle(nextIsShuffle);
+
+        if (nextIsShuffle) {
+            const rest = tracks
+                .filter(track => track.track_id !== playing?.track_id)
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value);
+
+            // playing track goes first, so the rest of the shuffle follows it
+            setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+            onSetCurrentTrackIndex(0);
+        } 
+        else {
+            const originalIndex = tracks.findIndex(track => track.track_id === playing?.track_id);
+            if (originalIndex !== -1) onSetCurrentTrackIndex(originalIndex);
+        }
+
+        console.log(nextIsShuffle)
+
+    }
+
     async function handleTogglePlay() {
         const audio = audioRef.current;
     
@@ -156,15 +186,16 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onPlay={() => onIsPlaying(true)}
                 onPause={() => onIsPlaying(false)}
                 onEnded={() => {
+                    const currentQueue = isShuffle ? shuffleTrackQueue : tracks
                     let nextIndex = currentTrackIndex + 1;
 
-                    if(tracks.length <= 1 && repeatMode === "all") {
+                    if(currentQueue.length <= 1 && repeatMode === "all") {
                         setCurrentTime(0);
                         audioRef.current?.play();
                         return
                     }
 
-                    if (nextIndex >= tracks.length) {
+                    if (nextIndex >= currentQueue.length) {
                         if (repeatMode === "off") {
                             onIsPlaying(false); // end of queue
                             return;
@@ -174,7 +205,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                         }
                     }
                     onSetCurrentTrackIndex(nextIndex);
-                    onHandleFetch(tracks[nextIndex].track_id);
+                    onHandleFetch(currentQueue[nextIndex].track_id);
                 }}
                 onLoadedData={handleLoadedMetadata}
                 onTimeUpdate={handleTimeUpdate}
@@ -252,7 +283,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 </div>
                 <div style={{display: "flex", justifyContent: "space-evenly"}}>
                     <AudioPlayerButton 
-                    onClick={() => {setIsShuffle(!isShuffle)}} size={36} toggleAction={isShuffle} 
+                    onClick={handleShuffle} size={36} toggleAction={isShuffle} 
                     labelTrue="Shuffle On" labelFalse="Shuffle Off"
                     srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
                     <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
