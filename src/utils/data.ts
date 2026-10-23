@@ -43,7 +43,7 @@ export async function fetchTrackById(id: number) {
 export async function fetchTrackByQuery(query: string) {
 
     try {
-        const result = await fetch(`https://api.audius.co/v1/tracks/search?limit=50&query=${query}`);
+        const result = await fetch(`https://api.audius.co/v1/tracks/search?limit=500&query=${query}`);
 
         if(result.ok) {
             const data = await result.json();
