@@ -33,11 +33,12 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
 
-    const cycleRepeatMode = () =>
-    setRepeatMode(
-        (m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % REPEAT_MODES.length]
-    );
-
+    const cycleRepeatMode = () => {
+        setRepeatMode(
+            (m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % REPEAT_MODES.length]
+        );
+    }
+    
     const { showSnackbar } = useSnackbar();
     
     function handleShuffle() {
@@ -58,10 +59,12 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             // playing track goes first, so the rest of the shuffle follows it
             setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
             onSetCurrentTrackIndex(0);
+            showSnackbar("Shuffle Enabled!")
         } 
         else {
             const originalIndex = tracks.findIndex(track => track.track_id === playing?.track_id);
             if (originalIndex !== -1) onSetCurrentTrackIndex(originalIndex);
+            showSnackbar("Shuffle Disabled!")
         }
 
     }
