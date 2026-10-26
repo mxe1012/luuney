@@ -14,6 +14,7 @@ import './styles/pagination.css'
 import { MainPane } from './ui/Containers';
 import Dashboard from './ui/Dashboard';
 import SnackbarProvider from './hooks/SnackbarContext';
+import Footer from './ui/Footer'
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
 					<Dashboard />
 				</SnackbarProvider>
 			</MainPane>
+			<Footer />
 		</>	
 	);
 }
