@@ -235,30 +235,34 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                         className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
                             <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
                                 <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
-                                onChange={(e) => {
-                                    setPlaylistName(e.target.value)
-                                }} 
-                                onClick={(e) => e.stopPropagation()} 
+                                    onChange={(e) => {
+                                        setPlaylistName(e.target.value)
+                                    }} 
+                                    onClick={(e) => e.stopPropagation()} 
                                 />
-                                <button className="PlaylistMenuItem" 
-                                disabled={playlistName.length == 0 ? true : false}
-                                onClick={() => { 
-                                    onHandleCreatePlaylist(playlistName, track);
-                                    setPlaylistName("");
-                                    showSnackbar("Playlist created!");
-                                }}>
-                                        +
-                                    </button>
-                            </div>
-                            <div className="PlaylistMenuList">
-                                {playlists.map((element) => (
-                                    <button className="PlaylistMenuItem" key={element.id} onClick={() => {
-                                        onHandleAddToPlaylist(element.id, track);
-                                        showSnackbar("Track added to " + element.name + "!")
+                                <button className="PlaylistMenuAddItemBtn" 
+                                    disabled={playlistName.length == 0 ? true : false}
+                                    onClick={() => { 
+                                        onHandleCreatePlaylist(playlistName, track);
+                                        setPlaylistName("");
+                                        showSnackbar("Playlist created!");
                                     }}>
-                                        <p style={{margin: 0, padding: 0, minWidth: 0, flex: 1}}>{element.name}</p>
-                                    </button>
+                                        +
+                                </button>
+                            </div>
+                            <div >
+                                <ul className="PlaylistMenuList">
+                                {playlists.map((element) => (
+                                    <li> 
+                                        <button className="PlaylistMenuItem" key={element.id} onClick={() => {
+                                            onHandleAddToPlaylist(element.id, track);
+                                            showSnackbar("Track added to " + element.name + "!")
+                                        }}>
+                                            <p style={{margin: 0, padding: 0, minWidth: 0, flex: 1}}>{element.name}</p>
+                                        </button>
+                                    </li>
                                 ))}
+                                </ul>
                             </div>
                         </div>
                     </div>
