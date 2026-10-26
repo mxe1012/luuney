@@ -167,6 +167,7 @@ export interface SkeletonProps {
 }
 
 export interface PaginationControllerProps {
+    className?: string;
     page: number;
     pageCount: number;
     prev: () => void;
