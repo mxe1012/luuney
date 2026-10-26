@@ -3,10 +3,11 @@
     justify-content: space-evenly;
 }
 
-.Pagination.Extra.List {
+.PaginationExtraList {
     display: flex;
     justify-content: center;
     gap: 10px;
+    color: #F3D9C7;
 }
 
 .Pagination span {
