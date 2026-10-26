@@ -34,6 +34,7 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                 ))}
             </ul>
             <PaginationController 
+                className="Pagination"
                 page={page} 
                 pageCount={pageCount} 
                 prev={prev} 

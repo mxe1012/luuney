@@ -120,6 +120,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                         ))}
                     </ul>
                     <PaginationController 
+                        className="Pagination"
                         page={page} 
                         pageCount={pageCount} 
                         prev={prev} 

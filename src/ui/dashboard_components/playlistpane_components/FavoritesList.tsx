@@ -31,7 +31,8 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                     </li>
                 ))}
             </ul>
-            <PaginationController 
+            <PaginationController
+                className="Pagination" 
                 page={page} 
                 pageCount={pageCount} 
                 prev={prev} 
