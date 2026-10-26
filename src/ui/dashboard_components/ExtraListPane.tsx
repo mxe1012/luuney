@@ -1,6 +1,7 @@
 import usePagination from "../../hooks/usePagination";
 import type { ExtraListPaneProps } from "../../utils/types";
 import CoverImage from "../CoverImage";
+import PaginationController from "../PaginationController";
 import SkeletonExtraListPane from "../skeletons/SkeletonExtraListPane";
 
 export default function ExtraListPane({list, heading, onHandleFetch, onAddToRecents, onIsPlaying, isLoaded}: ExtraListPaneProps) {
@@ -18,13 +19,15 @@ export default function ExtraListPane({list, heading, onHandleFetch, onAddToRece
                                 <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
                             </div>
                             <div>
-                                {pageCount > 1 && (
-                                    <div className="Pagination Extra List">
-                                        <button className="PlaylistPaneControllerButton" onClick={prev} disabled={!hasPrev}>Prev</button>
-                                        <span>{page + 1} / {pageCount}</span>
-                                        <button className="PlaylistPaneControllerButton" onClick={next} disabled={!hasNext}>Next</button>
-                                    </div>
-                                )}
+                                <PaginationController
+                                    className="PaginationExtraList" 
+                                    page={page} 
+                                    pageCount={pageCount} 
+                                    prev={prev} 
+                                    hasPrev={hasPrev} 
+                                    next={next} 
+                                    hasNext={hasNext} 
+                                />
                             </div>
                         </div>
                         <ul className="ExtraListItems">
