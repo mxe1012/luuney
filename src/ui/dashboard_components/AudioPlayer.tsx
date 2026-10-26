@@ -25,6 +25,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     
     const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
 
+    const [isScrolled, setIsScrolled] = useState(false);
+
     const audioRef = useRef<HTMLAudioElement>(null);
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -178,6 +180,17 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         return () => document.removeEventListener("mousedown", handler);
     }, [])
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+            setIsScrolled(scrollTop > 555);
+        }
+        
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+
+    }, [])
+
     return (
         <>
             <audio
@@ -212,7 +225,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onTimeUpdate={handleTimeUpdate}
                 onVolumeChange={handleElementVolumeChange} 
             />
-            <div className="AudioPlayer">
+            <div className={isScrolled ? "AudioPlayer hidden" : "AudioPlayer"}>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
@@ -253,8 +266,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                             <div >
                                 <ul className="PlaylistMenuList">
                                 {playlists.map((element) => (
-                                    <li> 
-                                        <button className="PlaylistMenuItem" key={element.id} onClick={() => {
+                                    <li key={element.id}> 
+                                        <button className="PlaylistMenuItem" onClick={() => {
                                             onHandleAddToPlaylist(element.id, track);
                                             showSnackbar("Track added to " + element.name + "!")
                                         }}>
@@ -321,6 +334,64 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                         value={isMuted ? 0 : volume}
                         onChange={handleVolumeChange}
                         aria-label="Volume" />
+                </div>
+            </div>
+            <div className={isScrolled ? "MiniAudioPlayer" : "MiniAudioPlayer hidden"}>
+                <div style={{flexShrink: 0}}>
+                    <CoverImage styles={{borderRadius: "15px"}} src={track.artwork} size={100}/>
+                </div>
+                <div style={{display: "grid", alignItems: "flex-start", flex: 1, minWidth: 0, gap: '2px'}}>
+                    <div style={{display: "flex", alignItems: "flex-start"}}>
+                        <input 
+                            type="range"
+                            min={0}
+                            max={duration}
+                            step={0.1}
+                            value={currentTime}
+                            onChange={handleSeek} 
+                            disabled={false}
+                            aria-label="Seek" 
+                        />
+                        
+                    </div>
+                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                        <AudioPlayerButton 
+                        onClick={handleShuffle} size={36} toggleAction={isShuffle} 
+                        labelTrue="Shuffle On" labelFalse="Shuffle Off"
+                        srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
+                        <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                        <AudioPlayerButton 
+                        onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
+                        labelTrue="Pause" labelFalse="Play"
+                        srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
+                        <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                        <AudioPlayerModeButton
+                            size={36}
+                            onClick={cycleRepeatMode}
+                            states={[
+                                { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
+                                { label: "Repeat one", src: "/assets/audio_player_icons/repeat-once.svg" },
+                                { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
+                            ]}
+                            stateIndex={REPEAT_MODES.indexOf(repeatMode)}
+                        />
+                    </div>
+                    <div style={{display: "flex", justifyContent: "flex-start"}}>
+                        <AudioPlayerButton
+                            onClick={handleToggleMute} size={40} toggleAction={isMuted}
+                            labelTrue="Unmute" labelFalse="Mute"
+                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" 
+                        />
+                        <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={isMuted ? 0 : volume}
+                            onChange={handleVolumeChange}
+                            aria-label="Volume" 
+                        />
+                    </div>
                 </div>
             </div>
         </>
