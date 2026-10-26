@@ -136,7 +136,9 @@ export default function Dashboard() {
     }
 
     function handleAddToRecents(entry: TrackObject) {
-        const maxed = recents.length >= 20 ? recents.slice(0, 19) : recents
+        const MAX_LENGTH = 50;
+
+        const maxed = recents.length >= MAX_LENGTH ? recents.slice(0, (MAX_LENGTH - 1)) : recents
         const filtered = maxed.filter((element) => element.track_id !== entry.track_id);
 
         setRecents([
