@@ -7,6 +7,8 @@ import type { SearchListPaneProps, TrackObject } from "../../utils/types";
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import ListButton from "./playlistpane_components/ListButton";
 import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
+import  usePagination  from "../../hooks/usePagination";
+import PaginationController from "../PaginationController";
 
 export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
@@ -15,6 +17,9 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
     const [search, setSearch] = useState("");
 
     const [isLoaded, setIsLoaded] = useState(true);
+
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
+    usePagination(trackList, 10);
 
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchRef = useRef<string>("");
@@ -97,7 +102,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                 </div>
                 <SkeletonSearchListPane isLoaded={isLoaded}>
                     <ul className="SearchList">
-                        {trackList.map((element, index) => (
+                        {pageItems.map((element, index) => (
                             <li className="SearchList" key={element.track_id}>
                                 <ListButton 
                                     list={trackList}
@@ -114,6 +119,15 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                             </li>
                         ))}
                     </ul>
+                    <PaginationController 
+                        className="Pagination"
+                        page={page} 
+                        pageCount={pageCount} 
+                        prev={prev} 
+                        hasPrev={hasPrev} 
+                        next={next} 
+                        hasNext={hasNext}
+                    />
                 </SkeletonSearchListPane>
             </div>
         </>

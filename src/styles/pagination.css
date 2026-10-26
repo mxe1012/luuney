@@ -1,0 +1,15 @@
+.Pagination {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.PaginationExtraList {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: #F3D9C7;
+}
+
+.Pagination span {
+    color: #F3D9C7;
+}

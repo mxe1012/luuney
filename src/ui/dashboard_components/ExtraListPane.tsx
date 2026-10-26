@@ -1,17 +1,37 @@
+import usePagination from "../../hooks/usePagination";
 import type { ExtraListPaneProps } from "../../utils/types";
 import CoverImage from "../CoverImage";
+import PaginationController from "../PaginationController";
 import SkeletonExtraListPane from "../skeletons/SkeletonExtraListPane";
 
 export default function ExtraListPane({list, heading, onHandleFetch, onAddToRecents, onIsPlaying, isLoaded}: ExtraListPaneProps) {
+
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
+            usePagination(list, 10);
 
     return (
         <>  
             <SkeletonExtraListPane isLoaded={isLoaded}>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <div className="ExtraListPane">
-                        <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
+                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                            <div>
+                                <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
+                            </div>
+                            <div>
+                                <PaginationController
+                                    className="PaginationExtraList" 
+                                    page={page} 
+                                    pageCount={pageCount} 
+                                    prev={prev} 
+                                    hasPrev={hasPrev} 
+                                    next={next} 
+                                    hasNext={hasNext} 
+                                />
+                            </div>
+                        </div>
                         <ul className="ExtraListItems">
-                            {list.map((element) => (
+                            {pageItems.map((element) => (
                                 <li className="ExtraListItems" key={element.track_id}>
                                     <button className="ExtraListPaneButton" 
                                         onClick={() => {

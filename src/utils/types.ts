@@ -165,3 +165,14 @@ export interface SkeletonProps {
     children: React.ReactNode;
     isLoaded: boolean;
 }
+
+export interface PaginationControllerProps {
+    className?: string;
+    page: number;
+    pageCount: number;
+    prev: () => void;
+    hasPrev: boolean;
+    next: () => void;
+    hasNext: boolean;
+    visible?: boolean;
+}

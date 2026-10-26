@@ -1,75 +1,81 @@
 # Luuney
 
-Luuney is a music player and streaming application built with React, TypeScript, and Vite. Play your favorite songs with tracks sourced from Audius API.
+Luuney is a simple, intuitive music streaming app designed to make discovering and organizing music easy. Create custom playlists, save favorite tracks, and enjoy a clean, straightforward interface.
 
 ## Features
 
-TBA
+- **Custom Playlists** — Create and manage personalized playlists.
+- **Favorites** — Add songs to your favorites for quick access.
+- **Simple UI** — Clean and intuitive interface focused on the listening experience.
 
 ## Tech Stack
 
-- [React](https://react.dev/) — UI library
-- [TypeScript](https://www.typescriptlang.org/) — static typing
-  - TypeScript is used in lieu of JavaScript to enforce typing throughout the app. This, in turn, makes the app easier to reason about, debug, and reduce type errors.
-- [Vite](https://vitejs.dev/) — build tool & dev server
-  - Easily preview and debug the app with features such as fast refresh and hot module replacement.
-- [npm](https://www.npmjs.com/) — package manager
+- **React**  — UI library
+- **TypeScript**
+- **NPM**  — package manager
+- **Vite**  — build tool & dev server
 
 ## Prerequisites
 
-- Node.js 20.19+ or 22.12+ (required by Vite 8)
-- npm (bundled with Node.js)
+Before installing and running Luuney, make sure you have the following installed:
 
-## Getting Started
+- **Node.js** 20.19+ or 22.12+ (required by Vite 8)
+- **npm** (bundled with Node.js)
 
-### 1. Clone the repository
+You can verify your installed versions with:
+
+```bash
+node --version
+npm --version
+```
+
+## Build Instructions
+
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/mxe1012/luuney.git
 cd luuney
 ```
 
-### 2. Install dependencies
+2. Install the project dependencies:
 
 ```bash
 npm install
 ```
 
-### 3. Configure environment variables
-
-Create a `.env` file in the project root (see `.env.example`):
-
-TBA
-
-```bash
-
-```
-
-### 4. Run the dev server
+3. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173` by default.
+4. Open the local URL provided by Vite in your browser.
 
-## Available Scripts
+## Scripts
 
-| Command          | Description                              |
-|------------------|-------------------------------------------|
-| `npm run dev`    | Start the local development server        |
-| `npm run build`  | Type-check and build for production        |
-| `npm run preview`| Preview the production build locally       |
-| `npm run lint`   | Run ESLint against the codebase            |
-
-## Project Structure
-
-TBA
+| Script | Description |
+|---|---|
+| `npm run dev` | Starts the development server |
+| `npm run build` | Builds the application for production |
+| `npm run preview` | Previews the production build locally |
+| `npm test` | Runs the test suite |
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -m 'Add my feature'`)
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Open a Pull Request
+1. Fork the repository.
+2. Create a new branch for your changes:
+
+```bash
+git switch -c feature/your-feature
+```
+
+3. Make your changes and add appropriate tests.
+4. Run the test suite and verify that the project builds successfully.
+5. Commit your changes:
+
+```bash
+git commit -m "Add your feature"
+```
+
+6.Push your branch and open a pull request.
