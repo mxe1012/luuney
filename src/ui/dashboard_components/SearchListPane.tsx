@@ -8,6 +8,7 @@ import { useSnackbar } from "../../hooks/SnackbarContext";
 import ListButton from "./playlistpane_components/ListButton";
 import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
 import  usePagination  from "../../hooks/usePagination";
+import PaginationController from "../PaginationController";
 
 export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
@@ -118,13 +119,14 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                             </li>
                         ))}
                     </ul>
-                    {pageCount > 1 && (
-                    <div className="Pagination">
-                        <button className="PlaylistPaneControllerButton" onClick={prev} disabled={!hasPrev}>Prev</button>
-                        <span>{page + 1} / {pageCount}</span>
-                        <button className="PlaylistPaneControllerButton" onClick={next} disabled={!hasNext}>Next</button>
-                    </div>
-                    )}
+                    <PaginationController 
+                        page={page} 
+                        pageCount={pageCount} 
+                        prev={prev} 
+                        hasPrev={hasPrev} 
+                        next={next} 
+                        hasNext={hasNext}
+                    />
                 </SkeletonSearchListPane>
             </div>
         </>

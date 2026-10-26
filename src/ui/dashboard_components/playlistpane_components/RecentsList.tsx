@@ -1,6 +1,8 @@
 import usePagination from "../../../hooks/usePagination";
 import type { MainListProps } from "../../../utils/types";
 
+import PaginationController from "../../PaginationController";
+
 import ListButton from "./ListButton";
 
 export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, isFavorited, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
@@ -31,13 +33,15 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                     </li>
                 ))}
             </ul>
-            {(pageCount > 1 && visible) && (
-                <div className="Pagination">
-                    <button className="PlaylistPaneControllerButton" onClick={prev} disabled={!hasPrev}>Prev</button>
-                    <span>{page + 1} / {pageCount}</span>
-                    <button className="PlaylistPaneControllerButton" onClick={next} disabled={!hasNext}>Next</button>
-                </div>
-            )}
+            <PaginationController 
+                page={page} 
+                pageCount={pageCount} 
+                prev={prev} 
+                hasPrev={hasPrev} 
+                next={next} 
+                hasNext={hasNext} 
+                visible={visible}
+            />
         </>
     )
 }
