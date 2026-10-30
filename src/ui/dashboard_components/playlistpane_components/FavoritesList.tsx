@@ -1,3 +1,4 @@
+import { useSnackbar } from "../../../hooks/SnackbarContext";
 import usePagination from "../../../hooks/usePagination";
 import type { MainListProps } from "../../../utils/types";
 
@@ -7,8 +8,9 @@ import ListButton from "./ListButton";
 
 export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
     
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start} =
-        usePagination(list, 10);
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start} = usePagination(list, 10);
+
+    const { showSnackbar } = useSnackbar();
 
     return (
         <>
@@ -31,16 +33,31 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                     </li>
                 ))}
             </ul>
-            <PaginationController
-                className="Pagination" 
-                page={page} 
-                pageCount={pageCount} 
-                prev={prev} 
-                hasPrev={hasPrev} 
-                next={next} 
-                hasNext={hasNext} 
-                visible={visible}
-            />
+            <div style={{display: 'flex', justifyContent: "space-between"}}>
+                <div>
+                    <PaginationController 
+                        className="Pagination"
+                        page={page} 
+                        pageCount={pageCount} 
+                        prev={prev} 
+                        hasPrev={hasPrev} 
+                        next={next} 
+                        hasNext={hasNext} 
+                        visible={visible}
+                    />
+                </div>
+                <div>
+                    <button 
+                    style={{
+                        display: (visible && list.length >= 1) ? "" : "none", 
+                        visibility: (visible && list.length >= 1) ? "visible" : "hidden"
+                    }}
+                    className="PlaylistPaneControllerButton" 
+                    onClick={() => {showSnackbar("Favorites cleared!"); onFavoritesList?.([])}}>
+                        Clear
+                    </button>
+                </div>
+            </div>
         </>
     )
 }
