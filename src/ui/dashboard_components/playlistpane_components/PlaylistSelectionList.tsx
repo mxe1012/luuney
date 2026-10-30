@@ -31,6 +31,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         hasNext: trackHasNext,
         next: trackNext,
         prev: trackPrev,
+        start: trackStart
     } = usePagination(selectedPlaylist, 10);
     
     if(!isSelectedPlaylist) {
@@ -96,13 +97,13 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         visibility: playlist.id !== playlistId ? "hidden" : "visible"
                     }} 
                     className={"PlaylistPaneFolderSelection"}>
-                    {playlist.id === playlistId && trackPageItems.map((element) => (
+                    {playlist.id === playlistId && trackPageItems.map((element, index) => (
                         <li key={element.track_id} className="PlaylistPaneFolderList">
                             <ListButton
                                 list={playlist.tracks}
                                 track={element}
                                 playlist={playlist}
-                                index={playlist.tracks.findIndex((t) => t.track_id === element.track_id)}
+                                index={trackStart + index}
                                 onHandleFetch={onHandleFetch}
                                 onAddToFavorites={onAddToFavorites}
                                 hasDeleteButton={true}

@@ -7,18 +7,18 @@ import ListButton from "./ListButton";
 
 export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
     
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start} =
         usePagination(list, 10);
 
     return (
         <>
             <ul className={visible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                {pageItems.map((element) => (
+                {pageItems.map((element, index) => (
                     <li className="PlaylistPaneList" key={element.track_id}>
                         <ListButton 
                             list={list}
                             track={element}
-                            index={list.findIndex((t) => t.track_id === element.track_id)}
+                            index={start + index}
                             onHandleFetch={onHandleFetch}
                             onListDeleteEntry={onFavoritesList}
                             onDeleteEntry={onDeleteEntry}
