@@ -18,7 +18,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
 
     const [isLoaded, setIsLoaded] = useState(true);
 
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } =
     usePagination(trackList, 10);
 
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -107,7 +107,7 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                                 <ListButton 
                                     list={trackList}
                                     track={element}
-                                    index={index}
+                                    index={start + index}
                                     onHandleFetch={onHandleFetch}
                                     onAddToFavorites={onAddToFavorites}
                                     onAddToRecents={onAddToRecents}
