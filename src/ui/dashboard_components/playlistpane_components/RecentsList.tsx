@@ -13,12 +13,12 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
     return (
         <>
             <ul className={visible ? "PlaylistPaneList" : "PlaylistPaneList hidden"}>
-                {pageItems.map((element, index) => (
+                {pageItems.map((element) => (
                     <li className="PlaylistPaneList" key={element.track_id}>
                         <ListButton 
                             list={list}
                             track={element}
-                            index={index}
+                            index={list.findIndex((t) => t.track_id === element.track_id)}
                             onHandleFetch={onHandleFetch}
                             onAddToFavorites={onAddToFavorites}
                             onListDeleteEntry={onRecentsList}
