@@ -19,6 +19,7 @@ export default function usePagination<T>(items: T[], pageSize: number) {
         pageItems,
         hasPrev: page > 0,
         hasNext: page < pageCount - 1,
+        start,
         next: () => setPage((p) => Math.min(p + 1, pageCount - 1)),
         prev: () => setPage((p) => Math.max(p - 1, 0)),
     };
