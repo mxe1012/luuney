@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { PlaylistSelectionProps } from "../../../utils/types";
+import type { PlaylistSelectionProps, TrackObject } from "../../../utils/types";
 
 import { formatTime, getDurationSum } from "../../../utils/helpers";
 
@@ -15,9 +15,24 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     const [playlistId, setPlaylistId] = useState<string | null>("");
     const [playlistIndex, setPlaylistIndex] = useState(0);
 
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
-            usePagination(list, 10);
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(list, 10);
 
+    // module level, so the fallback array has a stable reference
+    const EMPTY_TRACKS: TrackObject[] = [];
+
+    // inside the component, next to your existing hook call
+    const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;;
+
+    const {
+        pageItems: trackPageItems,
+        page: trackPage,
+        pageCount: trackPageCount,
+        hasPrev: trackHasPrev,
+        hasNext: trackHasNext,
+        next: trackNext,
+        prev: trackPrev,
+    } = usePagination(selectedPlaylist, 10);
+    
     if(!isSelectedPlaylist) {
         return (
             <>
@@ -57,7 +72,8 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         </li>
                     ))}
                 </ul>
-                <PaginationController 
+                <PaginationController
+                    className="Pagination" 
                     page={page} 
                     pageCount={pageCount} 
                     prev={prev} 
@@ -73,19 +89,20 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         <>
             <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{list[playlistIndex].name}</h2>
             {list.map((playlist) => (
+                <>
                 <ul key={playlist.id} 
                     style={{
                         display: playlist.id !== playlistId ? "none" : "",
                         visibility: playlist.id !== playlistId ? "hidden" : "visible"
                     }} 
                     className={"PlaylistPaneFolderSelection"}>
-                    {playlist.id === playlistId && playlist.tracks.map((element, index) => (
+                    {playlist.id === playlistId && trackPageItems.map((element) => (
                         <li key={element.track_id} className="PlaylistPaneFolderList">
                             <ListButton
                                 list={playlist.tracks}
                                 track={element}
                                 playlist={playlist}
-                                index={index}
+                                index={playlist.tracks.findIndex((t) => t.track_id === element.track_id)}
                                 onHandleFetch={onHandleFetch}
                                 onAddToFavorites={onAddToFavorites}
                                 hasDeleteButton={true}
@@ -99,6 +116,19 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         </li>
                     ))}
                 </ul>
+                {playlist.id === playlistId && 
+                    <PaginationController 
+                        className="Pagination"
+                        page={trackPage} 
+                        pageCount={trackPageCount} 
+                        prev={trackPrev} 
+                        hasPrev={trackHasPrev} 
+                        next={trackNext} 
+                        hasNext={trackHasNext} 
+                        visible={true}
+                    />
+                }
+                </>
             ))}
         </>
     )
