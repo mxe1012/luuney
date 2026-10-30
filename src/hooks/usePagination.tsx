@@ -5,13 +5,15 @@ export default function usePagination<T>(items: T[], pageSize: number) {
 
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setPage(0)
-    }, [items])
-
     const start = page * pageSize;
     const pageItems = items.slice(start, start + pageSize);
+
+    useEffect(() => {
+        if(pageItems.length === 0) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setPage(0);
+        }
+    }, [pageItems.length])
 
     return {
         page,
