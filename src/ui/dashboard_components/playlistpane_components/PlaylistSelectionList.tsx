@@ -9,6 +9,7 @@ import usePagination from "../../../hooks/usePagination";
 import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
 import PaginationController from "../../PaginationController";
+import { useSnackbar } from "../../../hooks/SnackbarContext";
 
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
@@ -19,9 +20,11 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
 
     // module level, so the fallback array has a stable reference
     const EMPTY_TRACKS: TrackObject[] = [];
-
+    
     // inside the component, next to your existing hook call
     const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;;
+
+    const { showSnackbar } = useSnackbar();
 
     const {
         pageItems: trackPageItems,
@@ -73,16 +76,31 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         </li>
                     ))}
                 </ul>
-                <PaginationController
-                    className="Pagination" 
-                    page={page} 
-                    pageCount={pageCount} 
-                    prev={prev} 
-                    hasPrev={hasPrev} 
-                    next={next} 
-                    hasNext={hasNext} 
-                    visible={visible}
-                />
+                <div style={{display: 'flex', justifyContent: "space-between"}}>
+                    <div>
+                        <PaginationController 
+                            className="Pagination"
+                            page={page} 
+                            pageCount={pageCount} 
+                            prev={prev} 
+                            hasPrev={hasPrev} 
+                            next={next} 
+                            hasNext={hasNext} 
+                            visible={visible}
+                        />
+                    </div>
+                    <div>
+                        <button 
+                        style={{
+                            display: (visible && list.length >= 1) ? "" : "none", 
+                            visibility: (visible && list.length >= 1) ? "visible" : "hidden"
+                        }}
+                        className="PlaylistPaneControllerButton" 
+                        onClick={() => {showSnackbar("All playlists cleared!"); onSetPlaylist?.([])}}>
+                            Clear
+                        </button>
+                    </div>
+                </div>
             </>
         );
     }
@@ -118,16 +136,35 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                     ))}
                 </ul>
                 {playlist.id === playlistId && 
-                    <PaginationController 
-                        className="Pagination"
-                        page={trackPage} 
-                        pageCount={trackPageCount} 
-                        prev={trackPrev} 
-                        hasPrev={trackHasPrev} 
-                        next={trackNext} 
-                        hasNext={trackHasNext} 
-                        visible={true}
-                    />
+                    <div style={{display: 'flex', justifyContent: "space-between"}}>
+                        <div>
+                            <PaginationController 
+                                className="Pagination"
+                                page={trackPage} 
+                                pageCount={trackPageCount} 
+                                prev={trackPrev} 
+                                hasPrev={trackHasPrev} 
+                                next={trackNext} 
+                                hasNext={trackHasNext} 
+                                visible={true}
+                            />
+                        </div>
+                        <div>
+                            <button 
+                                style={{
+                                    display: selectedPlaylist.length >= 1 ? "" : "none", 
+                                    visibility: selectedPlaylist.length >= 1 ? "visible" : "hidden"
+                                }}
+                                className="PlaylistPaneControllerButton" 
+                                onClick={() => {showSnackbar("Playlists cleared!"); 
+                                onSetPlaylist(prev =>
+                                    prev.map(p => p.id === playlistId ? { ...p, tracks: [] } : p)
+                                );
+                            }}>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
                 }
                 </>
             ))}
