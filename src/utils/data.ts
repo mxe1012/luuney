@@ -100,3 +100,42 @@ export async function fetchTrackLatest() {
     }
 }
 
+export async function fetchUsers(query: string) {
+
+    try {
+        const result = await fetch(`https://api.audius.co/v1/users/search?query=${query}`)
+
+        if(result.ok) {
+            const data = await result.json();
+            console.log(data);
+            return data;
+        }
+
+        throw new Error(`Failed with code ${result.status}`)
+
+    }
+    catch(e) {
+        console.log(e);
+        throw e;
+    }
+}
+
+export async function fetchTracksByUser(id: number) {
+
+    try {
+        const result = await fetch(`https://api.audius.co/v1/users/${id}/tracks`)
+
+        if(result.ok) {
+            const data = await result.json();
+            console.log(data);
+            return data;
+        }
+
+        throw new Error(`Failed with code ${result.status}`)
+
+    }
+    catch(e) {
+        console.log(e);
+        throw e;
+    }
+}
