@@ -36,9 +36,32 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
         setSearchType(e.target.value);
     }
 
+    type TrackResponse = Awaited<ReturnType<typeof fetchTrackByQuery>>;
+
+    function mapTracksData(data: TrackResponse["data"]): TrackObject[] {
+        return data
+            .filter((e) => e.stream?.url)
+            .map((e) => {
+                const { track_id, artwork, title, duration } = e;
+                const { handle } = e.user;
+                const { url } = e.stream;
+
+                return {
+                    track_id,
+                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                    title,
+                    handle,
+                    url,
+                    duration,
+                };
+            });
+    }
+
     async function handleSearchTracks(e: React.ChangeEvent<HTMLInputElement>) {
 
         setIsLoaded(false);
+        setTrackList([]);
+        setArtistList([]);
 
         const query = e.target.value;
         setSearchTrack(query);
@@ -70,28 +93,8 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                 return;
             }
 
-            const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
-
-                const { track_id, artwork, title, duration } = element;
-
-                const { handle } = element.user;
-
-                const { url } = element.stream;
-
-                return {
-                    track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
-                    title,
-                    handle,
-                    url,
-                    duration
-                }
-
-            })
-
-            setTrackList(newList);
+            setTrackList(mapTracksData(result.data));
             setIsLoaded(true);
-            console.log(newList)
         }
         catch(e) {
             if(searchRef.current !== query) {
@@ -106,6 +109,8 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
     async function handleSearchArtists(e: React.ChangeEvent<HTMLInputElement>) {
 
         setIsLoaded(false);
+        setTrackList([]);
+        setArtistList([]);
 
         const query = e.target.value;
         setSearchArtist(query);
@@ -169,28 +174,8 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
         try {
             const result = await fetchTracksByUser(id);
 
-            const newList: TrackObject[] = result.data.filter((element) => element.stream?.url).map((element) => {
-
-                const { track_id, artwork, title, duration } = element;
-
-                const { handle } = element.user;
-
-                const { url } = element.stream;
-
-                return {
-                    track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
-                    title,
-                    handle,
-                    url,
-                    duration
-                }
-
-            })
-
-            setTrackList(newList);
+            setTrackList(mapTracksData(result.data));
             setIsLoaded(true);
-            console.log(newList)
         }
         catch(e) {
             showSnackbar("Could not search for tracks by user.");
@@ -214,7 +199,10 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                     </select>
                 </div>
                 <SkeletonSearchListPane isLoaded={isLoaded}>
-                    <ul className="SearchList">
+                    <ul className="SearchList" style={{
+                        display: trackList.length === 0 ? "none" : "",
+                        visibility: trackList.length === 0 ? "hidden" : "visible"
+                    }}>
                         {pageItems.map((element, index) => (
                             <li className="SearchList" key={element.track_id}>
                                 <ListButton 
@@ -232,7 +220,10 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                             </li>
                         ))}
                     </ul>
-                    <ul className="SearchList">
+                    <ul className="SearchList" style={{
+                        display: artistList.length === 0 ? "none" : "",
+                        visibility: artistList.length === 0 ? "hidden" : "visible"
+                    }}>
                         {artistList.map((element) => (
                             <li className="SearchList" key={element.user_id}>
                                 <button className="PlaylistButton" 
