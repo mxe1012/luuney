@@ -13,6 +13,13 @@ export interface TrackObject {
     duration: number;
 }
 
+export interface ArtistObject {
+    user_id: number;
+    profile_picture: string;
+    name: string;
+    handle: string;
+}
+
 export interface AudioPlayerProps {
     track: TrackObject
     tracks: TrackObject[];
