@@ -23,7 +23,7 @@
 .SearchController {
     display: flex;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 5px;
     padding: 20px;
     white-space: nowrap;
     overflow: auto;
