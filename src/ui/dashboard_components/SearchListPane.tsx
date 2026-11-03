@@ -5,11 +5,11 @@ import { fetchTrackByQuery, fetchTracksByUser, fetchUsers } from "../../utils/da
 import type { ArtistObject, SearchListPaneProps, TrackObject } from "../../utils/types";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
-import ListButton from "./playlistpane_components/ListButton";
+
 import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
-import  usePagination  from "../../hooks/usePagination";
-import PaginationController from "../PaginationController";
+
 import CoverImage from "../CoverImage";
+import TrackSearchList from "./searchlistpane_components/TrackSearchList";
 
 export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
@@ -23,9 +23,6 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
     const [searchArtist, setSearchArtist] = useState("");
 
     const [isLoaded, setIsLoaded] = useState(true);
-
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } =
-    usePagination(trackList, 10);
 
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchRef = useRef<string>("");
@@ -199,27 +196,14 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                     </select>
                 </div>
                 <SkeletonSearchListPane isLoaded={isLoaded}>
-                    <ul className="SearchList" style={{
-                        display: trackList.length === 0 ? "none" : "",
-                        visibility: trackList.length === 0 ? "hidden" : "visible"
-                    }}>
-                        {pageItems.map((element, index) => (
-                            <li className="SearchList" key={element.track_id}>
-                                <ListButton 
-                                    list={trackList}
-                                    track={element}
-                                    index={start + index}
-                                    onHandleFetch={onHandleFetch}
-                                    onAddToFavorites={onAddToFavorites}
-                                    onAddToRecents={onAddToRecents}
-                                    onIsPlaying={onIsPlaying}
-                                    isFavorited={isFavorited}
-                                    hasDeleteButton={false}
-                                    hasFavoriteButton={true}
-                                />
-                            </li>
-                        ))}
-                    </ul>
+                    <TrackSearchList 
+                        list={trackList}
+                        onHandleFetch={onHandleFetch}
+                        onAddToFavorites={onAddToFavorites}
+                        onAddToRecents={onAddToRecents}
+                        onIsPlaying={onIsPlaying}
+                        isFavorited={isFavorited}
+                    />
                     <ul className="SearchList" style={{
                         display: artistList.length === 0 ? "none" : "",
                         visibility: artistList.length === 0 ? "hidden" : "visible"
@@ -244,15 +228,6 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                             </li>
                         ))}
                     </ul>
-                    <PaginationController 
-                        className="Pagination"
-                        page={page} 
-                        pageCount={pageCount} 
-                        prev={prev} 
-                        hasPrev={hasPrev} 
-                        next={next} 
-                        hasNext={hasNext}
-                    />
                 </SkeletonSearchListPane>
             </div>
         </>
