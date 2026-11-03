@@ -194,8 +194,8 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                         onChange={searchType === "tracks" ? handleSearchTracks : handleSearchArtists}>
                     </input>
                     <select value={searchType} className="PlaylistPaneControllerButton" onChange={handleSearchType}>
-                        <option value={searchTypes[0]} onClick={() => setArtistList([])}>Tracks</option>
-                        <option value={searchTypes[1]} onClick={() => setTrackList([])}>Artists</option>
+                        <option value={searchTypes[0]} onClick={() => {setArtistList([]); showSnackbar("Searching by Tracks")}}>Tracks</option>
+                        <option value={searchTypes[1]} onClick={() => {setTrackList([]); showSnackbar("Searching by Artists")}}>Artists</option>
                     </select>
                 </div>
                 <SkeletonSearchListPane isLoaded={isLoaded}>
