@@ -26,7 +26,6 @@ export async function fetchTrackById(id: number) {
 
         if(result.ok){
             const data = await result.json();
-            console.log(data);
             return data;
         }
 
@@ -47,7 +46,6 @@ export async function fetchTrackByQuery(query: string) {
 
         if(result.ok) {
             const data = await result.json();
-            console.log(data);
             return data;
         }
 
@@ -67,7 +65,6 @@ export async function fetchTrackTrending() {
 
         if(result.ok) {
             const data = await result.json();
-            console.log(data);
             return data;
         }
 
@@ -87,7 +84,6 @@ export async function fetchTrackLatest() {
 
         if(result.ok) {
             const data = await result.json();
-            console.log(data);
             return data;
         }
 
@@ -107,7 +103,6 @@ export async function fetchUsers(query: string) {
 
         if(result.ok) {
             const data = await result.json();
-            console.log(data);
             return data;
         }
 
@@ -127,7 +122,6 @@ export async function fetchTracksByUser(id: number) {
 
         if(result.ok) {
             const data = await result.json();
-            console.log(data);
             return data;
         }
 
