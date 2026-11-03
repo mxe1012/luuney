@@ -192,3 +192,9 @@ export interface TrackSearchListProps {
     onIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
     isFavorited: (entry: TrackObject) => boolean;
 }
+
+export interface ArtistSearchListProps {
+    list: ArtistObject[]
+    onHandleFetchTracksByUserId: (id: number) => Promise<void>;
+    onSetArtistList: React.Dispatch<React.SetStateAction<ArtistObject[]>>;
+}

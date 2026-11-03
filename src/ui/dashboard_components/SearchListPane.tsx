@@ -8,8 +8,8 @@ import { useSnackbar } from "../../hooks/SnackbarContext";
 
 import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
 
-import CoverImage from "../CoverImage";
 import TrackSearchList from "./searchlistpane_components/TrackSearchList";
+import ArtistSearchList from "./searchlistpane_components/ArtistSearchList";
 
 export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
@@ -204,30 +204,11 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                         onIsPlaying={onIsPlaying}
                         isFavorited={isFavorited}
                     />
-                    <ul className="SearchList" style={{
-                        display: artistList.length === 0 ? "none" : "",
-                        visibility: artistList.length === 0 ? "hidden" : "visible"
-                    }}>
-                        {artistList.map((element) => (
-                            <li className="SearchList" key={element.user_id}>
-                                <button className="PlaylistButton" 
-                                    onClick={() => {
-                                    handleFetchTracksByUserId(element.user_id);
-                                    setArtistList([]);
-                                }}>
-                                    <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                        <div style={{flexShrink: 0}}>
-                                            <CoverImage styles={{borderRadius: '10px'}} src={element.profile_picture} size={64}/>
-                                        </div>
-                                        <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
-                                            <h4>{element.name}</h4>
-                                            <h5>{element.handle}</h5>
-                                        </div>
-                                    </div>
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    <ArtistSearchList 
+                        list={artistList}
+                        onHandleFetchTracksByUserId={handleFetchTracksByUserId}
+                        onSetArtistList={setArtistList}
+                    />
                 </SkeletonSearchListPane>
             </div>
         </>
