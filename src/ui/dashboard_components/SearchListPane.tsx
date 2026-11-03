@@ -5,11 +5,11 @@ import { fetchTrackByQuery, fetchTracksByUser, fetchUsers } from "../../utils/da
 import type { ArtistObject, SearchListPaneProps, TrackObject } from "../../utils/types";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
-import ListButton from "./playlistpane_components/ListButton";
+
 import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
-import  usePagination  from "../../hooks/usePagination";
-import PaginationController from "../PaginationController";
-import CoverImage from "../CoverImage";
+
+import TrackSearchList from "./searchlistpane_components/TrackSearchList";
+import ArtistSearchList from "./searchlistpane_components/ArtistSearchList";
 
 export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
@@ -23,9 +23,6 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
     const [searchArtist, setSearchArtist] = useState("");
 
     const [isLoaded, setIsLoaded] = useState(true);
-
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } =
-    usePagination(trackList, 10);
 
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchRef = useRef<string>("");
@@ -199,59 +196,18 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
                     </select>
                 </div>
                 <SkeletonSearchListPane isLoaded={isLoaded}>
-                    <ul className="SearchList" style={{
-                        display: trackList.length === 0 ? "none" : "",
-                        visibility: trackList.length === 0 ? "hidden" : "visible"
-                    }}>
-                        {pageItems.map((element, index) => (
-                            <li className="SearchList" key={element.track_id}>
-                                <ListButton 
-                                    list={trackList}
-                                    track={element}
-                                    index={start + index}
-                                    onHandleFetch={onHandleFetch}
-                                    onAddToFavorites={onAddToFavorites}
-                                    onAddToRecents={onAddToRecents}
-                                    onIsPlaying={onIsPlaying}
-                                    isFavorited={isFavorited}
-                                    hasDeleteButton={false}
-                                    hasFavoriteButton={true}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                    <ul className="SearchList" style={{
-                        display: artistList.length === 0 ? "none" : "",
-                        visibility: artistList.length === 0 ? "hidden" : "visible"
-                    }}>
-                        {artistList.map((element) => (
-                            <li className="SearchList" key={element.user_id}>
-                                <button className="PlaylistButton" 
-                                    onClick={() => {
-                                    handleFetchTracksByUserId(element.user_id);
-                                    setArtistList([]);
-                                }}>
-                                    <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                        <div style={{flexShrink: 0}}>
-                                            <CoverImage styles={{borderRadius: '10px'}} src={element.profile_picture} size={64}/>
-                                        </div>
-                                        <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
-                                            <h4>{element.name}</h4>
-                                            <h5>{element.handle}</h5>
-                                        </div>
-                                    </div>
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                    <PaginationController 
-                        className="Pagination"
-                        page={page} 
-                        pageCount={pageCount} 
-                        prev={prev} 
-                        hasPrev={hasPrev} 
-                        next={next} 
-                        hasNext={hasNext}
+                    <TrackSearchList 
+                        list={trackList}
+                        onHandleFetch={onHandleFetch}
+                        onAddToFavorites={onAddToFavorites}
+                        onAddToRecents={onAddToRecents}
+                        onIsPlaying={onIsPlaying}
+                        isFavorited={isFavorited}
+                    />
+                    <ArtistSearchList 
+                        list={artistList}
+                        onHandleFetchTracksByUserId={handleFetchTracksByUserId}
+                        onSetArtistList={setArtistList}
                     />
                 </SkeletonSearchListPane>
             </div>

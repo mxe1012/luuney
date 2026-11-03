@@ -183,3 +183,18 @@ export interface PaginationControllerProps {
     hasNext: boolean;
     visible?: boolean;
 }
+
+export interface TrackSearchListProps {
+    list: TrackObject[];
+    onHandleFetch: (id: number) => Promise<void>;
+    onAddToFavorites: (entry: TrackObject) => void;
+    onAddToRecents: (entry: TrackObject) => void;
+    onIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+    isFavorited: (entry: TrackObject) => boolean;
+}
+
+export interface ArtistSearchListProps {
+    list: ArtistObject[]
+    onHandleFetchTracksByUserId: (id: number) => Promise<void>;
+    onSetArtistList: React.Dispatch<React.SetStateAction<ArtistObject[]>>;
+}
