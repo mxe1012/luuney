@@ -5,8 +5,7 @@ import ListButton from "../playlistpane_components/ListButton";
 
 export default function TrackSearchList({list, onHandleFetch, onAddToFavorites, onAddToRecents, onIsPlaying, isFavorited}: TrackSearchListProps) {
 
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } =
-        usePagination(list, 10);
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } = usePagination(list, 10);
 
     return (
         <>
