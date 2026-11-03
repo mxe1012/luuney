@@ -29,7 +29,7 @@
     overflow: auto;
 }
 
-button.PlaylistPaneControllerButton {
+.PlaylistPaneControllerButton {
     padding: 10px 20px;
     color: #DCCCF7;
     background-color: rgba(167, 139, 250, 0.15);
@@ -44,7 +44,7 @@ button.PlaylistPaneControllerButton {
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-button.PlaylistPaneControllerButton:hover {
+.PlaylistPaneControllerButton:hover {
     background-color: rgba(167, 139, 250, 0.25);
     border-color: rgba(220, 204, 247, 0.5);
     box-shadow:
@@ -55,16 +55,16 @@ button.PlaylistPaneControllerButton:hover {
 }
 
 
-button.PlaylistPaneControllerButton:active {
+.PlaylistPaneControllerButton:active {
     background-color: rgba(220, 204, 247, 0.35);
 }
 
-button.PlaylistPaneControllerButton:focus-visible {
+.PlaylistPaneControllerButton:focus-visible {
     outline: 2px solid #DCCCF7;
     outline-offset: 3px;
 }
 
-button.PlaylistPaneControllerButton.is-selected {
+.PlaylistPaneControllerButton.is-selected {
     padding: 10px 20px;
     color: #DCCCF7;
     background-color: rgba(220, 204, 247, 0.35);
@@ -79,7 +79,7 @@ button.PlaylistPaneControllerButton.is-selected {
     transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-button.PlaylistPaneControllerButton:disabled {
+.PlaylistPaneControllerButton:disabled {
     background-color: rgba(67, 62, 75, 0.35);
     color: gray;
     cursor: not-allowed;

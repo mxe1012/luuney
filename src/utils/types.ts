@@ -13,6 +13,13 @@ export interface TrackObject {
     duration: number;
 }
 
+export interface ArtistObject {
+    user_id: number;
+    profile_picture: string;
+    name: string;
+    handle: string;
+}
+
 export interface AudioPlayerProps {
     track: TrackObject
     tracks: TrackObject[];
@@ -175,4 +182,19 @@ export interface PaginationControllerProps {
     next: () => void;
     hasNext: boolean;
     visible?: boolean;
+}
+
+export interface TrackSearchListProps {
+    list: TrackObject[];
+    onHandleFetch: (id: number) => Promise<void>;
+    onAddToFavorites: (entry: TrackObject) => void;
+    onAddToRecents: (entry: TrackObject) => void;
+    onIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+    isFavorited: (entry: TrackObject) => boolean;
+}
+
+export interface ArtistSearchListProps {
+    list: ArtistObject[]
+    onHandleFetchTracksByUserId: (id: number) => Promise<void>;
+    onSetArtistList: React.Dispatch<React.SetStateAction<ArtistObject[]>>;
 }

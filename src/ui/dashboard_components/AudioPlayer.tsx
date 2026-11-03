@@ -194,7 +194,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     return (
         <>
             <audio
-                loop={repeatMode === "one"} 
+                loop={repeatMode === "one"}
+                autoPlay 
                 ref={audioRef}
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
