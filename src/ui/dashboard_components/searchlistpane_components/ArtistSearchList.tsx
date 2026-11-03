@@ -1,8 +1,12 @@
+import usePagination from "../../../hooks/usePagination";
 import type { ArtistSearchListProps } from "../../../utils/types";
 import CoverImage from "../../CoverImage";
+import PaginationController from "../../PaginationController";
 
 export default function ArtistSearchList({list, onHandleFetchTracksByUserId, onSetArtistList}: ArtistSearchListProps) {
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } = usePagination(list, 10);
 
     return (
         <>
@@ -10,7 +14,7 @@ export default function ArtistSearchList({list, onHandleFetchTracksByUserId, onS
                 display: list.length === 0 ? "none" : "",
                 visibility: list.length === 0 ? "hidden" : "visible"
             }}>
-                {list.map((element) => (
+                {pageItems.map((element) => (
                     <li className="SearchList" key={element.user_id}>
                         <button className="PlaylistButton" 
                             onClick={() => {
@@ -30,6 +34,15 @@ export default function ArtistSearchList({list, onHandleFetchTracksByUserId, onS
                     </li>
                 ))}
             </ul>
+            <PaginationController 
+                className="Pagination"
+                page={page} 
+                pageCount={pageCount} 
+                prev={prev} 
+                hasPrev={hasPrev} 
+                next={next} 
+                hasNext={hasNext}
+            />
         </>
     )
 }
