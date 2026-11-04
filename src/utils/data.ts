@@ -41,8 +41,10 @@ export async function fetchTrackById(id: number) {
 
 export async function fetchTrackByQuery(query: string) {
 
+    const encodedQuery = encodeURIComponent(query);
+
     try {
-        const result = await fetch(`https://api.audius.co/v1/tracks/search?limit=1000&query=${query}`);
+        const result = await fetch(`https://api.audius.co/v1/tracks/search?limit=1000&query=${encodedQuery}`);
 
         if(result.ok) {
             const data = await result.json();
@@ -98,8 +100,10 @@ export async function fetchTrackLatest() {
 
 export async function fetchUsers(query: string) {
 
+    const encodedQuery = encodeURIComponent(query);
+
     try {
-        const result = await fetch(`https://api.audius.co/v1/users/search?limit=1000&query=${query}`)
+        const result = await fetch(`https://api.audius.co/v1/users/search?limit=1000&query=${encodedQuery}`)
 
         if(result.ok) {
             const data = await result.json();
