@@ -198,3 +198,15 @@ export interface ArtistSearchListProps {
     onHandleFetchTracksByUserId: (id: number) => Promise<void>;
     onSetArtistList: React.Dispatch<React.SetStateAction<ArtistObject[]>>;
 }
+
+export interface SearchController {
+    searchType: string;
+    searchTypes: string[];
+    searchTrack: string;
+    searchArtist: string;
+    onHandleSearchTracks: (e: React.ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
+    onHandleSearchArtists: (e: React.ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
+    onHandleSearchType: (e: React.ChangeEvent<HTMLSelectElement, Element>) => void;
+    onSetTrackList:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetArtistList:  React.Dispatch<React.SetStateAction<ArtistObject[]>>;
+}
