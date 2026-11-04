@@ -10,8 +10,9 @@ import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
 
 import TrackSearchList from "./searchlistpane_components/TrackSearchList";
 import ArtistSearchList from "./searchlistpane_components/ArtistSearchList";
+import SearchController from "./searchlistpane_components/SearchController";
 
-export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
+export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavorites, onAddToRecents, onIsPlaying}: SearchListPaneProps) {
 
     const searchTypes: string[] = ["tracks", "artists"]
     const [searchType, setSearchType] = useState(searchTypes[0]);
@@ -183,18 +184,17 @@ export default function SearchListPane({onHandleFetch, isFavorited , onAddToFavo
     return (
         <>
             <div className="SearchPane">
-                <div className="SearchController">
-                    <input 
-                        className="SearchInput" 
-                        value={searchType === "tracks" ? searchTrack : searchArtist} 
-                        placeholder={searchType === "tracks" ? "Search Tracks..." : "Search Artists..."}
-                        onChange={searchType === "tracks" ? handleSearchTracks : handleSearchArtists}>
-                    </input>
-                    <select value={searchType} className="PlaylistPaneControllerButton" onChange={handleSearchType}>
-                        <option value={searchTypes[0]} onClick={() => {setArtistList([]); showSnackbar("Searching by Tracks")}}>Tracks</option>
-                        <option value={searchTypes[1]} onClick={() => {setTrackList([]); showSnackbar("Searching by Artists")}}>Artists</option>
-                    </select>
-                </div>
+                <SearchController 
+                    searchType={searchType}
+                    searchTypes={searchTypes}
+                    searchTrack={searchTrack}
+                    searchArtist={searchArtist}
+                    onHandleSearchTracks={handleSearchTracks}
+                    onHandleSearchArtists={handleSearchArtists}
+                    onHandleSearchType={handleSearchType}
+                    onSetTrackList={setTrackList}
+                    onSetArtistList={setArtistList}
+                />
                 <SkeletonSearchListPane isLoaded={isLoaded}>
                     <TrackSearchList 
                         list={trackList}
