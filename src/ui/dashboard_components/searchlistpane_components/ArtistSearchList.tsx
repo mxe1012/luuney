@@ -29,6 +29,12 @@ export default function ArtistSearchList({list, onHandleFetchTracksByUserId, onS
                                     <h4>{element.name}</h4>
                                     <h5>{element.handle}</h5>
                                 </div>
+                                <div style={{textAlign: 'right', minWidth: 0}}>
+                                    <h6>
+                                        {element.track_count + " "} 
+                                        {element.track_count === 1 ? "track" : "tracks"}
+                                    </h6>
+                                </div>
                             </div>
                         </button>
                     </li>
