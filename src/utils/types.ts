@@ -18,6 +18,7 @@ export interface ArtistObject {
     profile_picture: string;
     name: string;
     handle: string;
+    track_count: number;
 }
 
 export interface AudioPlayerProps {

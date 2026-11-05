@@ -140,22 +140,22 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                 return;
             }
 
-            const newList: ArtistObject[] = result.data.map((element) => {
+            const newList: ArtistObject[] = result.data.filter((element) => element.track_count >= 1).map((element) => {
 
-                const { user_id, profile_picture, name, handle } = element;
+                const { user_id, profile_picture, name, handle, track_count } = element;
 
                 return {
                     user_id,
                     profile_picture: profile_picture?.["480x480"] ?? "/assets/person-placeholder.svg",
                     name,
                     handle,
+                    track_count
                 }
 
             })
 
             setArtistList(newList);
             setIsLoaded(true);
-            console.log(newList)
         }
         catch(e) {
             if(searchRef.current !== query) {
@@ -168,6 +168,8 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
     }
 
     async function handleFetchTracksByUserId(id: number) {
+
+        setIsLoaded(false);
 
         try {
             const result = await fetchTracksByUser(id);
