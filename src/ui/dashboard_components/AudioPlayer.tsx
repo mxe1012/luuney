@@ -170,6 +170,29 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         setIsMuted(audio.muted);
     };
 
+    function handleOnEnded() {
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+        let nextIndex = currentTrackIndex + 1;
+
+        if(currentQueue.length <= 1 && repeatMode === "all") {
+            setCurrentTime(0);
+            audioRef.current?.play();
+            return
+        }
+
+        if (nextIndex >= currentQueue.length) {
+            if (repeatMode === "off") {
+                onIsPlaying(false); // end of queue
+                return;
+            }
+            else if (repeatMode === "all") {
+                nextIndex = 0;
+            }
+        }
+        onSetCurrentTrackIndex(nextIndex);
+        onHandleFetch(currentQueue[nextIndex].track_id);
+    }
+
     useEffect(() => {
         const handler = (e: MouseEvent) => {
             if (!playlistWrapperRef.current?.contains(e.target as Node)) { 
@@ -200,28 +223,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
                 onPause={() => onIsPlaying(false)}
-                onEnded={() => {
-                    const currentQueue = isShuffle ? shuffleTrackQueue : tracks
-                    let nextIndex = currentTrackIndex + 1;
-
-                    if(currentQueue.length <= 1 && repeatMode === "all") {
-                        setCurrentTime(0);
-                        audioRef.current?.play();
-                        return
-                    }
-
-                    if (nextIndex >= currentQueue.length) {
-                        if (repeatMode === "off") {
-                            onIsPlaying(false); // end of queue
-                            return;
-                        }
-                        else if (repeatMode === "all") {
-                            nextIndex = 0;
-                        }
-                    }
-                    onSetCurrentTrackIndex(nextIndex);
-                    onHandleFetch(currentQueue[nextIndex].track_id);
-                }}
+                onEnded={handleOnEnded}
                 onLoadedData={handleLoadedMetadata}
                 onTimeUpdate={handleTimeUpdate}
                 onVolumeChange={handleElementVolumeChange} 
