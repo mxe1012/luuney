@@ -1,5 +1,7 @@
 import type React from "react";
 
+import type { ChangeEvent } from "react";
+
 export interface ChildrenProps {
     children: React.ReactNode;
 }
@@ -210,4 +212,35 @@ export interface SearchController {
     onHandleSearchType: (e: React.ChangeEvent<HTMLSelectElement, Element>) => void;
     onSetTrackList:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onSetArtistList:  React.Dispatch<React.SetStateAction<ArtistObject[]>>;
+}
+
+export interface AudioPlayerUIProps {
+    track: TrackObject;
+    playlists: Playlist[];
+    duration: number;
+    currentTime: number;
+    isPlaying: boolean;
+    isFavorited: boolean;
+    isShuffle: boolean;
+    isScrolled: boolean;
+    isMuted: boolean;
+    volume: number;
+    repeatMode: "off" | "one" | "all";
+    REPEAT_MODES: readonly ["off", "one", "all"];
+    playlistName: string
+    isPlaylistMenuVisible: boolean;
+    playlistWrapperRef: React.RefObject<HTMLDivElement | null>
+    onHandleSeek: (e: ChangeEvent<HTMLInputElement, Element>) => void;
+    onHandleShuffle:  () => void
+    onHandleRewind:  () => void
+    onHandleTogglePlay: () => Promise<void>
+    onHandleFastForward:  () => void
+    onHandleToggleMute: () => void;
+    onHandleVolumeChange: (e: ChangeEvent<HTMLInputElement, Element>) => void;
+    onCycleRepeatMode: () => void;
+    onAddToFavorites: (entry: TrackObject) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
+    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void
+    setPlaylistName: (value: React.SetStateAction<string>) => void
+    onSetIsPlaylistMenuVisible: (value: React.SetStateAction<boolean>) => void;
 }
