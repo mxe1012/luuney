@@ -227,9 +227,6 @@ export interface AudioPlayerUIProps {
     volume: number;
     repeatMode: "off" | "one" | "all";
     REPEAT_MODES: readonly ["off", "one", "all"];
-    playlistName: string
-    isPlaylistMenuVisible: boolean;
-    playlistWrapperRef: React.RefObject<HTMLDivElement | null>
     onHandleSeek: (e: ChangeEvent<HTMLInputElement, Element>) => void;
     onHandleShuffle:  () => void
     onHandleRewind:  () => void
@@ -241,6 +238,4 @@ export interface AudioPlayerUIProps {
     onAddToFavorites: (entry: TrackObject) => void;
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onHandleCreatePlaylist: (name: string, entry: TrackObject) => void
-    setPlaylistName: (value: React.SetStateAction<string>) => void
-    onSetIsPlaylistMenuVisible: (value: React.SetStateAction<boolean>) => void;
 }

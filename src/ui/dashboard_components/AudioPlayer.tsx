@@ -13,9 +13,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
 
-    const [playlistName, setPlaylistName] = useState("");
-    const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
-
     const [isShuffle, setIsShuffle] = useState(false);
     
     const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
@@ -23,7 +20,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [isScrolled, setIsScrolled] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement>(null);
-    const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
     const REPEAT_MODES = ["off", "one", "all"] as const;
     type RepeatMode = (typeof REPEAT_MODES)[number];
@@ -189,16 +185,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     }
 
     useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (!playlistWrapperRef.current?.contains(e.target as Node)) { 
-                setIsPlaylistMenuVisible(false)
-            };
-        }
-        document.addEventListener("mousedown", handler);
-        return () => document.removeEventListener("mousedown", handler);
-    }, [])
-
-    useEffect(() => {
         const handleScroll = () => {
             const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
             setIsScrolled(scrollTop > 555);
@@ -236,9 +222,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 volume={volume}
                 repeatMode={repeatMode}
                 REPEAT_MODES={REPEAT_MODES}
-                playlistName={playlistName}
-                isPlaylistMenuVisible={isPlaylistMenuVisible}
-                playlistWrapperRef={playlistWrapperRef}
                 onHandleSeek={handleSeek}
                 onHandleShuffle={handleShuffle}
                 onHandleRewind={handleRewind}
@@ -250,8 +233,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onAddToFavorites={onAddToFavorites}
                 onHandleAddToPlaylist={onHandleAddToPlaylist}
                 onHandleCreatePlaylist={onHandleCreatePlaylist}
-                setPlaylistName={setPlaylistName}
-                onSetIsPlaylistMenuVisible={setIsPlaylistMenuVisible}
             />
         </>
     )

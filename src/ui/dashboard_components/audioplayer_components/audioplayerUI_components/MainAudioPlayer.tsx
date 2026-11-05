@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { useSnackbar } from "../../../../hooks/SnackbarContext";
 import { formatTime } from "../../../../utils/helpers";
 import type { AudioPlayerUIProps } from "../../../../utils/types";
@@ -18,9 +20,6 @@ export default function MainAudioPlayer({
     volume,
     repeatMode,
     REPEAT_MODES,
-    playlistName,
-    isPlaylistMenuVisible,
-    playlistWrapperRef,
     onHandleSeek,
     onHandleShuffle,
     onHandleRewind,
@@ -31,11 +30,24 @@ export default function MainAudioPlayer({
     onCycleRepeatMode,
     onAddToFavorites,
     onHandleAddToPlaylist,
-    onHandleCreatePlaylist,
-    setPlaylistName,
-    onSetIsPlaylistMenuVisible}: AudioPlayerUIProps) {
+    onHandleCreatePlaylist}: AudioPlayerUIProps) {
+
+    const [playlistName, setPlaylistName] = useState("");
+    const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
+    
+    const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
     const { showSnackbar } = useSnackbar();
+
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            if (!playlistWrapperRef.current?.contains(e.target as Node)) { 
+                setIsPlaylistMenuVisible(false)
+            };
+        }
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, [])
 
     return (
         <>
@@ -54,7 +66,7 @@ export default function MainAudioPlayer({
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
                     </button>
                     <div className="PlaylistMenuWrapper">
-                        <button className="ActionBtn" onClick={() => onSetIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
+                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
                             <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
                         </button>
                         <div
