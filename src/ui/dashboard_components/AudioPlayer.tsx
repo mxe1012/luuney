@@ -2,13 +2,8 @@ import type { AudioPlayerProps, TrackObject } from "../../utils/types";
 
 import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
-import { formatTime } from "../../utils/helpers";
-
-import AudioPlayerButton from "./audioplayer_components/AudioPlayerButton";
-import AudioPlayerModeButton from "./audioplayer_components/AudioPlayerModeButton";
-
-import CoverImage from "../CoverImage";
 import { useSnackbar } from "../../hooks/SnackbarContext";
+import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
@@ -228,175 +223,36 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onTimeUpdate={handleTimeUpdate}
                 onVolumeChange={handleElementVolumeChange} 
             />
-            <div className={isScrolled ? "AudioPlayer hidden" : "AudioPlayer"}>
-                <div style={{display: "flex", justifyContent: "center"}}>
-                    <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
-                </div>
-                <div className={track.title.length >= 22 ? "scroll-container" : ""}>
-                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
-                        {track.title}
-                    </h2>
-                    <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
-                </div>
-                <div style={{display: "flex", justifyContent: "center"}}>
-                    <button className="ActionBtn" onClick={() => onAddToFavorites(track)}>
-                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
-                    </button>
-                    <div className="PlaylistMenuWrapper">
-                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
-                            <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
-                        </button>
-                        <div
-                        ref={playlistWrapperRef} 
-                        className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
-                            <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
-                                <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
-                                    onChange={(e) => {
-                                        setPlaylistName(e.target.value)
-                                    }} 
-                                    onClick={(e) => e.stopPropagation()} 
-                                />
-                                <button className="PlaylistMenuAddItemBtn" 
-                                    disabled={playlistName.length == 0 ? true : false}
-                                    onClick={() => { 
-                                        onHandleCreatePlaylist(playlistName, track);
-                                        setPlaylistName("");
-                                        showSnackbar("Playlist created!");
-                                    }}>
-                                        +
-                                </button>
-                            </div>
-                            <div >
-                                <ul className="PlaylistMenuList">
-                                {playlists.map((element) => (
-                                    <li key={element.id}> 
-                                        <button className="PlaylistMenuItem" onClick={() => {
-                                            onHandleAddToPlaylist(element.id, track);
-                                            showSnackbar("Track added to " + element.name + "!")
-                                        }}>
-                                            <p style={{margin: 0, padding: 0, minWidth: 0, flex: 1}}>{element.name}</p>
-                                        </button>
-                                    </li>
-                                ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style={{display: "flex", justifyContent: "center"}}>
-                    <input 
-                        type="range"
-                        min={0}
-                        max={duration}
-                        step={0.1}
-                        value={currentTime}
-                        onChange={handleSeek} 
-                        disabled={false}
-                        aria-label="Seek" />
-                </div>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <div>
-                        <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(currentTime)}</h4>
-                    </div>
-                    <div>
-                        <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(duration)}</h4>
-                    </div>
-                </div>
-                <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <AudioPlayerButton 
-                    onClick={handleShuffle} size={36} toggleAction={isShuffle} 
-                    labelTrue="Shuffle On" labelFalse="Shuffle Off"
-                    srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
-                    <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
-                    <AudioPlayerButton 
-                    onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
-                    labelTrue="Pause" labelFalse="Play"
-                    srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                    <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
-                    <AudioPlayerModeButton
-                        size={36}
-                        onClick={cycleRepeatMode}
-                        states={[
-                            { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
-                            { label: "Repeat one", src: "/assets/audio_player_icons/repeat-once.svg" },
-                            { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
-                        ]}
-                        stateIndex={REPEAT_MODES.indexOf(repeatMode)}
-                    />
-                </div>
-                <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                    <AudioPlayerButton
-                    onClick={handleToggleMute} size={40} toggleAction={isMuted}
-                    labelTrue="Unmute" labelFalse="Mute"
-                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
-                    <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={isMuted ? 0 : volume}
-                        onChange={handleVolumeChange}
-                        aria-label="Volume" />
-                </div>
-            </div>
-            <div className={isScrolled ? "MiniAudioPlayer" : "MiniAudioPlayer hidden"}>
-                <div style={{flexShrink: 0}}>
-                    <CoverImage styles={{borderRadius: "15px"}} src={track.artwork} size={100}/>
-                </div>
-                <div style={{display: "grid", alignItems: "flex-start", flex: 1, minWidth: 0, gap: '2px'}}>
-                    <div style={{display: "flex", alignItems: "flex-start"}}>
-                        <input 
-                            type="range"
-                            min={0}
-                            max={duration}
-                            step={0.1}
-                            value={currentTime}
-                            onChange={handleSeek} 
-                            disabled={false}
-                            aria-label="Seek" 
-                        />
-                        
-                    </div>
-                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
-                        <AudioPlayerButton 
-                        onClick={handleShuffle} size={36} toggleAction={isShuffle} 
-                        labelTrue="Shuffle On" labelFalse="Shuffle Off"
-                        srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
-                        <AudioPlayerButton onClick={handleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
-                        <AudioPlayerButton 
-                        onClick={handleTogglePlay} size={64} toggleAction={isPlaying} 
-                        labelTrue="Pause" labelFalse="Play"
-                        srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                        <AudioPlayerButton onClick={handleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
-                        <AudioPlayerModeButton
-                            size={36}
-                            onClick={cycleRepeatMode}
-                            states={[
-                                { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
-                                { label: "Repeat one", src: "/assets/audio_player_icons/repeat-once.svg" },
-                                { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
-                            ]}
-                            stateIndex={REPEAT_MODES.indexOf(repeatMode)}
-                        />
-                    </div>
-                    <div style={{display: "flex", justifyContent: "flex-start"}}>
-                        <AudioPlayerButton
-                            onClick={handleToggleMute} size={40} toggleAction={isMuted}
-                            labelTrue="Unmute" labelFalse="Mute"
-                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" 
-                        />
-                        <input
-                            type="range"
-                            min={0}
-                            max={1}
-                            step={0.01}
-                            value={isMuted ? 0 : volume}
-                            onChange={handleVolumeChange}
-                            aria-label="Volume" 
-                        />
-                    </div>
-                </div>
-            </div>
+            <AudioPlayerUI 
+                track={track}
+                playlists={playlists}
+                duration={duration}
+                currentTime={currentTime}
+                isPlaying={isPlaying}
+                isFavorited={isFavorited}
+                isShuffle={isShuffle}
+                isScrolled={isScrolled}
+                isMuted={isMuted}
+                volume={volume}
+                repeatMode={repeatMode}
+                REPEAT_MODES={REPEAT_MODES}
+                playlistName={playlistName}
+                isPlaylistMenuVisible={isPlaylistMenuVisible}
+                playlistWrapperRef={playlistWrapperRef}
+                onHandleSeek={handleSeek}
+                onHandleShuffle={handleShuffle}
+                onHandleRewind={handleRewind}
+                onHandleTogglePlay={handleTogglePlay}
+                onHandleFastForward={handleFastForward}
+                onHandleToggleMute={handleToggleMute}
+                onHandleVolumeChange={handleVolumeChange}
+                onCycleRepeatMode={cycleRepeatMode}
+                onAddToFavorites={onAddToFavorites}
+                onHandleAddToPlaylist={onHandleAddToPlaylist}
+                onHandleCreatePlaylist={onHandleCreatePlaylist}
+                setPlaylistName={setPlaylistName}
+                onSetIsPlaylistMenuVisible={setIsPlaylistMenuVisible}
+            />
         </>
     )
 }
