@@ -27,6 +27,9 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
 
+    const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
+    const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+
     const cycleRepeatMode = () => {
         const nextMode = REPEAT_MODES[(REPEAT_MODES.indexOf(repeatMode) + 1) % REPEAT_MODES.length];
         
@@ -228,6 +231,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 volume={volume}
                 repeatMode={repeatMode}
                 REPEAT_MODES={REPEAT_MODES}
+                progressTrack={progressTrack}
+                progressVolume={progressVolume}
                 onHandleSeek={handleSeek}
                 onHandleShuffle={handleShuffle}
                 onHandleRewind={handleRewind}
