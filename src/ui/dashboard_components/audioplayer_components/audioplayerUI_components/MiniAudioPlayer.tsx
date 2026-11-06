@@ -23,6 +23,9 @@ export default function MiniAudioPlayer({
     repeatMode,
     REPEAT_MODES }: AudioPlayerUIProps) {
 
+    const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
+    const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+
     return (
         <>
             <div className={isScrolled ? "MiniAudioPlayer" : "MiniAudioPlayer hidden"}>
@@ -32,6 +35,8 @@ export default function MiniAudioPlayer({
                 <div style={{display: "grid", alignItems: "flex-start", flex: 1, minWidth: 0, gap: '2px'}}>
                     <div style={{display: "flex", alignItems: "flex-start"}}>
                         <input 
+                            className="progress-slider" 
+                            style={{ "--progress": `${progressTrack}%` } as React.CSSProperties}
                             type="range"
                             min={0}
                             max={duration}
@@ -72,6 +77,8 @@ export default function MiniAudioPlayer({
                             srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" 
                         />
                         <input
+                            className="progress-slider" 
+                            style={{ "--progress": `${progressVolume}%` } as React.CSSProperties}
                             type="range"
                             min={0}
                             max={1}

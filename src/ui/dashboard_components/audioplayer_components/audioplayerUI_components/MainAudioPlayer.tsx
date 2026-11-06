@@ -37,6 +37,9 @@ export default function MainAudioPlayer({
     
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
 
+    const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
+    const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+    
     const { showSnackbar } = useSnackbar();
 
     useEffect(() => {
@@ -107,7 +110,9 @@ export default function MainAudioPlayer({
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <input 
+                    <input
+                        className="progress-slider" 
+                        style={{ "--progress": `${progressTrack}%` } as React.CSSProperties}
                         type="range"
                         min={0}
                         max={duration}
@@ -153,6 +158,8 @@ export default function MainAudioPlayer({
                     labelTrue="Unmute" labelFalse="Mute"
                     srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
                     <input
+                        className="progress-slider" 
+                        style={{ "--progress": `${progressVolume}%` } as React.CSSProperties}
                         type="range"
                         min={0}
                         max={1}
