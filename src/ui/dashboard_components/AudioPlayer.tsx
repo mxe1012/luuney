@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
+import Visualizer from "./audioplayer_components/Visualizer";
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
@@ -199,7 +200,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         <>
             <audio
                 loop={repeatMode === "one"}
-                autoPlay 
+                autoPlay
+                crossOrigin="anonymous" 
                 ref={audioRef}
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
@@ -234,6 +236,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onHandleAddToPlaylist={onHandleAddToPlaylist}
                 onHandleCreatePlaylist={onHandleCreatePlaylist}
             />
+            <Visualizer audioRef={audioRef} isPlaying={isPlaying}/>
         </>
     )
 }
