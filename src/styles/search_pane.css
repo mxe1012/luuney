@@ -57,7 +57,7 @@
     padding: 10px 20px 10px 48px; 
     color: #DCCCF7;
     background-color: rgba(167, 139, 250, 0.15);
-    background-image: url("public/assets/search.svg");
+    background-image: url("/assets/search.svg");
     background-repeat: no-repeat;
     background-position: left 16px center;  
     background-size: 20px;  
@@ -146,6 +146,16 @@
 .SearchListButton:focus-visible {
     outline: 2px solid #DCCCF7;
     outline-offset: 3px;
+}
+
+select.PlaylistPaneControllerButton option {
+    background-color: #2a1b40;   /* solid dark purple; the list can't be see-through */
+    color: #DCCCF7;
+}
+
+select.PlaylistPaneControllerButton option:checked {
+    background-color: #5b4691;   /* highlight for the selected option */
+    color: #F3D9C7;
 }
 
 ul.SearchList {
