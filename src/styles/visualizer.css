@@ -1,4 +1,4 @@
-@keyframes audp-fade {
+@keyframes fade-in {
     from {
         opacity: 0;
     }
@@ -8,7 +8,7 @@
 }
 
 #visualizer {
-    animation-name: audp-fade;
+    animation-name: fade-in;
     animation-duration: 1s;
     margin-top: 16px;
     padding: 20px;
