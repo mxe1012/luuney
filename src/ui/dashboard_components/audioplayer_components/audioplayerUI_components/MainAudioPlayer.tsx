@@ -20,6 +20,8 @@ export default function MainAudioPlayer({
     volume,
     repeatMode,
     REPEAT_MODES,
+    progressTrack,
+    progressVolume,
     onHandleSeek,
     onHandleShuffle,
     onHandleRewind,
@@ -36,9 +38,6 @@ export default function MainAudioPlayer({
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
     
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
-
-    const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
-    const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
     
     const { showSnackbar } = useSnackbar();
 

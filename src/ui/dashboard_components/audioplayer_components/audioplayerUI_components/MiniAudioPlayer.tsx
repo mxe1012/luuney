@@ -12,6 +12,8 @@ export default function MiniAudioPlayer({
     isMuted,
     isScrolled,
     isShuffle,
+    progressTrack,
+    progressVolume,
     onHandleVolumeChange,
     onHandleSeek,
     onHandleShuffle,
@@ -22,9 +24,6 @@ export default function MiniAudioPlayer({
     onCycleRepeatMode,
     repeatMode,
     REPEAT_MODES }: AudioPlayerUIProps) {
-
-    const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
-    const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
 
     return (
         <>
