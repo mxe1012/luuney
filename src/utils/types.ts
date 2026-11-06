@@ -244,3 +244,8 @@ export interface VisualizerProps {
     audioRef: React.RefObject<HTMLAudioElement | null>;
     isPlaying: boolean;
 }
+
+export interface MiniIconProps {
+    src: string;
+    size?: number;
+}
