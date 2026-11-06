@@ -239,3 +239,8 @@ export interface AudioPlayerUIProps {
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onHandleCreatePlaylist: (name: string, entry: TrackObject) => void
 }
+
+export interface VisualizerProps {
+    audioRef: React.RefObject<HTMLAudioElement | null>;
+    isPlaying: boolean;
+}
