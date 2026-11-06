@@ -227,6 +227,8 @@ export interface AudioPlayerUIProps {
     volume: number;
     repeatMode: "off" | "one" | "all";
     REPEAT_MODES: readonly ["off", "one", "all"];
+    progressTrack: number;
+    progressVolume: number;
     onHandleSeek: (e: ChangeEvent<HTMLInputElement, Element>) => void;
     onHandleShuffle:  () => void
     onHandleRewind:  () => void
