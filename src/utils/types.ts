@@ -210,8 +210,6 @@ export interface SearchController {
     onHandleSearchTracks: (e: React.ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
     onHandleSearchArtists: (e: React.ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
     onHandleSearchType: (e: React.ChangeEvent<HTMLSelectElement, Element>) => void;
-    onSetTrackList:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
-    onSetArtistList:  React.Dispatch<React.SetStateAction<ArtistObject[]>>;
 }
 
 export interface AudioPlayerUIProps {
