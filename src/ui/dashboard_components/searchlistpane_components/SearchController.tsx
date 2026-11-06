@@ -1,9 +1,6 @@
-import { useSnackbar } from "../../../hooks/SnackbarContext";
 import type { SearchController } from "../../../utils/types";
 
-export default function SearchController({searchType, searchTypes, searchTrack, searchArtist, onHandleSearchTracks, onHandleSearchArtists, onHandleSearchType, onSetArtistList, onSetTrackList}: SearchController) {
-
-    const { showSnackbar } = useSnackbar();
+export default function SearchController({searchType, searchTypes, searchTrack, searchArtist, onHandleSearchTracks, onHandleSearchArtists, onHandleSearchType}: SearchController) {
 
     return (
         <>
@@ -16,8 +13,8 @@ export default function SearchController({searchType, searchTypes, searchTrack, 
                     onChange={searchType === "tracks" ? onHandleSearchTracks : onHandleSearchArtists}>
                 </input>
                 <select value={searchType} className="PlaylistPaneControllerButton" onChange={onHandleSearchType}>
-                    <option value={searchTypes[0]} onClick={() => {onSetArtistList([]); showSnackbar("Searching by Tracks")}}>Tracks</option>
-                    <option value={searchTypes[1]} onClick={() => {onSetTrackList([]); showSnackbar("Searching by Artists")}}>Artists</option>
+                    <option value={searchTypes[0]}>Tracks</option>
+                    <option value={searchTypes[1]}>Artists</option>
                 </select>
             </div>
         </>
