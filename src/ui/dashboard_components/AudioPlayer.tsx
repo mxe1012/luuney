@@ -28,9 +28,10 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
 
     const cycleRepeatMode = () => {
-        setRepeatMode(
-            (m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % REPEAT_MODES.length]
-        );
+        const nextMode = REPEAT_MODES[(REPEAT_MODES.indexOf(repeatMode) + 1) % REPEAT_MODES.length];
+        
+        setRepeatMode(nextMode);
+        showSnackbar("Repeat, " + nextMode);
     }
     
     const { showSnackbar } = useSnackbar();
@@ -154,6 +155,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         }
 
         audio.muted = !audio.muted;
+        showSnackbar(!isMuted ? "Audio muted!" : "Audio unmuted!")
     };
 
     function handleElementVolumeChange() {
