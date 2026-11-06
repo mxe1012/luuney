@@ -31,7 +31,16 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
     const { showSnackbar } = useSnackbar();
 
     function handleSearchType(e: React.ChangeEvent<HTMLSelectElement>) {
-        setSearchType(e.target.value);
+        const type = e.target.value;
+        setSearchType(type);
+
+        if(type === searchTypes[0]) {
+            setArtistList([]);
+        }
+        else if(type === searchTypes[1]) {
+            setTrackList([]);
+        }
+        showSnackbar("Searching by " + type)
     }
 
     type TrackResponse = Awaited<ReturnType<typeof fetchTrackByQuery>>;
@@ -194,8 +203,6 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                     onHandleSearchTracks={handleSearchTracks}
                     onHandleSearchArtists={handleSearchArtists}
                     onHandleSearchType={handleSearchType}
-                    onSetTrackList={setTrackList}
-                    onSetArtistList={setArtistList}
                 />
                 <SkeletonSearchListPane isLoaded={isLoaded}>
                     <TrackSearchList 

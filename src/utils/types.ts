@@ -210,8 +210,6 @@ export interface SearchController {
     onHandleSearchTracks: (e: React.ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
     onHandleSearchArtists: (e: React.ChangeEvent<HTMLInputElement, Element>) => Promise<void>;
     onHandleSearchType: (e: React.ChangeEvent<HTMLSelectElement, Element>) => void;
-    onSetTrackList:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
-    onSetArtistList:  React.Dispatch<React.SetStateAction<ArtistObject[]>>;
 }
 
 export interface AudioPlayerUIProps {
@@ -227,6 +225,8 @@ export interface AudioPlayerUIProps {
     volume: number;
     repeatMode: "off" | "one" | "all";
     REPEAT_MODES: readonly ["off", "one", "all"];
+    progressTrack: number;
+    progressVolume: number;
     onHandleSeek: (e: ChangeEvent<HTMLInputElement, Element>) => void;
     onHandleShuffle:  () => void
     onHandleRewind:  () => void
@@ -243,4 +243,9 @@ export interface AudioPlayerUIProps {
 export interface VisualizerProps {
     audioRef: React.RefObject<HTMLAudioElement | null>;
     isPlaying: boolean;
+}
+
+export interface MiniIconProps {
+    src: string;
+    size?: number;
 }

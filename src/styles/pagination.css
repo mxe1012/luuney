@@ -14,3 +14,46 @@
 .Pagination span {
     color: #F3D9C7;
 }
+
+button.PaginationButton {
+    padding: 10px;
+    color: #DCCCF7;
+    background-color: rgba(167, 139, 250, 0.15);
+    border: 1px solid rgba(220, 204, 247, 0.3);
+    border-radius: 25%;
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+    box-shadow:
+        0 0 6px rgba(167, 139, 250, 0.45),
+        0 0 15px rgba(167, 139, 250, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+button.PaginationButton:hover {
+    background-color: rgba(167, 139, 250, 0.25);
+    border-color: rgba(220, 204, 247, 0.5);
+    box-shadow:
+        0 0 16px rgba(167, 139, 250, 0.6),
+        0 0 40px rgba(167, 139, 250, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+
+button.PaginationButton:active {
+    background-color: rgba(220, 204, 247, 0.35);
+}
+
+button.PaginationButton:focus-visible {
+    outline: 2px solid #DCCCF7;
+    outline-offset: 3px;
+}
+
+button.PaginationButton:disabled {
+    background-color: rgba(74, 61, 111, 0.15);
+    box-shadow:
+        0 0 0px rgba(0, 0, 0, 0.45),
+        0 0 0px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(0, 0, 0, 0.25);
+    cursor: not-allowed;
+}

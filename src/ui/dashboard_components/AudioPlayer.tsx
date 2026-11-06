@@ -27,10 +27,14 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
 
+    const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
+    const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+
     const cycleRepeatMode = () => {
-        setRepeatMode(
-            (m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % REPEAT_MODES.length]
-        );
+        const nextMode = REPEAT_MODES[(REPEAT_MODES.indexOf(repeatMode) + 1) % REPEAT_MODES.length];
+        
+        setRepeatMode(nextMode);
+        showSnackbar("Repeat, " + nextMode);
     }
     
     const { showSnackbar } = useSnackbar();
@@ -141,6 +145,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         if (audio.muted && newVolume > 0) {
             audio.muted = false;
         }
+
+        showSnackbar("Volume: " + Math.round(newVolume * 100))
     };
 
     function handleToggleMute() {
@@ -152,6 +158,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         }
 
         audio.muted = !audio.muted;
+        showSnackbar(!isMuted ? "Audio muted!" : "Audio unmuted!")
     };
 
     function handleElementVolumeChange() {
@@ -224,6 +231,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 volume={volume}
                 repeatMode={repeatMode}
                 REPEAT_MODES={REPEAT_MODES}
+                progressTrack={progressTrack}
+                progressVolume={progressVolume}
                 onHandleSeek={handleSeek}
                 onHandleShuffle={handleShuffle}
                 onHandleRewind={handleRewind}
