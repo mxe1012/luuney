@@ -141,6 +141,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         if (audio.muted && newVolume > 0) {
             audio.muted = false;
         }
+
+        showSnackbar("Volume: " + Math.round(newVolume * 100))
     };
 
     function handleToggleMute() {
