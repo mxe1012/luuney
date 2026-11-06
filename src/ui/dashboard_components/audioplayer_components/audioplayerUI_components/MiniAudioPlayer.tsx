@@ -1,0 +1,88 @@
+import type { AudioPlayerUIProps } from "../../../../utils/types";
+import CoverImage from "../../../CoverImage";
+import AudioPlayerButton from "../AudioPlayerButton";
+import AudioPlayerModeButton from "../AudioPlayerModeButton";
+
+export default function MiniAudioPlayer({
+    track,
+    duration,
+    currentTime,
+    volume,
+    isPlaying,
+    isMuted,
+    isScrolled,
+    isShuffle,
+    onHandleVolumeChange,
+    onHandleSeek,
+    onHandleShuffle,
+    onHandleRewind,
+    onHandleTogglePlay,
+    onHandleFastForward,
+    onHandleToggleMute,
+    onCycleRepeatMode,
+    repeatMode,
+    REPEAT_MODES }: AudioPlayerUIProps) {
+
+    return (
+        <>
+            <div className={isScrolled ? "MiniAudioPlayer" : "MiniAudioPlayer hidden"}>
+                <div style={{flexShrink: 0}}>
+                    <CoverImage styles={{borderRadius: "15px"}} src={track.artwork} size={100}/>
+                </div>
+                <div style={{display: "grid", alignItems: "flex-start", flex: 1, minWidth: 0, gap: '2px'}}>
+                    <div style={{display: "flex", alignItems: "flex-start"}}>
+                        <input 
+                            type="range"
+                            min={0}
+                            max={duration}
+                            step={0.1}
+                            value={currentTime}
+                            onChange={onHandleSeek} 
+                            disabled={false}
+                            aria-label="Seek" 
+                        />
+                        
+                    </div>
+                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                        <AudioPlayerButton 
+                        onClick={onHandleShuffle} size={36} toggleAction={isShuffle} 
+                        labelTrue="Shuffle On" labelFalse="Shuffle Off"
+                        srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
+                        <AudioPlayerButton onClick={onHandleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                        <AudioPlayerButton 
+                        onClick={onHandleTogglePlay} size={64} toggleAction={isPlaying} 
+                        labelTrue="Pause" labelFalse="Play"
+                        srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
+                        <AudioPlayerButton onClick={onHandleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                        <AudioPlayerModeButton
+                            size={36}
+                            onClick={onCycleRepeatMode}
+                            states={[
+                                { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
+                                { label: "Repeat one", src: "/assets/audio_player_icons/repeat-once.svg" },
+                                { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
+                            ]}
+                            stateIndex={REPEAT_MODES.indexOf(repeatMode)}
+                        />
+                    </div>
+                    <div style={{display: "flex", justifyContent: "flex-start"}}>
+                        <AudioPlayerButton
+                            onClick={onHandleToggleMute} size={40} toggleAction={isMuted}
+                            labelTrue="Unmute" labelFalse="Mute"
+                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" 
+                        />
+                        <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={isMuted ? 0 : volume}
+                            onChange={onHandleVolumeChange}
+                            aria-label="Volume" 
+                        />
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
