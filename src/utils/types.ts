@@ -134,7 +134,8 @@ export interface CoverImageProps {
 }
 
 export interface SnackbarContextType {
-    showSnackbar: (message: string, duration?: number) => void;
+    showSnackbar: (message: string, duration?: number, isPersist?: boolean) => void;
+    hideSnackbar: () => void;
 }
 
 export interface Playlist {
