@@ -108,6 +108,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                 setIsLoaded(true);
                 return;
             }
+            setIsLoaded(true);
             showSnackbar("Could not search for tracks.");
             console.error(e);
         }
@@ -171,6 +172,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                 setIsLoaded(true);
                 return;
             }
+            setIsLoaded(true);
             showSnackbar("Could not search for artists.");
             console.error(e);
         }
@@ -187,6 +189,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
             setIsLoaded(true);
         }
         catch(e) {
+            setIsLoaded(true);
             showSnackbar("Could not search for tracks by user.");
             console.error(e);
         }
