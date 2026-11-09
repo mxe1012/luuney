@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import type { PlaylistSelectionProps, TrackObject } from "../../../utils/types";
 
@@ -108,8 +108,8 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         <>
             <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{list[playlistIndex].name}</h2>
             {list.map((playlist) => (
-                <>
-                <ul key={playlist.id} 
+                <Fragment key={playlist.id}>
+                <ul  
                     style={{
                         display: playlist.id !== playlistId ? "none" : "",
                         visibility: playlist.id !== playlistId ? "hidden" : "visible"
@@ -166,7 +166,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         </div>
                     </div>
                 }
-                </>
+                </Fragment>
             ))}
         </>
     )
