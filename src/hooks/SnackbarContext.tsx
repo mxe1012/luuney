@@ -25,6 +25,10 @@ export default function SnackbarProvider({ children }: ChildrenProps) {
     }, [])
 
     const hideSnackbar = useCallback(() => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
         setVisible(false);
     }, [])
 
