@@ -3,7 +3,7 @@ import type { TrackSearchListProps } from "../../../utils/types";
 import PaginationController from "../../PaginationController";
 import ListButton from "../playlistpane_components/ListButton";
 
-export default function TrackSearchList({list, onHandleFetch, onAddToFavorites, onAddToRecents, onIsPlaying, isFavorited}: TrackSearchListProps) {
+export default function TrackSearchList({list, onHandleFetch, onAddToFavorites, onAddToRecents, onIsPlaying, isFavorited, onSetCurrentTrackIndex, onSetTrackQueue}: TrackSearchListProps) {
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } = usePagination(list, 10);
 
@@ -26,6 +26,8 @@ export default function TrackSearchList({list, onHandleFetch, onAddToFavorites, 
                             isFavorited={isFavorited}
                             hasDeleteButton={false}
                             hasFavoriteButton={true}
+                            onSetTrackQueue={onSetTrackQueue}
+                            onSetCurrentTrackIndex={onSetCurrentTrackIndex}
                         />
                     </li>
                 ))}

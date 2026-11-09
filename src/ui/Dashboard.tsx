@@ -244,10 +244,6 @@ export default function Dashboard() {
         }
     }, [showSnackbar, hideSnackbar]);
 
-    useEffect(() => {
-        console.log(trackQueue);
-    }, [trackQueue])
-
     return (
         <>
             <div className="MusicDashboard">
@@ -293,6 +289,8 @@ export default function Dashboard() {
                         onAddToFavorites={handleAddToFavorites} 
                         onAddToRecents={handleAddToRecents} 
                         onIsPlaying={setIsPlaying}
+                        onSetCurrentTrackIndex={setCurrentTrackIndex}
+                        onSetTrackQueue={setTrackQueue}
                     />
                 </div>
             </div>
