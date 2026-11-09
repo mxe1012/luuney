@@ -1,4 +1,4 @@
-import { createContext, useState, useRef, useContext } from "react";
+import { createContext, useState, useRef, useContext, useCallback } from "react";
 
 import type { ChildrenProps, SnackbarContextType } from "../utils/types";
 
@@ -9,8 +9,7 @@ export default function SnackbarProvider({ children }: ChildrenProps) {
     const [visible, setVisible] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    function showSnackbar(message: string, duration = 2000) {
-        
+    const showSnackbar = useCallback((message: string, duration = 2000, isPersist = false) => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
@@ -18,13 +17,23 @@ export default function SnackbarProvider({ children }: ChildrenProps) {
         setNotice(message);
         setVisible(true);
 
-        timeoutRef.current = setTimeout(() => {
-            setVisible(false);
-        }, duration);
-    }
+        if(!isPersist){
+            timeoutRef.current = setTimeout(() => {
+                setVisible(false);
+            }, duration);
+        }
+    }, [])
+
+    const hideSnackbar = useCallback(() => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        setVisible(false);
+    }, [])
 
     return (
-        <SnackbarContext.Provider value={{ showSnackbar }}>
+        <SnackbarContext.Provider value={{ showSnackbar, hideSnackbar }}>
             {children}
             <div id="snackbar" className={visible ? "show" : ""}>{notice}</div>
         </SnackbarContext.Provider>
