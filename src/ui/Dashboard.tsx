@@ -14,6 +14,7 @@ import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import ExtraListPane from "./dashboard_components/ExtraListPane";
+import { isOnline } from "../utils/helpers";
 
 export default function Dashboard() {
 
@@ -54,11 +55,11 @@ export default function Dashboard() {
     
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
-    const { showSnackbar } = useSnackbar();
+    const { showSnackbar, hideSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
 
-        showSnackbar("Loading track...");
+        showSnackbar("Loading track...", undefined, true);
 
         try {
             const result = await fetchTrackById(id);
@@ -223,6 +224,25 @@ export default function Dashboard() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        const notify = () => {
+            showSnackbar("You are offline!\nConnect to a network to play songs.", undefined, true);
+        }
+
+        const backOnline = () => {
+            hideSnackbar();
+        }
+
+        if (!isOnline()) notify(); else backOnline();
+
+        window.addEventListener("offline", notify);
+        window.addEventListener("online", backOnline)
+        return () => {
+            window.removeEventListener("offline", notify);
+            window.removeEventListener("online", backOnline)
+        }
+    }, [showSnackbar, hideSnackbar]);
 
     return (
         <>

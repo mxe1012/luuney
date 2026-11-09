@@ -17,3 +17,7 @@ export function getDurationSum(playlist: Playlist): number {
     }
     return durationSum;
 }
+
+export function isOnline(): boolean {
+    return navigator.onLine;
+}
