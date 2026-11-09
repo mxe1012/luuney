@@ -193,6 +193,22 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     }
 
     useEffect(() => {
+        if (!isShuffle) return;
+
+            const playing = tracks[currentTrackIndex];
+            const rest = tracks
+                .filter(track => track.track_id !== playing?.track_id)
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value);
+
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+            onSetCurrentTrackIndex(0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tracks]);
+
+    useEffect(() => {
         const handleScroll = () => {
             const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
             setIsScrolled(scrollTop > 555);
