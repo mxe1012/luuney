@@ -227,7 +227,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         const notify = () => {
-            showSnackbar("You are offline!\nConnect to a network to play songs.", undefined, true);
+            showSnackbar("You are offline!\nConnect to a network.", undefined, true);
         }
 
         const backOnline = () => {
