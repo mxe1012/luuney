@@ -166,10 +166,12 @@ export interface ListButtonProps {
 export interface ExtraListPaneProps {
     list: TrackObject[];
     heading: string;
+    isLoaded: boolean;
     onHandleFetch: (id: number) => Promise<void>;
     onAddToRecents: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-    isLoaded: boolean;
+    onSetTrackQueue:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface SkeletonProps {
