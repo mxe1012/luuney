@@ -120,7 +120,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
         audio.currentTime = newTime;
 
-        setCurrentTime(newTime)
+        setCurrentTime(newTime > duration ? duration : newTime)
     }
 
     function handleRewind() {
@@ -131,7 +131,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
         audio.currentTime = newTime;
 
-        setCurrentTime(newTime)
+        setCurrentTime(newTime < 0 ? 0 : newTime)
     }
 
     function handleVolumeChange(e: ChangeEvent<HTMLInputElement>) {
