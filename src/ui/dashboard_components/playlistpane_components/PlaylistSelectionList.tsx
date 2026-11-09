@@ -14,15 +14,13 @@ import { useSnackbar } from "../../../hooks/SnackbarContext";
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
-    const [playlistIndex, setPlaylistIndex] = useState(0);
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(list, 10);
 
-    // module level, so the fallback array has a stable reference
     const EMPTY_TRACKS: TrackObject[] = [];
     
-    // inside the component, next to your existing hook call
     const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;;
+    const selectedPlaylistName = list.find((p) => p.id === playlistId)?.name ?? "";
 
     const { showSnackbar } = useSnackbar();
 
@@ -41,14 +39,13 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         return (
             <>
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
-                    {pageItems.map((playlist, index) => (
+                    {pageItems.map((playlist) => (
                         <li key={playlist.id} className="PlaylistPaneFolderList">
                             <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
                                 <button className="PlaylistButton" onClick={() => {
                                     onIsSelectedPlaylist(true)
                                     onSetIsPlaylistSelectionVisible(false);
                                     setPlaylistId(playlist.id);
-                                    setPlaylistIndex(index);
                                 }}>
                                     <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
                                         <div style={{flexShrink: 0}}>
@@ -106,7 +103,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     }
     return (
         <>
-            <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{list[playlistIndex].name}</h2>
+            <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{selectedPlaylistName}</h2>
             {list.map((playlist) => (
                 <Fragment key={playlist.id}>
                 <ul  
@@ -156,7 +153,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                     visibility: selectedPlaylist.length >= 1 ? "visible" : "hidden"
                                 }}
                                 className="PlaylistPaneControllerButton" 
-                                onClick={() => {showSnackbar("Playlists cleared!"); 
+                                onClick={() => {showSnackbar("Playlist cleared!"); 
                                 onSetPlaylist(prev =>
                                     prev.map(p => p.id === playlistId ? { ...p, tracks: [] } : p)
                                 );
