@@ -244,6 +244,10 @@ export default function Dashboard() {
         }
     }, [showSnackbar, hideSnackbar]);
 
+    useEffect(() => {
+        console.log(trackQueue);
+    }, [trackQueue])
+
     return (
         <>
             <div className="MusicDashboard">
@@ -299,6 +303,8 @@ export default function Dashboard() {
                 onHandleFetch={handleFetch}
                 onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
+                onSetTrackQueue={setTrackQueue}
+                onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
             <ExtraListPane 
                 isLoaded={isLoadedLatest}
@@ -307,6 +313,8 @@ export default function Dashboard() {
                 onHandleFetch={handleFetch}
                 onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
+                onSetTrackQueue={setTrackQueue}
+                onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
         </>
     )
