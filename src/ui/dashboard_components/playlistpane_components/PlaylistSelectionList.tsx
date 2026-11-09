@@ -19,7 +19,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
 
     const EMPTY_TRACKS: TrackObject[] = [];
     
-    const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;;
+    const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;
     const selectedPlaylistName = list.find((p) => p.id === playlistId)?.name ?? "";
 
     const { showSnackbar } = useSnackbar();
