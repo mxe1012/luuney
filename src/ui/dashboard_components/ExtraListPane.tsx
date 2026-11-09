@@ -4,10 +4,9 @@ import CoverImage from "../CoverImage";
 import PaginationController from "../PaginationController";
 import SkeletonExtraListPane from "../skeletons/SkeletonExtraListPane";
 
-export default function ExtraListPane({list, heading, onHandleFetch, onAddToRecents, onIsPlaying, isLoaded}: ExtraListPaneProps) {
+export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, onAddToRecents, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: ExtraListPaneProps) {
 
-    const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } =
-            usePagination(list, 10);
+    const { pageItems, page, pageCount, hasPrev, hasNext, start, next, prev } = usePagination(list, 10);
 
     return (
         <>  
@@ -31,15 +30,16 @@ export default function ExtraListPane({list, heading, onHandleFetch, onAddToRece
                             </div>
                         </div>
                         <ul className="ExtraListItems">
-                            {pageItems.map((element) => (
+                            {pageItems.map((element, index) => (
                                 <li className="ExtraListItems" key={element.track_id}>
                                     <button className="ExtraListPaneButton" 
                                         onClick={() => {
                                             onHandleFetch(element.track_id)
                                             onAddToRecents(element)
                                             onIsPlaying(false)
-                                        }}
-                                    >
+                                            onSetCurrentTrackIndex(start + index)
+                                            onSetTrackQueue(list.map((element) => element));
+                                        }}>
                                         <div style={{display: "grid", alignItems: "flex-start", gap: '12px'}}>
                                             <div style={{display: "flex", justifyContent: "center", flexShrink: 0}}> 
                                                 <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={128}/>

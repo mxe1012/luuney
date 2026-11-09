@@ -289,6 +289,8 @@ export default function Dashboard() {
                         onAddToFavorites={handleAddToFavorites} 
                         onAddToRecents={handleAddToRecents} 
                         onIsPlaying={setIsPlaying}
+                        onSetCurrentTrackIndex={setCurrentTrackIndex}
+                        onSetTrackQueue={setTrackQueue}
                     />
                 </div>
             </div>
@@ -299,6 +301,8 @@ export default function Dashboard() {
                 onHandleFetch={handleFetch}
                 onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
+                onSetTrackQueue={setTrackQueue}
+                onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
             <ExtraListPane 
                 isLoaded={isLoadedLatest}
@@ -307,6 +311,8 @@ export default function Dashboard() {
                 onHandleFetch={handleFetch}
                 onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
+                onSetTrackQueue={setTrackQueue}
+                onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
         </>
     )

@@ -120,7 +120,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
         audio.currentTime = newTime;
 
-        setCurrentTime(newTime)
+        setCurrentTime(newTime > duration ? duration : newTime)
     }
 
     function handleRewind() {
@@ -131,7 +131,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
         audio.currentTime = newTime;
 
-        setCurrentTime(newTime)
+        setCurrentTime(newTime < 0 ? 0 : newTime)
     }
 
     function handleVolumeChange(e: ChangeEvent<HTMLInputElement>) {
@@ -191,6 +191,22 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         onSetCurrentTrackIndex(nextIndex);
         onHandleFetch(currentQueue[nextIndex].track_id);
     }
+
+    useEffect(() => {
+        if (!isShuffle) return;
+
+        const playing = tracks[currentTrackIndex];
+        const rest = tracks
+            .filter(track => track.track_id !== playing?.track_id)
+            .map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value);
+
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+        onSetCurrentTrackIndex(0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tracks]);
 
     useEffect(() => {
         const handleScroll = () => {
