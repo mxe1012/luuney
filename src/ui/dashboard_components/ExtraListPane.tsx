@@ -1,4 +1,5 @@
 import usePagination from "../../hooks/usePagination";
+import { formatTime } from "../../utils/helpers";
 import type { ExtraListPaneProps } from "../../utils/types";
 import CoverImage from "../CoverImage";
 import PaginationController from "../PaginationController";
@@ -46,7 +47,12 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
                                             </div>
                                             <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
                                                 <h4>{element.title}</h4>
-                                                <h5>{element.handle}</h5>
+                                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                    <h5>{element.handle}</h5>
+                                                    <h6 style={{padding: 0, margin: 0}}>
+                                                        <time>{formatTime(element.duration)}</time>
+                                                    </h6>
+                                                </div>
                                             </div>
                                         </div>
                                     </button>

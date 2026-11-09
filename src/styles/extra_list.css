@@ -78,6 +78,11 @@
     font-weight: 400;
 }
 
+.ExtraListPaneButton h6 {
+    margin: 0;
+    color: rgba(220, 204, 247, 0.75);
+}
+
 ul.ExtraListItems {
     list-style: none;
     padding: 0;
