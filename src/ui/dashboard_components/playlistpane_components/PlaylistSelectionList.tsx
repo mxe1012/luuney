@@ -11,13 +11,15 @@ import ListButton from "./ListButton";
 import PaginationController from "../../PaginationController";
 import { useSnackbar } from "../../../hooks/SnackbarContext";
 
+const EMPTY_TRACKS: TrackObject[] = [];
+
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState<string | null>("");
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(list, 10);
 
-    const EMPTY_TRACKS: TrackObject[] = [];
+    
     
     const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;
     const selectedPlaylistName = list.find((p) => p.id === playlistId)?.name ?? "";
