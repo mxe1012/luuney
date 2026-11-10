@@ -79,7 +79,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
 
         searchRef.current = query;
 
-        if (query.trim().length == 0) {
+        if (query.trim().length === 0) {
             setTrackList([]);
             setIsLoaded(true);
             return;
@@ -129,7 +129,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
 
         searchRef.current = query;
 
-        if (query.trim().length == 0) {
+        if (query.trim().length === 0) {
             setArtistList([]);
             setIsLoaded(true);
             return;
