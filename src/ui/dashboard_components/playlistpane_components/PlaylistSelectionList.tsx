@@ -90,7 +90,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         <button 
                         style={{
                             display: (visible && list.length >= 1) ? "" : "none", 
-                            visibility: (visible && list.length >= 1) ? "visible" : "hidden"
                         }}
                         className="PlaylistPaneControllerButton" 
                         onClick={() => {showSnackbar("All playlists cleared!"); onSetPlaylist?.([])}}>
@@ -150,7 +149,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                             <button 
                                 style={{
                                     display: selectedPlaylist.length >= 1 ? "" : "none", 
-                                    visibility: selectedPlaylist.length >= 1 ? "visible" : "hidden"
                                 }}
                                 className="PlaylistPaneControllerButton" 
                                 onClick={() => {showSnackbar("Playlist cleared!"); 

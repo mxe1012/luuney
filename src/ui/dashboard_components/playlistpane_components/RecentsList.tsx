@@ -52,7 +52,6 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                     <button 
                     style={{
                         display: (visible && list.length >= 1) ? "" : "none", 
-                        visibility: (visible && list.length >= 1) ? "visible" : "hidden"
                     }}
                     className="PlaylistPaneControllerButton" 
                     onClick={() => {showSnackbar("Recents cleared!"); onRecentsList?.([])}}>

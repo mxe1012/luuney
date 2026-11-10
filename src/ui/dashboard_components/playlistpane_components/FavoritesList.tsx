@@ -50,7 +50,6 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                     <button 
                     style={{
                         display: (visible && list.length >= 1) ? "" : "none", 
-                        visibility: (visible && list.length >= 1) ? "visible" : "hidden"
                     }}
                     className="PlaylistPaneControllerButton" 
                     onClick={() => {showSnackbar("Favorites cleared!"); onFavoritesList?.([])}}>
