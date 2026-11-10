@@ -8,30 +8,30 @@ export default function ListButton({list, track, playlist, index, onHandleFetch,
 
     return (
         <>
-            <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
-                <div style={{flex: 1, minWidth: 0, gap: '2px'}}>
+            <div className="ListRow">
+                <div className="ListMain">
                     <button className="PlaylistButton" onClick={() => {
                         onAddToRecents?.(track);
                         onHandleFetch(track.track_id);
                         onIsPlaying(false);
                         onSetCurrentTrackIndex?.(index);
-                        onSetTrackQueue?.(list.map((element) => element))
+                        onSetTrackQueue?.([...list])
                         }}>
-                            <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                <div style={{flexShrink: 0}}>
+                            <div className="ListItem">
+                                <div className="ListCover">
                                     <CoverImage styles={{borderRadius: '10px'}} src={track.artwork} size={64}/>
                                 </div>
-                                <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
+                                <div className="ListText">
                                     <h4>{track.title}</h4>
                                     <h5>{track.handle}</h5>
                                 </div>
-                                <div style={{textAlign: 'right', minWidth: 0}}>
+                                <div className="ListMeta">
                                     <h6><time>{formatTime(track.duration)}</time></h6>
                                 </div>
                             </div>
                     </button>
                 </div>
-                    <div style={{display: "grid", alignItems: "center", flexShrink: 0}}>
+                    <div className="ListActions">
                         {hasFavoriteButton && 
                             <button className="ListActionBtn" aria-label={isFavorited?.(track) ? "Remove from Favorites" : "Add to Favorites"} 
                                 onClick={() => {

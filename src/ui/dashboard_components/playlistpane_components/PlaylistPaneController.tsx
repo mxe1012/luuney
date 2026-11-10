@@ -31,7 +31,7 @@ export default function PlaylistPaneController({isRecentsVisible, isFavoritesVis
                     onSetIsSelectedPlaylist(false);
                 }} 
                 >
-                    {(!isPlaylistSelectionVisible || isPlaylistSelectionVisible) && !isSelectedPlaylist ? "Playlists" : "< Back"}</button>
+                    {!isSelectedPlaylist ? "Playlists" : "< Back"}</button>
             </div>
         </>
     )

@@ -55,7 +55,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
 
                 return {
                     track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
                     title,
                     handle,
                     url,
@@ -79,7 +79,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
 
         searchRef.current = query;
 
-        if (query.trim().length == 0) {
+        if (query.trim().length === 0) {
             setTrackList([]);
             setIsLoaded(true);
             return;
@@ -129,7 +129,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
 
         searchRef.current = query;
 
-        if (query.trim().length == 0) {
+        if (query.trim().length === 0) {
             setArtistList([]);
             setIsLoaded(true);
             return;

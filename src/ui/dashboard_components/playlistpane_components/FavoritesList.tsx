@@ -33,7 +33,7 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                     </li>
                 ))}
             </ul>
-            <div style={{display: 'flex', justifyContent: "space-between"}}>
+            <div className="RowBetween">
                 <div>
                     <PaginationController 
                         className="Pagination"
@@ -50,7 +50,6 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                     <button 
                     style={{
                         display: (visible && list.length >= 1) ? "" : "none", 
-                        visibility: (visible && list.length >= 1) ? "visible" : "hidden"
                     }}
                     className="PlaylistPaneControllerButton" 
                     onClick={() => {showSnackbar("Favorites cleared!"); onFavoritesList?.([])}}>

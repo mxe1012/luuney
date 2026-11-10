@@ -209,7 +209,7 @@ export interface ArtistSearchListProps {
     onSetArtistList: React.Dispatch<React.SetStateAction<ArtistObject[]>>;
 }
 
-export interface SearchController {
+export interface SearchControllerProps {
     searchType: string;
     searchTypes: string[];
     searchTrack: string;
@@ -254,5 +254,6 @@ export interface VisualizerProps {
 
 export interface MiniIconProps {
     src: string;
+    alt?: string;
     size?: number;
 }

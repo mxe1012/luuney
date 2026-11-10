@@ -11,13 +11,13 @@ import ListButton from "./ListButton";
 import PaginationController from "../../PaginationController";
 import { useSnackbar } from "../../../hooks/SnackbarContext";
 
+const EMPTY_TRACKS: TrackObject[] = [];
+
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
-    const [playlistId, setPlaylistId] = useState<string | null>("");
+    const [playlistId, setPlaylistId] = useState("");
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(list, 10);
-
-    const EMPTY_TRACKS: TrackObject[] = [];
     
     const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;
     const selectedPlaylistName = list.find((p) => p.id === playlistId)?.name ?? "";
@@ -41,39 +41,39 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {pageItems.map((playlist) => (
                         <li key={playlist.id} className="PlaylistPaneFolderList">
-                            <div style={{display: "flex", justifyContent:"flex-start", gap: "6px"}}>
+                            <div className="ListRow">
                                 <button className="PlaylistButton" onClick={() => {
                                     onIsSelectedPlaylist(true)
                                     onSetIsPlaylistSelectionVisible(false);
                                     setPlaylistId(playlist.id);
                                 }}>
-                                    <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                        <div style={{flexShrink: 0}}>
+                                    <div className="ListItem">
+                                        <div className="ListCover">
                                             <CoverImage styles={{borderRadius: '10px'}} src={"/assets/playlist-icon.svg"} size={64}/>
                                         </div>
-                                        <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
+                                        <div  className="ListText">
                                             <h4>{playlist.name}</h4>
                                             <h5>({playlist.tracks.length} tracks)</h5>
                                         </div>
-                                        <div style={{textAlign: 'right', minWidth: 0}}>
+                                        <div className="ListMeta">
                                             <h6>{formatTime(getDurationSum(playlist))}</h6>
                                         </div>
                                     </div>
                                 </button>
-                                <div style={{display: "grid", alignItems: "center"}}>
+                                <div className="ListActions">
                                     <button className="ListActionBtn"
                                     onClick={() => {
                                         onSetPlaylist(onDeletePlaylist(playlist));
                                     }}
-                                    >
-                                    <img src="/assets/delete.svg" />
+                                    aria-label="delete playlist">
+                                        <img src="/assets/delete.svg" alt="delete" />
                                     </button>
                                 </div>
                             </div>
                         </li>
                     ))}
                 </ul>
-                <div style={{display: 'flex', justifyContent: "space-between"}}>
+                <div className="RowBetween">
                     <div>
                         <PaginationController 
                             className="Pagination"
@@ -90,7 +90,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         <button 
                         style={{
                             display: (visible && list.length >= 1) ? "" : "none", 
-                            visibility: (visible && list.length >= 1) ? "visible" : "hidden"
                         }}
                         className="PlaylistPaneControllerButton" 
                         onClick={() => {showSnackbar("All playlists cleared!"); onSetPlaylist?.([])}}>
@@ -133,7 +132,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                     ))}
                 </ul>
                 {playlist.id === playlistId && 
-                    <div style={{display: 'flex', justifyContent: "space-between"}}>
+                    <div className="RowBetween">
                         <div>
                             <PaginationController 
                                 className="Pagination"
@@ -150,7 +149,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                             <button 
                                 style={{
                                     display: selectedPlaylist.length >= 1 ? "" : "none", 
-                                    visibility: selectedPlaylist.length >= 1 ? "visible" : "hidden"
                                 }}
                                 className="PlaylistPaneControllerButton" 
                                 onClick={() => {showSnackbar("Playlist cleared!"); 

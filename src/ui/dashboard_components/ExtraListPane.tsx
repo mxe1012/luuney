@@ -12,9 +12,9 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
     return (
         <>  
             <SkeletonExtraListPane isLoaded={isLoaded}>
-                <div style={{display: "flex", justifyContent: "center"}}>
+                <div className="RowCenter">
                     <div className="ExtraListPane">
-                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                        <div className="RowBetween">
                             <div>
                                 <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
                             </div>
@@ -39,17 +39,17 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
                                             onAddToRecents(element)
                                             onIsPlaying(false)
                                             onSetCurrentTrackIndex(start + index)
-                                            onSetTrackQueue(list.map((element) => element));
+                                            onSetTrackQueue([...list]);
                                         }}>
-                                        <div style={{display: "grid", alignItems: "flex-start", gap: '12px'}}>
-                                            <div style={{display: "flex", justifyContent: "center", flexShrink: 0}}> 
+                                        <div className="ExtraItem">
+                                            <div className="RowCenter ListCover"> 
                                                 <CoverImage styles={{borderRadius: '10px'}} src={element.artwork} size={128}/>
                                             </div>
-                                            <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
+                                            <div className="ListText">
                                                 <h4>{element.title}</h4>
-                                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                <div className="RowBetween">
                                                     <h5>{element.handle}</h5>
-                                                    <h6 style={{padding: 0, margin: 0}}>
+                                                    <h6 className="NoMargin">
                                                         <time>{formatTime(element.duration)}</time>
                                                     </h6>
                                                 </div>

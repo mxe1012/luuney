@@ -1,0 +1,23 @@
+/* text */
+.NoMargin { margin: 0; padding: 0; }
+
+/* rows */
+.RowStart   { display: flex; justify-content: flex-start; }
+.RowCenter  { display: flex; justify-content: center; }
+.RowBetween { display: flex; justify-content: space-between; }
+.RowEvenly  { display: flex; justify-content: space-evenly; }
+
+/* list item layout (ListButton, playlists, artists) */
+.ListRow    { display: flex; justify-content: flex-start; gap: 6px; }
+.ListMain   { flex: 1; min-width: 0; }
+.ListItem   { display: flex; justify-content: flex-start; align-items: center; gap: 12px; }
+.ListCover   { flex-shrink: 0; }
+.ListText    { text-align: left; min-width: 0; flex: 1; }
+.ListMeta    { text-align: right; min-width: 0; }
+.ListActions { display: grid; align-items: center; flex-shrink: 0; }
+
+/* one-offs */
+.ExtraItem { display: grid; align-items: flex-start; gap: 12px; }
+.MiniInfo   { display: grid; align-items: flex-start; flex: 1; min-width: 0; gap: 2px; }
+.MiniSeek   { display: flex; align-items: flex-start; }
+.MenuActions { display: flex; justify-content: space-evenly; gap: 2px; }

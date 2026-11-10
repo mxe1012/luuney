@@ -35,7 +35,7 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                     </li>
                 ))}
             </ul>
-            <div style={{display: 'flex', justifyContent: "space-between"}}>
+            <div className="RowBetween">
                 <div>
                     <PaginationController 
                         className="Pagination"
@@ -52,7 +52,6 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                     <button 
                     style={{
                         display: (visible && list.length >= 1) ? "" : "none", 
-                        visibility: (visible && list.length >= 1) ? "visible" : "hidden"
                     }}
                     className="PlaylistPaneControllerButton" 
                     onClick={() => {showSnackbar("Recents cleared!"); onRecentsList?.([])}}>

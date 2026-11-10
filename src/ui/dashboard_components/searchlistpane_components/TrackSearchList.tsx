@@ -11,7 +11,6 @@ export default function TrackSearchList({list, onHandleFetch, onAddToFavorites, 
         <>
             <ul className="SearchList" style={{
                 display: list.length === 0 ? "none" : "",
-                visibility: list.length === 0 ? "hidden" : "visible"
             }}>
                 {pageItems.map((element, index) => (
                     <li className="SearchList" key={element.track_id}>

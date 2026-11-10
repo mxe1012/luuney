@@ -13,7 +13,7 @@ export default function CoverImage({ styles, src, size }: CoverImageProps) {
             src={showPlaceholder ? "/assets/placeholder-cover-purple.svg" : src}
             width={size}
             height={size}
-            alt="Cover Image"
+            alt=""
             onError={() => setFailedSrc(src ?? null)}
         />
     );

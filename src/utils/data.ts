@@ -13,7 +13,7 @@ export async function fetchTrackById(id: number) {
 
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         throw e;
     }
 
@@ -35,7 +35,7 @@ export async function fetchTrackByQuery(query: string) {
 
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         throw e;
     }
 }
@@ -54,7 +54,7 @@ export async function fetchTrackTrending() {
 
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         throw e;
     }
 }
@@ -73,7 +73,7 @@ export async function fetchTrackLatest() {
 
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         throw e;
     }
 }
@@ -94,7 +94,7 @@ export async function fetchUsers(query: string) {
 
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         throw e;
     }
 }
@@ -113,7 +113,7 @@ export async function fetchTracksByUser(id: number) {
 
     }
     catch(e) {
-        console.log(e);
+        console.error(e);
         throw e;
     }
 }
