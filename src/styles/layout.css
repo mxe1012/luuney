@@ -9,7 +9,7 @@
 
 /* list item layout (ListButton, playlists, artists) */
 .ListRow    { display: flex; justify-content: flex-start; gap: 6px; }
-.ListMain   { flex: 1; min-width: 0; gap: 2px; }
+.ListMain   { flex: 1; min-width: 0; }
 .ListItem   { display: flex; justify-content: flex-start; align-items: center; gap: 12px; }
 .ListCover   { flex-shrink: 0; }
 .ListText    { text-align: left; min-width: 0; flex: 1; }
