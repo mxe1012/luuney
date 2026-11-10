@@ -73,7 +73,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         </li>
                     ))}
                 </ul>
-                <div style={{display: 'flex', justifyContent: "space-between"}}>
+                <div className="RowBetween">
                     <div>
                         <PaginationController 
                             className="Pagination"
