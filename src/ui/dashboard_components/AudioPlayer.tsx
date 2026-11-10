@@ -209,9 +209,12 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     }, [tracks]);
 
     useEffect(() => {
+
+        const MAX_SCROLL = 555; // looks the best when scrolled past this value
+
         const handleScroll = () => {
             const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-            setIsScrolled(scrollTop > 555);
+            setIsScrolled(scrollTop > MAX_SCROLL);
         }
         
         window.addEventListener("scroll", handleScroll)
