@@ -1,4 +1,5 @@
 import './styles/styles.css'
+import './styles/layout.css'
 import './styles/music_dashboard.css'
 import './styles/audio_player.css'
 import './styles/search_pane.css'
