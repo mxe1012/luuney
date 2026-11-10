@@ -28,11 +28,11 @@ export default function MiniAudioPlayer({
     return (
         <>
             <div className={isScrolled ? "MiniAudioPlayer" : "MiniAudioPlayer hidden"}>
-                <div style={{flexShrink: 0}}>
+                <div className="ListCover">
                     <CoverImage styles={{borderRadius: "15px"}} src={track.artwork} size={100}/>
                 </div>
-                <div style={{display: "grid", alignItems: "flex-start", flex: 1, minWidth: 0, gap: '2px'}}>
-                    <div style={{display: "flex", alignItems: "flex-start"}}>
+                <div className="MiniInfo">
+                    <div className="MiniSeek">
                         <input 
                             className="progress-slider" 
                             style={{ "--progress": `${progressTrack}%` } as React.CSSProperties}
@@ -45,9 +45,8 @@ export default function MiniAudioPlayer({
                             disabled={false}
                             aria-label="Seek" 
                         />
-                        
                     </div>
-                    <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                    <div className="RowEvenly">
                         <AudioPlayerButton 
                         onClick={onHandleShuffle} size={36} toggleAction={isShuffle} 
                         labelTrue="Shuffle On" labelFalse="Shuffle Off"
@@ -69,7 +68,7 @@ export default function MiniAudioPlayer({
                             stateIndex={REPEAT_MODES.indexOf(repeatMode)}
                         />
                     </div>
-                    <div style={{display: "flex", justifyContent: "flex-start"}}>
+                    <div className="RowStart">
                         <AudioPlayerButton
                             onClick={onHandleToggleMute} size={40} toggleAction={isMuted}
                             labelTrue="Unmute" labelFalse="Mute"
