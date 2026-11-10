@@ -39,7 +39,7 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
                                             onAddToRecents(element)
                                             onIsPlaying(false)
                                             onSetCurrentTrackIndex(start + index)
-                                            onSetTrackQueue(list.map((element) => element));
+                                            onSetTrackQueue([...list]);
                                         }}>
                                         <div style={{display: "grid", alignItems: "flex-start", gap: '12px'}}>
                                             <div style={{display: "flex", justifyContent: "center", flexShrink: 0}}> 

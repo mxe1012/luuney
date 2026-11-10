@@ -15,7 +15,7 @@ export default function ListButton({list, track, playlist, index, onHandleFetch,
                         onHandleFetch(track.track_id);
                         onIsPlaying(false);
                         onSetCurrentTrackIndex?.(index);
-                        onSetTrackQueue?.(list.map((element) => element))
+                        onSetTrackQueue?.([...list])
                         }}>
                             <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
                                 <div style={{flexShrink: 0}}>
