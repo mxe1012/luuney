@@ -15,11 +15,9 @@ const EMPTY_TRACKS: TrackObject[] = [];
 
 export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
-    const [playlistId, setPlaylistId] = useState<string | null>("");
+    const [playlistId, setPlaylistId] = useState("");
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(list, 10);
-
-    
     
     const selectedPlaylist = list.find((p) => p.id === playlistId)?.tracks ?? EMPTY_TRACKS;
     const selectedPlaylistName = list.find((p) => p.id === playlistId)?.name ?? "";
