@@ -209,7 +209,7 @@ export interface ArtistSearchListProps {
     onSetArtistList: React.Dispatch<React.SetStateAction<ArtistObject[]>>;
 }
 
-export interface SearchController {
+export interface SearchControllerProps {
     searchType: string;
     searchTypes: string[];
     searchTrack: string;

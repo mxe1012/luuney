@@ -1,6 +1,6 @@
-import type { SearchController } from "../../../utils/types";
+import type { SearchControllerProps } from "../../../utils/types";
 
-export default function SearchController({searchType, searchTypes, searchTrack, searchArtist, onHandleSearchTracks, onHandleSearchArtists, onHandleSearchType}: SearchController) {
+export default function SearchController({searchType, searchTypes, searchTrack, searchArtist, onHandleSearchTracks, onHandleSearchArtists, onHandleSearchType}: SearchControllerProps) {
 
     return (
         <>
