@@ -127,7 +127,7 @@ export default function Dashboard() {
 
                 return {
                     track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover.svg",
+                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
                     title,
                     handle,
                     url,
