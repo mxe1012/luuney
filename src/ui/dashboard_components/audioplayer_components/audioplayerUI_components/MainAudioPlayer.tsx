@@ -39,6 +39,8 @@ export default function MainAudioPlayer({
     
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
     
+    const isLongTitle = track.title.length >= 22;
+
     const { showSnackbar } = useSnackbar();
 
     useEffect(() => {
@@ -54,16 +56,16 @@ export default function MainAudioPlayer({
     return (
         <>
             <div className={isScrolled ? "AudioPlayer hidden" : "AudioPlayer"}>
-                <div style={{display: "flex", justifyContent: "center"}}>
+                <div className="RowCenter">
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
-                <div className={track.title.length >= 22 ? "scroll-container" : ""}>
-                    <h2 className={track.title.length >= 22 ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
+                <div className={isLongTitle ? "scroll-container" : ""}>
+                    <h2 className={isLongTitle ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
                         {track.title}
                     </h2>
                     <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
                 </div>
-                <div style={{display: "flex", justifyContent: "center"}}>
+                <div className="RowCenter">
                     <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
                     </button>
@@ -74,7 +76,7 @@ export default function MainAudioPlayer({
                         <div
                         ref={playlistWrapperRef} 
                         className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
-                            <div style={{display: 'flex', justifyContent: 'space-evenly', gap: '2px'}}>
+                            <div className="MenuActions">
                                 <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
                                     onChange={(e) => {
                                         setPlaylistName(e.target.value)
@@ -91,7 +93,7 @@ export default function MainAudioPlayer({
                                         +
                                 </button>
                             </div>
-                            <div >
+                            <div>
                                 <ul className="PlaylistMenuList">
                                 {playlists.map((element) => (
                                     <li key={element.id}> 
@@ -99,7 +101,7 @@ export default function MainAudioPlayer({
                                             onHandleAddToPlaylist(element.id, track);
                                             showSnackbar("Track added to " + element.name + "!")
                                         }}>
-                                            <p style={{margin: 0, padding: 0, minWidth: 0, flex: 1}}>{element.name}</p>
+                                            <p className="NoMargin ListText">{element.name}</p>
                                         </button>
                                     </li>
                                 ))}
@@ -108,7 +110,7 @@ export default function MainAudioPlayer({
                         </div>
                     </div>
                 </div>
-                <div style={{display: "flex", justifyContent: "center"}}>
+                <div className="RowCenter">
                     <input
                         className="progress-slider" 
                         style={{ "--progress": `${progressTrack}%` } as React.CSSProperties}
@@ -121,7 +123,7 @@ export default function MainAudioPlayer({
                         disabled={false}
                         aria-label="Seek" />
                 </div>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
+                <div className="RowBetween">
                     <div>
                         <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(currentTime)}</h4>
                     </div>
@@ -129,7 +131,7 @@ export default function MainAudioPlayer({
                         <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(duration)}</h4>
                     </div>
                 </div>
-                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                <div className="RowEvenly">
                     <AudioPlayerButton 
                     onClick={onHandleShuffle} size={36} toggleAction={isShuffle} 
                     labelTrue="Shuffle On" labelFalse="Shuffle Off"
@@ -151,7 +153,7 @@ export default function MainAudioPlayer({
                         stateIndex={REPEAT_MODES.indexOf(repeatMode)}
                     />
                 </div>
-                <div style={{display: "flex", justifyContent: "space-evenly"}}>
+                <div className="RowEvenly">
                     <AudioPlayerButton
                     onClick={onHandleToggleMute} size={40} toggleAction={isMuted}
                     labelTrue="Unmute" labelFalse="Mute"
