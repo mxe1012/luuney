@@ -65,8 +65,8 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                     onClick={() => {
                                         onSetPlaylist(onDeletePlaylist(playlist));
                                     }}
-                                    >
-                                    <img src="/assets/delete.svg" />
+                                    aria-label="delete playlist">
+                                        <img src="/assets/delete.svg" alt="delete" />
                                     </button>
                                 </div>
                             </div>
