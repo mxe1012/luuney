@@ -5,7 +5,7 @@ export default function SkeletonExtraListPane({children, isLoaded}: SkeletonProp
     if(!isLoaded) {
         return (
             <>
-                <div style={{display: "flex", justifyContent: "center"}}>
+                <div className="RowCenter">
                     <div className="ExtraListPane">
                         <h1><div className="skeleton skeleton-heading"></div></h1>
                         <ul className="ExtraListItems">

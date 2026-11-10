@@ -10,7 +10,7 @@ export function MiniIcon({src, size=18, alt}: MiniIconProps) {
 
 export function PlaylistControllerButtonMiniContainer({children}: ChildrenProps) {
     return (
-        <div style={{display: "flex", justifyContent: "flex-start"}}>
+        <div className="RowStart">
             {children}
         </div>
     )

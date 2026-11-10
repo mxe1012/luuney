@@ -35,7 +35,7 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                     </li>
                 ))}
             </ul>
-            <div style={{display: 'flex', justifyContent: "space-between"}}>
+            <div className="RowBetween">
                 <div>
                     <PaginationController 
                         className="Pagination"

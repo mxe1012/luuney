@@ -19,15 +19,15 @@ export default function ArtistSearchList({list, onHandleFetchTracksByUserId, onS
                             onHandleFetchTracksByUserId(element.user_id);
                             onSetArtistList([]);
                         }}>
-                            <div style={{display: "flex", justifyContent: "flex-start", alignItems: "center", gap: '12px'}}>
-                                <div style={{flexShrink: 0}}>
+                            <div className="ListItem">
+                                <div className="ListCover">
                                     <CoverImage styles={{borderRadius: '10px'}} src={element.profile_picture} size={64}/>
                                 </div>
-                                <div style={{textAlign: 'left', minWidth: 0, flex: 1}}>
+                                <div className="ListText">
                                     <h4>{element.name}</h4>
                                     <h5>{element.handle}</h5>
                                 </div>
-                                <div style={{textAlign: 'right', minWidth: 0}}>
+                                <div className="ListMeta">
                                     <h6>
                                         {element.track_count + " "} 
                                         {element.track_count === 1 ? "track" : "tracks"}
