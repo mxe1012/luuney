@@ -64,12 +64,12 @@ export default function MainAudioPlayer({
                     <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <button className="ActionBtn" onClick={() => onAddToFavorites(track)}>
-                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} aria-label="favorite" alt="favorite" />
+                    <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
+                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
                     </button>
                     <div className="PlaylistMenuWrapper">
-                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)}>
-                            <img src={"/assets/audio_player_icons/playlist.svg"} aria-label="playlist" alt="playlist" />
+                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)} aria-label="playlist">
+                            <img src={"/assets/audio_player_icons/playlist.svg"} alt="playlist" />
                         </button>
                         <div
                         ref={playlistWrapperRef} 
