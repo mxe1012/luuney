@@ -254,5 +254,6 @@ export interface VisualizerProps {
 
 export interface MiniIconProps {
     src: string;
+    alt?: string;
     size?: number;
 }
