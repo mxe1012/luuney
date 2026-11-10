@@ -82,7 +82,7 @@ export default function MainAudioPlayer({
                                     onClick={(e) => e.stopPropagation()} 
                                 />
                                 <button className="PlaylistMenuAddItemBtn" 
-                                    disabled={playlistName.length == 0 ? true : false}
+                                    disabled={playlistName.trim().length === 0}
                                     onClick={() => { 
                                         onHandleCreatePlaylist(playlistName, track);
                                         setPlaylistName("");
