@@ -1,12 +1,4 @@
-:root {
-    --accent: #F3D9C7;
-    --muted: rgba(220, 204, 247, 0.75);
-}
-
 /* text */
-.TextAccent { color: var(--accent); }
-.TextMuted  { color: var(--muted); }
-.CenteredAccent { margin: 0; padding: 0; text-align: center; color: var(--accent); }
 .NoMargin { margin: 0; padding: 0; }
 
 /* rows */
