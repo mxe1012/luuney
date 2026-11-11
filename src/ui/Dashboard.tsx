@@ -16,6 +16,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import ExtraListPane from "./dashboard_components/ExtraListPane";
 import { isOnline } from "../utils/helpers";
 
+const MAX_LENGTH = 50;
+
 export default function Dashboard() {
 
     const [track, setTrack] = useState<TrackObject>({
@@ -68,18 +70,20 @@ export default function Dashboard() {
 
             const { handle } = result.data.user;
 
-            const { url } = result.data.stream
+            const { url } = result.data.stream;
 
-            setTrack({ 
+            const newTrack: TrackObject = {
                 track_id,
                 artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
-                title, 
-                handle, 
+                title,
+                handle,
                 url,
-                duration
-            });
+                duration,
+            };
 
-            showSnackbar("Now playing:\n" + title + "\n" + handle)
+            setTrack(newTrack);
+            showSnackbar("Now playing:\n" + title + "\n" + handle);
+            handleAddToRecents(newTrack);
 
         }
         catch(e) {
@@ -137,15 +141,10 @@ export default function Dashboard() {
     }
 
     function handleAddToRecents(entry: TrackObject) {
-        const MAX_LENGTH = 50;
-
-        const maxed = recents.length >= MAX_LENGTH ? recents.slice(0, (MAX_LENGTH - 1)) : recents
-        const filtered = maxed.filter((element) => element.track_id !== entry.track_id);
-
-        setRecents([
+       setRecents(prev => [
             entry,
-            ...filtered
-        ])
+            ...prev.filter(element => element.track_id !== entry.track_id),
+        ].slice(0, MAX_LENGTH));
     }
 
     function handleAddToFavorites(entry: TrackObject) {
@@ -287,7 +286,6 @@ export default function Dashboard() {
                         onHandleFetch={handleFetch} 
                         isFavorited={isListTrackInFavorites} 
                         onAddToFavorites={handleAddToFavorites} 
-                        onAddToRecents={handleAddToRecents} 
                         onIsPlaying={setIsPlaying}
                         onSetCurrentTrackIndex={setCurrentTrackIndex}
                         onSetTrackQueue={setTrackQueue}
@@ -299,7 +297,6 @@ export default function Dashboard() {
                 list={trending}
                 heading="Trending Tracks (Top 100)"
                 onHandleFetch={handleFetch}
-                onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
                 onSetTrackQueue={setTrackQueue}
                 onSetCurrentTrackIndex={setCurrentTrackIndex}
@@ -309,7 +306,6 @@ export default function Dashboard() {
                 list={latest}
                 heading="Latest Tracks"
                 onHandleFetch={handleFetch}
-                onAddToRecents={handleAddToRecents}
                 onIsPlaying={setIsPlaying}
                 onSetTrackQueue={setTrackQueue}
                 onSetCurrentTrackIndex={setCurrentTrackIndex}

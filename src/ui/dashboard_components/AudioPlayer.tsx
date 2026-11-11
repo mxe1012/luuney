@@ -6,6 +6,8 @@ import { useSnackbar } from "../../hooks/SnackbarContext";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 
+const SCROLL_THRESHOLD = 555; 
+
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
     const [currentTime, setCurrentTime] = useState(0);
@@ -209,8 +211,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     }, [tracks]);
 
     useEffect(() => {
-
-        const SCROLL_THRESHOLD = 555; // looks the best when scrolled past this value
 
         const handleScroll = () => {
             const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;

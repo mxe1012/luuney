@@ -4,14 +4,13 @@ import { formatTime } from "../../../utils/helpers";
 
 import CoverImage from "../../CoverImage";
 
-export default function ListButton({list, track, playlist, index, onHandleFetch, onIsPlaying, onAddToRecents, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton, onSetTrackQueue, onSetCurrentTrackIndex}: ListButtonProps) {
+export default function ListButton({list, track, playlist, index, onHandleFetch, onIsPlaying, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton, onSetTrackQueue, onSetCurrentTrackIndex}: ListButtonProps) {
 
     return (
         <>
             <div className="ListRow">
                 <div className="ListMain">
                     <button className="PlaylistButton" onClick={() => {
-                        onAddToRecents?.(track);
                         onHandleFetch(track.track_id);
                         onIsPlaying(false);
                         onSetCurrentTrackIndex?.(index);

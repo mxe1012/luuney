@@ -5,7 +5,7 @@ import CoverImage from "../CoverImage";
 import PaginationController from "../PaginationController";
 import SkeletonExtraListPane from "../skeletons/SkeletonExtraListPane";
 
-export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, onAddToRecents, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: ExtraListPaneProps) {
+export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: ExtraListPaneProps) {
 
     const { pageItems, page, pageCount, hasPrev, hasNext, start, next, prev } = usePagination(list, 10);
 
@@ -36,7 +36,6 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
                                     <button className="ExtraListPaneButton" 
                                         onClick={() => {
                                             onHandleFetch(element.track_id)
-                                            onAddToRecents(element)
                                             onIsPlaying(false)
                                             onSetCurrentTrackIndex(start + index)
                                             onSetTrackQueue([...list]);
