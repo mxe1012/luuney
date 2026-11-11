@@ -59,8 +59,8 @@ export default function MainAudioPlayer({
                 <div className="RowCenter">
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
-                <div className={isLongTitle ? "scroll-container" : ""}>
-                    <h2 className={isLongTitle ? "scroll-text" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
+                <div className={isLongTitle ? "ScrollContainer" : ""}>
+                    <h2 className={isLongTitle ? "ScrollText" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
                         {track.title}
                     </h2>
                     <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
