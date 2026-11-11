@@ -42,7 +42,6 @@ export interface SearchListPaneProps {
     onHandleFetch: (id: number) => Promise<void>;
     isFavorited: (entry: TrackObject) => boolean;
     onAddToFavorites: (entry: TrackObject) => void
-    onAddToRecents: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
@@ -153,7 +152,6 @@ export interface ListButtonProps {
     index: number;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-    onAddToRecents?: (entry: TrackObject) => void;
     onAddToFavorites?: (entry: TrackObject) => void
     isFavorited?: (entry: TrackObject) => boolean;
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
@@ -170,7 +168,6 @@ export interface ExtraListPaneProps {
     heading: string;
     isLoaded: boolean;
     onHandleFetch: (id: number) => Promise<void>;
-    onAddToRecents: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetTrackQueue:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
@@ -196,7 +193,6 @@ export interface TrackSearchListProps {
     list: TrackObject[];
     onHandleFetch: (id: number) => Promise<void>;
     onAddToFavorites: (entry: TrackObject) => void;
-    onAddToRecents: (entry: TrackObject) => void;
     onIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
     isFavorited: (entry: TrackObject) => boolean;
     onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
