@@ -16,6 +16,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import ExtraListPane from "./dashboard_components/ExtraListPane";
 import { isOnline } from "../utils/helpers";
 
+const MAX_LENGTH = 50;
+
 export default function Dashboard() {
 
     const [track, setTrack] = useState<TrackObject>({
@@ -28,8 +30,6 @@ export default function Dashboard() {
     });
 
     const [isPlaying, setIsPlaying] = useState(false);
-
-    const MAX_LENGTH = 50;
 
     const [recents, setRecents] = useLocalStorage<TrackObject[]>("recent_tracks", []);
 
