@@ -29,6 +29,8 @@ export default function Dashboard() {
 
     const [isPlaying, setIsPlaying] = useState(false);
 
+    const MAX_LENGTH = 50;
+
     const [recents, setRecents] = useLocalStorage<TrackObject[]>("recent_tracks", []);
 
     const [favorites, setFavorites] = useLocalStorage<TrackObject[]>("favorite_tracks", [])
@@ -68,7 +70,7 @@ export default function Dashboard() {
 
             const { handle } = result.data.user;
 
-            const { url } = result.data.stream
+            const { url } = result.data.stream;
 
             const newTrack: TrackObject = {
                 track_id,
@@ -79,8 +81,8 @@ export default function Dashboard() {
                 duration,
             };
 
-            setTrack(newTrack)
-            showSnackbar("Now playing:\n" + title + "\n" + handle)
+            setTrack(newTrack);
+            showSnackbar("Now playing:\n" + title + "\n" + handle);
             handleAddToRecents(newTrack);
 
         }
@@ -139,8 +141,6 @@ export default function Dashboard() {
     }
 
     function handleAddToRecents(entry: TrackObject) {
-        const MAX_LENGTH = 50;
-
        setRecents(prev => [
             entry,
             ...prev.filter(element => element.track_id !== entry.track_id),
