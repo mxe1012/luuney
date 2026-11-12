@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { renderHook, act, cleanup } from "@testing-library/react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { useLocalStorage } from "./useLocalStorage";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 const KEY = "test_key";
 
