@@ -1,6 +1,6 @@
 # Luuney
 
-<img src="luuney-logo-horizontal.svg" alt="Alt text" width="300" height="200">
+<img src="public/assets/logos/luuney-logo-horizontal.svg" alt="Alt text" width="300" height="200">
 
 [![CI](https://github.com/mxe1012/luuney/actions/workflows/ci.yml/badge.svg)](https://github.com/mxe1012/luuney/actions/workflows/ci.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6ef88167-4408-4ba6-9535-7112b2195b98/deploy-status)](https://app.netlify.com/projects/luuney/deploys)
