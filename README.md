@@ -6,6 +6,8 @@
   <a href="https://github.com/mxe1012/luuney/actions/workflows/ci.yml"><img src="https://github.com/mxe1012/luuney/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 </p>
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6ef88167-4408-4ba6-9535-7112b2195b98/deploy-status)](https://app.netlify.com/projects/luuney/deploys)
+
 # Luuney
 
 Luuney is a soft, dreamy music streaming app. Discover trending and new tracks, search for songs and artists, save favorites, and build your own playlists, all in a clean interface focused on listening.
