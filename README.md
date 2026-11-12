@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/assets/logos/og-image.svg" alt="Luuney" width="360">
+  <img src="public/assets/logos/luuney-logo-horizontal.svg" alt="Luuney" width="360">
 </p>
 
 <p align="center">
