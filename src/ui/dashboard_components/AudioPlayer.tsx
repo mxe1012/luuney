@@ -276,11 +276,21 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 artist: track.handle,
                 artwork: [{ src: track.artwork, sizes: "480x480" }],
             });
-            
-            navigator.mediaSession.setPositionState({ duration, position: currentTime })
-
         }
-    }, [track, currentTime, duration])
+    }, [track])
+    
+    useEffect(() => {
+        if (!("mediaSession" in navigator)) return;
+
+        // setPositionState throws on an invalid duration or a position past the end,
+        // which can happen briefly before a new track's duration has loaded.
+        if (!Number.isFinite(duration) || duration <= 0) return;
+
+        navigator.mediaSession.setPositionState({
+            duration,
+            position: Math.min(Math.max(currentTime, 0), duration),
+        });
+    }, [currentTime, duration])
 
     useEffect(() => {
         if (!("mediaSession" in navigator)) return;
