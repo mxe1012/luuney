@@ -17,8 +17,10 @@ export default function MiniAudioPlayer({
     onHandleVolumeChange,
     onHandleSeek,
     onHandleShuffle,
+    onHandleSkipPrev,
     onHandleRewind,
     onHandleTogglePlay,
+    onHandleSkipNext,
     onHandleFastForward,
     onHandleToggleMute,
     onCycleRepeatMode,
@@ -48,17 +50,19 @@ export default function MiniAudioPlayer({
                     </div>
                     <div className="RowEvenly">
                         <AudioPlayerButton 
-                        onClick={onHandleShuffle} size={36} toggleAction={isShuffle} 
+                        onClick={onHandleShuffle} size={32} toggleAction={isShuffle} 
                         labelTrue="Shuffle On" labelFalse="Shuffle Off"
                         srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
-                        <AudioPlayerButton onClick={onHandleRewind} size={36} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                        <AudioPlayerButton onClick={onHandleRewind} size={32} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                        <AudioPlayerButton onClick={onHandleSkipPrev} size={36} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
                         <AudioPlayerButton 
                         onClick={onHandleTogglePlay} size={64} toggleAction={isPlaying} 
                         labelTrue="Pause" labelFalse="Play"
                         srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                        <AudioPlayerButton onClick={onHandleFastForward} size={36} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                        <AudioPlayerButton onClick={onHandleSkipNext} size={36} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
+                        <AudioPlayerButton onClick={onHandleFastForward} size={32} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                         <AudioPlayerModeButton
-                            size={36}
+                            size={32}
                             onClick={onCycleRepeatMode}
                             states={[
                                 { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },

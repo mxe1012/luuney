@@ -403,6 +403,153 @@ describe("AudioPlayer", () => {
         });
     });
 
+    describe("skip next / previous", () => {
+        function playFor(audio: HTMLAudioElement, media: ReturnType<typeof fakeMedia>, seconds: number) {
+            media.state.currentTime = seconds;
+            fireEvent.timeUpdate(audio);
+        }
+
+        describe("next", () => {
+            it("plays the next track in the queue", () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+                fireEvent.click(mainButton("Next"));
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(1);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
+            });
+
+            it("wraps from the last track to the first", () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
+
+                fireEvent.click(mainButton("Next"));
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(0);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(1);
+            });
+
+            it("wraps even when repeat is off", () => {
+                const { spies } = setup({ tracks: makeTracks(2), initialIndex: 1 });
+
+                fireEvent.click(mainButton("Next"));
+
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(1);
+            });
+
+            it("advances through repeated presses", () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+                fireEvent.click(mainButton("Next"));
+                fireEvent.click(mainButton("Next"));
+                fireEvent.click(mainButton("Next"));
+
+                expect(spies.onHandleFetch.mock.calls.map(([id]) => id)).toEqual([2, 3, 1]);
+            });
+
+            it.each([
+                ["empty", []],
+                ["single-track", [makeTrack(1)]],
+            ])("does nothing with an %s queue", (_, tracks) => {
+                const { spies } = setup({ tracks });
+
+                fireEvent.click(mainButton("Next"));
+
+                expect(spies.onSetCurrentTrackIndex).not.toHaveBeenCalled();
+                expect(spies.onHandleFetch).not.toHaveBeenCalled();
+            });
+
+            it("follows the shuffled order when shuffle is on", () => {
+                // Sort keys for the non-playing tracks [1, 3, 4] → shuffled order [2, 4, 3, 1].
+                vi.spyOn(Math, "random").mockReturnValueOnce(0.9).mockReturnValueOnce(0.5).mockReturnValueOnce(0.1);
+                const { spies } = setup({ tracks: makeTracks(4), initialIndex: 1 });
+                fireEvent.click(mainButton("Shuffle Off"));
+
+                fireEvent.click(mainButton("Next"));
+
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(4);
+            });
+        });
+
+        describe("previous", () => {
+            it("plays the previous track when within the first 3 seconds", () => {
+                const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
+                playFor(audio, media, 2);
+
+                fireEvent.click(mainButton("Previous"));
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(1);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
+            });
+
+            it("still goes back at exactly 3 seconds", () => {
+                const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
+                playFor(audio, media, 3);
+
+                fireEvent.click(mainButton("Previous"));
+
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
+            });
+
+            it("restarts the current track after 3 seconds instead of going back", () => {
+                const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
+                playFor(audio, media, 45);
+
+                fireEvent.click(mainButton("Previous"));
+
+                expect(media.state.currentTime).toBe(0);
+                expect(screen.getAllByText("0:00").length).toBeGreaterThan(0);
+                expect(spies.onHandleFetch).not.toHaveBeenCalled();
+                expect(spies.onSetCurrentTrackIndex).not.toHaveBeenCalled();
+            });
+
+            it("goes back on a second press after restarting", () => {
+                const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
+                playFor(audio, media, 45);
+
+                fireEvent.click(mainButton("Previous"));
+                fireEvent.click(mainButton("Previous"));
+
+                expect(spies.onHandleFetch).toHaveBeenCalledTimes(1);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
+            });
+
+            it("wraps from the first track to the last", () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+                fireEvent.click(mainButton("Previous"));
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(2);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(3);
+            });
+
+            it.each([
+                ["empty", []],
+                ["single-track", [makeTrack(1)]],
+            ])("does nothing with an %s queue, even after 3 seconds", (_, tracks) => {
+                const { audio, media, spies } = setup({ tracks });
+                playFor(audio, media, 45);
+
+                fireEvent.click(mainButton("Previous"));
+
+                expect(media.state.currentTime).toBe(45);
+                expect(spies.onSetCurrentTrackIndex).not.toHaveBeenCalled();
+                expect(spies.onHandleFetch).not.toHaveBeenCalled();
+            });
+
+            it("follows the shuffled order when shuffle is on", () => {
+                // Shuffled order [2, 4, 3, 1]; from the start, previous wraps to the end.
+                vi.spyOn(Math, "random").mockReturnValueOnce(0.9).mockReturnValueOnce(0.5).mockReturnValueOnce(0.1);
+                const { spies } = setup({ tracks: makeTracks(4), initialIndex: 1 });
+                fireEvent.click(mainButton("Shuffle Off"));
+
+                fireEvent.click(mainButton("Previous"));
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(3);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(1);
+            });
+        });
+    });
+
     describe("scrolling", () => {
         afterEach(() => {
             Reflect.deleteProperty(document.documentElement, "scrollTop");

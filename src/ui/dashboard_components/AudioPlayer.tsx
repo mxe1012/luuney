@@ -7,6 +7,7 @@ import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 
 const SCROLL_THRESHOLD = 555; 
+const SKIP_PREV_THRESHOLD = 3;
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
@@ -171,8 +172,39 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         setIsMuted(audio.muted);
     };
 
+    function handleSkipNext() {
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
+
+        if (currentQueue.length  <= 1 ) return;
+
+        const next = currentTrackIndex < (currentQueue.length - 1) ? currentTrackIndex + 1 : 0;
+
+        onSetCurrentTrackIndex(next)
+        onHandleFetch(currentQueue[next].track_id)
+    }
+
+    function handleSkipPrev() {
+        const audio = audioRef.current;
+        if(!audio) return;
+
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
+
+        if (currentQueue.length  <= 1 ) return;
+
+        const prev = currentTrackIndex > 0 ? currentTrackIndex - 1 : (currentQueue.length - 1);
+        
+        if (currentTime > SKIP_PREV_THRESHOLD) {
+            audio.currentTime = 0;
+            setCurrentTime(audio.currentTime);
+        }
+        else {
+        onSetCurrentTrackIndex(prev)
+        onHandleFetch(currentQueue[prev].track_id)
+        }
+    }
+
     function handleOnEnded() {
-        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
         let nextIndex = currentTrackIndex + 1;
 
         if(currentQueue.length <= 1 && repeatMode === "all") {
@@ -255,6 +287,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onHandleSeek={handleSeek}
                 onHandleShuffle={handleShuffle}
                 onHandleRewind={handleRewind}
+                onHandleSkipNext={handleSkipNext}
+                onHandleSkipPrev={handleSkipPrev}
                 onHandleTogglePlay={handleTogglePlay}
                 onHandleFastForward={handleFastForward}
                 onHandleToggleMute={handleToggleMute}

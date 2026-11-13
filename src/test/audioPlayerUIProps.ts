@@ -22,6 +22,8 @@ export function makeAudioPlayerUIProps(overrides: Partial<AudioPlayerUIProps> = 
         onHandleSeek: vi.fn(),
         onHandleShuffle: vi.fn(),
         onHandleRewind: vi.fn(),
+        onHandleSkipNext: vi.fn(),
+        onHandleSkipPrev: vi.fn(),
         onHandleTogglePlay: vi.fn().mockResolvedValue(undefined),
         onHandleFastForward: vi.fn(),
         onHandleToggleMute: vi.fn(),
