@@ -175,7 +175,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     function handleSkipNext() {
         const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
 
-        if (currentQueue.length  === 0 ) return;
+        if (currentQueue.length  <= 1 ) return;
 
         const next = currentTrackIndex < (currentQueue.length - 1) ? currentTrackIndex + 1 : 0;
 
@@ -189,7 +189,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
         const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
 
-        if (currentQueue.length  === 0 ) return;
+        if (currentQueue.length  <= 1 ) return;
 
         const prev = currentTrackIndex > 0 ? currentTrackIndex - 1 : (currentQueue.length - 1);
         
