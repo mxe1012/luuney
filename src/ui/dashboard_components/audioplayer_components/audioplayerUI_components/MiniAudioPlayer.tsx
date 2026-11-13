@@ -1,7 +1,9 @@
 import type { AudioPlayerUIProps } from "../../../../utils/types";
 import CoverImage from "../../../CoverImage";
 import AudioPlayerButton from "../AudioPlayerButton";
-import AudioPlayerModeButton from "../AudioPlayerModeButton";
+
+// Roughly how many characters fit under the 100px cover; longer titles scroll.
+const MINI_TITLE_SCROLL_LENGTH = 14;
 
 export default function MiniAudioPlayer({
     track,
@@ -11,27 +13,27 @@ export default function MiniAudioPlayer({
     isPlaying,
     isMuted,
     isScrolled,
-    isShuffle,
     progressTrack,
     progressVolume,
     onHandleVolumeChange,
     onHandleSeek,
-    onHandleShuffle,
     onHandleSkipPrev,
-    onHandleRewind,
     onHandleTogglePlay,
     onHandleSkipNext,
-    onHandleFastForward,
-    onHandleToggleMute,
-    onCycleRepeatMode,
-    repeatMode,
-    REPEAT_MODES }: AudioPlayerUIProps) {
+    onHandleToggleMute }: AudioPlayerUIProps) {
+
+    const isLongTitle = track.title.length > MINI_TITLE_SCROLL_LENGTH;
 
     return (
         <>
             <div className={isScrolled ? "MiniAudioPlayer" : "MiniAudioPlayer hidden"}>
-                <div className="ListCover">
+                <div className="ListCover MiniCover">
                     <CoverImage styles={{borderRadius: "15px"}} src={track.artwork} size={100}/>
+                    <div className="MiniTitle" title={track.title}>
+                        <p className={isLongTitle ? "MiniTitleText MiniScrollText" : "MiniTitleText"}>
+                            {track.title}
+                        </p>
+                    </div>
                 </div>
                 <div className="MiniInfo">
                     <div className="MiniSeek">
@@ -49,19 +51,19 @@ export default function MiniAudioPlayer({
                         />
                     </div>
                     <div className="RowEvenly">
-                        <AudioPlayerButton 
+                        {/* <AudioPlayerButton 
                         onClick={onHandleShuffle} size={32} toggleAction={isShuffle} 
                         labelTrue="Shuffle On" labelFalse="Shuffle Off"
-                        srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
-                        <AudioPlayerButton onClick={onHandleRewind} size={32} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                        srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" /> */}
+                        {/* <AudioPlayerButton onClick={onHandleRewind} size={32} label="Rewind" src="/assets/audio_player_icons/rewind.svg" /> */}
                         <AudioPlayerButton onClick={onHandleSkipPrev} size={36} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
                         <AudioPlayerButton 
                         onClick={onHandleTogglePlay} size={64} toggleAction={isPlaying} 
                         labelTrue="Pause" labelFalse="Play"
                         srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
                         <AudioPlayerButton onClick={onHandleSkipNext} size={36} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
-                        <AudioPlayerButton onClick={onHandleFastForward} size={32} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
-                        <AudioPlayerModeButton
+                        {/* <AudioPlayerButton onClick={onHandleFastForward} size={32} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" /> */}
+                        {/* <AudioPlayerModeButton
                             size={32}
                             onClick={onCycleRepeatMode}
                             states={[
@@ -70,7 +72,7 @@ export default function MiniAudioPlayer({
                                 { label: "Repeat all", src: "/assets/audio_player_icons/repeat-all.svg" },
                             ]}
                             stateIndex={REPEAT_MODES.indexOf(repeatMode)}
-                        />
+                        /> */}
                     </div>
                     <div className="RowStart">
                         <AudioPlayerButton
