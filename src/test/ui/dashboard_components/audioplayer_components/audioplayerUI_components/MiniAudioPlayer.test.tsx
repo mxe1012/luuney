@@ -53,6 +53,25 @@ describe("MiniAudioPlayer", () => {
         expect(props.onHandleToggleMute).toHaveBeenCalledTimes(1);
     });
 
+    // Found by icon: both skip buttons are currently labelled "Previous".
+    function skipButton(direction: "next" | "prev") {
+        return screen
+            .getAllByRole("button")
+            .find((b) => b.querySelector(`img[src="/assets/audio_player_icons/skip-${direction}.svg"]`)) as HTMLButtonElement;
+    }
+
+    it("wires the skip buttons to their handlers", () => {
+        const { props } = setup();
+
+        fireEvent.click(skipButton("prev"));
+        expect(props.onHandleSkipPrev).toHaveBeenCalledTimes(1);
+        expect(props.onHandleSkipNext).not.toHaveBeenCalled();
+
+        fireEvent.click(skipButton("next"));
+        expect(props.onHandleSkipNext).toHaveBeenCalledTimes(1);
+        expect(props.onHandleSkipPrev).toHaveBeenCalledTimes(1);
+    });
+
     it("reflects repeat, shuffle and mute state", () => {
         setup({ repeatMode: "all", isShuffle: true, isMuted: true });
 
