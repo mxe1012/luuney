@@ -552,6 +552,245 @@ describe("AudioPlayer", () => {
         });
     });
 
+    describe("media session", () => {
+        // jsdom has no Media Session API, so install a small fake on navigator.
+        let handlers: Map<MediaSessionAction, MediaSessionActionHandler | null>;
+        let mediaSession: {
+            metadata: FakeMediaMetadata | null;
+            setActionHandler: ReturnType<typeof vi.fn>;
+            setPositionState: ReturnType<typeof vi.fn>;
+        };
+        let metadataCount: number;
+
+        class FakeMediaMetadata {
+            title?: string;
+            artist?: string;
+            artwork?: MediaImage[];
+
+            constructor(init: MediaMetadataInit) {
+                metadataCount++;
+                Object.assign(this, init);
+            }
+        }
+
+        beforeEach(() => {
+            handlers = new Map();
+            metadataCount = 0;
+            mediaSession = {
+                metadata: null,
+                setActionHandler: vi.fn((action: MediaSessionAction, handler: MediaSessionActionHandler | null) => {
+                    handlers.set(action, handler);
+                }),
+                setPositionState: vi.fn(),
+            };
+            Object.defineProperty(navigator, "mediaSession", { configurable: true, value: mediaSession });
+            vi.stubGlobal("MediaMetadata", FakeMediaMetadata);
+        });
+
+        afterEach(() => {
+            // Unmount first: the player's cleanup still needs navigator.mediaSession.
+            cleanup();
+            Reflect.deleteProperty(navigator, "mediaSession");
+            vi.unstubAllGlobals();
+        });
+
+        // What a media key / lock screen button press does.
+        async function press(action: MediaSessionAction, details: Partial<MediaSessionActionDetails> = {}) {
+            await act(async () => {
+                handlers.get(action)?.({ action, ...details });
+            });
+        }
+
+        const ACTIONS: MediaSessionAction[] = [
+            "play", "pause", "nexttrack", "previoustrack", "seekbackward", "seekforward", "seekto",
+        ];
+
+        describe("action handlers", () => {
+            it("registers a handler for every supported action on mount", () => {
+                setup({ tracks: [makeTrack(1)] });
+
+                for (const action of ACTIONS) {
+                    expect(handlers.get(action)).toEqual(expect.any(Function));
+                }
+            });
+
+            it("removes every handler on unmount", () => {
+                const { unmount } = setup({ tracks: [makeTrack(1)] });
+
+                unmount();
+
+                for (const action of ACTIONS) {
+                    expect(handlers.get(action)).toBeNull();
+                }
+            });
+
+            it("registers the handlers only once, not on every render", () => {
+                const { audio, media } = setup({ tracks: [makeTrack(1)] });
+                const callsAfterMount = mediaSession.setActionHandler.mock.calls.length;
+
+                media.state.currentTime = 5;
+                fireEvent.timeUpdate(audio);
+                media.state.currentTime = 6;
+                fireEvent.timeUpdate(audio);
+
+                expect(mediaSession.setActionHandler).toHaveBeenCalledTimes(callsAfterMount);
+            });
+
+            it("play starts playback when paused", async () => {
+                const { media } = setup({ tracks: [makeTrack(1)] });
+
+                await press("play");
+
+                expect(media.play).toHaveBeenCalledTimes(1);
+            });
+
+            it("pause stops playback when playing", async () => {
+                const { media } = setup({ tracks: [makeTrack(1)] });
+                media.state.paused = false;
+
+                await press("pause");
+
+                expect(media.pause).toHaveBeenCalledTimes(1);
+            });
+
+            it("nexttrack plays the next track", async () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+                await press("nexttrack");
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(1);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
+            });
+
+            it("previoustrack plays the previous track", async () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
+
+                await press("previoustrack");
+
+                expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(1);
+                expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
+            });
+
+            it("uses the latest queue position, not the one from the first render", async () => {
+                const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+                await press("nexttrack");
+                await press("nexttrack");
+
+                expect(spies.onHandleFetch.mock.calls.map(([id]) => id)).toEqual([2, 3]);
+            });
+
+            it("seekbackward and seekforward skip 10 seconds", async () => {
+                const { media } = setup({ tracks: [makeTrack(1)] });
+                media.state.currentTime = 30;
+
+                await press("seekforward");
+                expect(media.state.currentTime).toBe(40);
+
+                await press("seekbackward");
+                expect(media.state.currentTime).toBe(30);
+            });
+
+            it("seekto jumps to the requested time", async () => {
+                const { media } = setup({ tracks: [makeTrack(1)] });
+
+                await press("seekto", { seekTime: 72 });
+
+                expect(media.state.currentTime).toBe(72);
+                expect(screen.getAllByText("1:12").length).toBeGreaterThan(0);
+            });
+
+            it("seekto without a seekTime does nothing", async () => {
+                const { media } = setup({ tracks: [makeTrack(1)] });
+                media.state.currentTime = 30;
+
+                await press("seekto");
+
+                expect(media.state.currentTime).toBe(30);
+            });
+        });
+
+        describe("metadata", () => {
+            it("shows the current track's title, artist and artwork", () => {
+                setup({ tracks: [makeTrack(1)] });
+
+                expect(mediaSession.metadata).toMatchObject({
+                    title: "Track 1",
+                    artist: "artist1",
+                    artwork: [{ src: "https://example.com/art/1.jpg", sizes: "480x480" }],
+                });
+            });
+
+            it("is not set for a track without a stream url", () => {
+                setup({ tracks: [makeTrack(1, { url: "" })] });
+
+                expect(mediaSession.metadata).toBeNull();
+            });
+
+            it("updates when the track changes", async () => {
+                setup({ tracks: makeTracks(2), initialIndex: 0 });
+
+                await press("nexttrack");
+
+                expect(mediaSession.metadata?.title).toBe("Track 2");
+                expect(mediaSession.metadata?.artist).toBe("artist2");
+            });
+
+            it("is not rebuilt while the track plays", () => {
+                const { audio, media } = setup({ tracks: [makeTrack(1)] });
+                const builtOnMount = metadataCount;
+
+                media.state.currentTime = 5;
+                fireEvent.timeUpdate(audio);
+                media.state.currentTime = 6;
+                fireEvent.timeUpdate(audio);
+
+                expect(metadataCount).toBe(builtOnMount);
+            });
+        });
+
+        describe("position state", () => {
+            it("is not reported before the duration is known", () => {
+                const { audio, media } = setup({ tracks: [makeTrack(1)] });
+
+                media.state.currentTime = 5;
+                fireEvent.timeUpdate(audio);
+
+                expect(mediaSession.setPositionState).not.toHaveBeenCalled();
+            });
+
+            it("reports the duration and the current position as the track plays", () => {
+                const { audio, media } = setup({ tracks: [makeTrack(1)] });
+                media.state.duration = 200;
+                fireEvent.loadedData(audio);
+
+                media.state.currentTime = 65;
+                fireEvent.timeUpdate(audio);
+
+                expect(mediaSession.setPositionState).toHaveBeenLastCalledWith({ duration: 200, position: 65 });
+            });
+
+            it("keeps the position within the duration", () => {
+                const { audio, media } = setup({ tracks: [makeTrack(1)] });
+                media.state.duration = 100;
+                fireEvent.loadedData(audio);
+
+                media.state.currentTime = 150;
+                fireEvent.timeUpdate(audio);
+
+                expect(mediaSession.setPositionState).toHaveBeenLastCalledWith({ duration: 100, position: 100 });
+            });
+
+            it("is not reported for a non-finite duration", () => {
+                const { audio, media } = setup({ tracks: [makeTrack(1)] });
+                media.state.duration = Infinity;
+                fireEvent.loadedData(audio);
+
+                expect(mediaSession.setPositionState).not.toHaveBeenCalled();
+            });
+        });
+    });
+
     describe("scrolling", () => {
         afterEach(() => {
             Reflect.deleteProperty(document.documentElement, "scrollTop");
