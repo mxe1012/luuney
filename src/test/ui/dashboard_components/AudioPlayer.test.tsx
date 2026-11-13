@@ -404,12 +404,6 @@ describe("AudioPlayer", () => {
     });
 
     describe("skip next / previous", () => {
-        // Found by icon: both skip buttons are currently labelled "Previous".
-        function skipButton(direction: "next" | "prev") {
-            const icon = document.querySelector(`.AudioPlayer img[src="/assets/audio_player_icons/skip-${direction}.svg"]`);
-            return icon?.closest("button") as HTMLButtonElement;
-        }
-
         function playFor(audio: HTMLAudioElement, media: ReturnType<typeof fakeMedia>, seconds: number) {
             media.state.currentTime = seconds;
             fireEvent.timeUpdate(audio);
@@ -419,7 +413,7 @@ describe("AudioPlayer", () => {
             it("plays the next track in the queue", () => {
                 const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
-                fireEvent.click(skipButton("next"));
+                fireEvent.click(mainButton("Next"));
 
                 expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(1);
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
@@ -428,7 +422,7 @@ describe("AudioPlayer", () => {
             it("wraps from the last track to the first", () => {
                 const { spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
 
-                fireEvent.click(skipButton("next"));
+                fireEvent.click(mainButton("Next"));
 
                 expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(0);
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(1);
@@ -437,7 +431,7 @@ describe("AudioPlayer", () => {
             it("wraps even when repeat is off", () => {
                 const { spies } = setup({ tracks: makeTracks(2), initialIndex: 1 });
 
-                fireEvent.click(skipButton("next"));
+                fireEvent.click(mainButton("Next"));
 
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(1);
             });
@@ -445,9 +439,9 @@ describe("AudioPlayer", () => {
             it("advances through repeated presses", () => {
                 const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
-                fireEvent.click(skipButton("next"));
-                fireEvent.click(skipButton("next"));
-                fireEvent.click(skipButton("next"));
+                fireEvent.click(mainButton("Next"));
+                fireEvent.click(mainButton("Next"));
+                fireEvent.click(mainButton("Next"));
 
                 expect(spies.onHandleFetch.mock.calls.map(([id]) => id)).toEqual([2, 3, 1]);
             });
@@ -458,7 +452,7 @@ describe("AudioPlayer", () => {
             ])("does nothing with an %s queue", (_, tracks) => {
                 const { spies } = setup({ tracks });
 
-                fireEvent.click(skipButton("next"));
+                fireEvent.click(mainButton("Next"));
 
                 expect(spies.onSetCurrentTrackIndex).not.toHaveBeenCalled();
                 expect(spies.onHandleFetch).not.toHaveBeenCalled();
@@ -470,7 +464,7 @@ describe("AudioPlayer", () => {
                 const { spies } = setup({ tracks: makeTracks(4), initialIndex: 1 });
                 fireEvent.click(mainButton("Shuffle Off"));
 
-                fireEvent.click(skipButton("next"));
+                fireEvent.click(mainButton("Next"));
 
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(4);
             });
@@ -481,7 +475,7 @@ describe("AudioPlayer", () => {
                 const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
                 playFor(audio, media, 2);
 
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(1);
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
@@ -491,7 +485,7 @@ describe("AudioPlayer", () => {
                 const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
                 playFor(audio, media, 3);
 
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
             });
@@ -500,7 +494,7 @@ describe("AudioPlayer", () => {
                 const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
                 playFor(audio, media, 45);
 
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(media.state.currentTime).toBe(0);
                 expect(screen.getAllByText("0:00").length).toBeGreaterThan(0);
@@ -512,8 +506,8 @@ describe("AudioPlayer", () => {
                 const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 2 });
                 playFor(audio, media, 45);
 
-                fireEvent.click(skipButton("prev"));
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(spies.onHandleFetch).toHaveBeenCalledTimes(1);
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(2);
@@ -522,7 +516,7 @@ describe("AudioPlayer", () => {
             it("wraps from the first track to the last", () => {
                 const { spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(2);
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(3);
@@ -535,7 +529,7 @@ describe("AudioPlayer", () => {
                 const { audio, media, spies } = setup({ tracks });
                 playFor(audio, media, 45);
 
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(media.state.currentTime).toBe(45);
                 expect(spies.onSetCurrentTrackIndex).not.toHaveBeenCalled();
@@ -548,7 +542,7 @@ describe("AudioPlayer", () => {
                 const { spies } = setup({ tracks: makeTracks(4), initialIndex: 1 });
                 fireEvent.click(mainButton("Shuffle Off"));
 
-                fireEvent.click(skipButton("prev"));
+                fireEvent.click(mainButton("Previous"));
 
                 expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(3);
                 expect(spies.onHandleFetch).toHaveBeenLastCalledWith(1);
