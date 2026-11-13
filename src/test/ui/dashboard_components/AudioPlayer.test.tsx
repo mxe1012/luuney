@@ -295,7 +295,8 @@ describe("AudioPlayer", () => {
 
             fireEvent.click(mainButton("Repeat all"));
             expect(snackbarText()).toBe("Repeat, off");
-            expect(screen.getAllByRole("button", { name: "Repeat off" })).toHaveLength(2);
+            // Only the main player has this control.
+            expect(screen.getAllByRole("button", { name: "Repeat off" })).toHaveLength(1);
         });
     });
 
@@ -357,7 +358,8 @@ describe("AudioPlayer", () => {
 
             expect(spies.onSetCurrentTrackIndex).toHaveBeenLastCalledWith(0);
             expect(snackbarText()).toBe("Shuffle Enabled!");
-            expect(screen.getAllByRole("button", { name: "Shuffle On" })).toHaveLength(2);
+            // Only the main player has this control.
+            expect(screen.getAllByRole("button", { name: "Shuffle On" })).toHaveLength(1);
         });
 
         it("advances through the shuffled order when tracks end", () => {
