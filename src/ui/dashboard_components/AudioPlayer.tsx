@@ -172,17 +172,21 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     };
 
     function handleSkipNext() {
-        const next = currentTrackIndex < (tracks.length - 1) ? currentTrackIndex + 1 : 0;
-        
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+
+        const next = currentTrackIndex < (currentQueue.length - 1) ? currentTrackIndex + 1 : 0;
+
         onSetCurrentTrackIndex(next)
-        onHandleFetch(tracks[next].track_id)
+        onHandleFetch(currentQueue[next].track_id)
     }
 
     function handleSkipPrev() {
-        const prev = currentTrackIndex > 0 ? currentTrackIndex - 1 : (tracks.length - 1);
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+
+        const prev = currentTrackIndex > 0 ? currentTrackIndex - 1 : (currentQueue.length - 1);
         
         onSetCurrentTrackIndex(prev)
-        onHandleFetch(tracks[prev].track_id)
+        onHandleFetch(currentQueue[prev].track_id)
     }
 
     function handleOnEnded() {
