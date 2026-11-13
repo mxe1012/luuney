@@ -171,6 +171,20 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         setIsMuted(audio.muted);
     };
 
+    function handleSkipNext() {
+        const next = currentTrackIndex + 1;
+
+        onSetCurrentTrackIndex(next)
+        onHandleFetch(tracks[next].track_id)
+    }
+
+    function handleSkipPrev() {
+        const prev = currentTrackIndex - 1;
+        
+        onSetCurrentTrackIndex(prev)
+        onHandleFetch(tracks[prev].track_id)
+    }
+
     function handleOnEnded() {
         const currentQueue = isShuffle ? shuffleTrackQueue : tracks
         let nextIndex = currentTrackIndex + 1;
@@ -255,6 +269,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onHandleSeek={handleSeek}
                 onHandleShuffle={handleShuffle}
                 onHandleRewind={handleRewind}
+                onHandleSkipNext={handleSkipNext}
+                onHandleSkipPrev={handleSkipPrev}
                 onHandleTogglePlay={handleTogglePlay}
                 onHandleFastForward={handleFastForward}
                 onHandleToggleMute={handleToggleMute}
