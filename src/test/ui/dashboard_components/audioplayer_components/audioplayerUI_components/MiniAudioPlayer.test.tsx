@@ -53,23 +53,39 @@ describe("MiniAudioPlayer", () => {
         expect(props.onHandleToggleMute).toHaveBeenCalledTimes(1);
     });
 
-    // Found by icon: both skip buttons are currently labelled "Previous".
-    function skipButton(direction: "next" | "prev") {
-        return screen
-            .getAllByRole("button")
-            .find((b) => b.querySelector(`img[src="/assets/audio_player_icons/skip-${direction}.svg"]`)) as HTMLButtonElement;
-    }
+    it("labels each skip button by its icon", () => {
+        setup();
+
+        const iconOf = (name: string) => screen.getByRole("button", { name }).querySelector("img")?.getAttribute("src");
+        expect(iconOf("Previous")).toBe("/assets/audio_player_icons/skip-prev.svg");
+        expect(iconOf("Next")).toBe("/assets/audio_player_icons/skip-next.svg");
+    });
 
     it("wires the skip buttons to their handlers", () => {
         const { props } = setup();
 
-        fireEvent.click(skipButton("prev"));
+        fireEvent.click(screen.getByRole("button", { name: "Previous" }));
         expect(props.onHandleSkipPrev).toHaveBeenCalledTimes(1);
         expect(props.onHandleSkipNext).not.toHaveBeenCalled();
 
-        fireEvent.click(skipButton("next"));
+        fireEvent.click(screen.getByRole("button", { name: "Next" }));
         expect(props.onHandleSkipNext).toHaveBeenCalledTimes(1);
         expect(props.onHandleSkipPrev).toHaveBeenCalledTimes(1);
+    });
+
+    it("places the skip buttons around Play: rewind, previous, play, next, fast forward", () => {
+        setup();
+
+        const icons = Array.from(document.querySelectorAll(".RowEvenly img")).map((img) =>
+            img.getAttribute("src")?.replace("/assets/audio_player_icons/", ""),
+        );
+        expect(icons.slice(1, 6)).toEqual([
+            "rewind.svg",
+            "skip-prev.svg",
+            "play.svg",
+            "skip-next.svg",
+            "fast-forward.svg",
+        ]);
     });
 
     it("reflects repeat, shuffle and mute state", () => {
