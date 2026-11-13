@@ -21,3 +21,4 @@
 .MiniInfo   { display: grid; align-items: flex-start; flex: 1; min-width: 0; gap: 2px; }
 .MiniSeek   { display: flex; align-items: flex-start; }
 .MenuActions { display: flex; justify-content: space-evenly; gap: 2px; }
+.ActionButtonRow {gap: 12px;}
