@@ -233,6 +233,8 @@ export interface AudioPlayerUIProps {
     onHandleSeek: (e: ChangeEvent<HTMLInputElement, Element>) => void;
     onHandleShuffle:  () => void
     onHandleRewind:  () => void
+    onHandleSkipNext: () => void;
+    onHandleSkipPrev: () => void;
     onHandleTogglePlay: () => Promise<void>
     onHandleFastForward:  () => void
     onHandleToggleMute: () => void;
