@@ -4,6 +4,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import MiniAudioPlayer from "../../../../../ui/dashboard_components/audioplayer_components/audioplayerUI_components/MiniAudioPlayer";
 import type { AudioPlayerUIProps } from "../../../../../utils/types";
 import { makeAudioPlayerUIProps } from "../../../../audioPlayerUIProps";
+import { makeTrack } from "../../../../fixtures";
 
 function setup(overrides: Partial<AudioPlayerUIProps> = {}) {
     const props = makeAudioPlayerUIProps(overrides);
@@ -39,17 +40,9 @@ describe("MiniAudioPlayer", () => {
         const { props } = setup({ isPlaying: true });
 
         fireEvent.click(screen.getByRole("button", { name: "Pause" }));
-        fireEvent.click(screen.getByRole("button", { name: "Rewind" }));
-        fireEvent.click(screen.getByRole("button", { name: "Fast Forward" }));
-        fireEvent.click(screen.getByRole("button", { name: "Shuffle Off" }));
-        fireEvent.click(screen.getByRole("button", { name: "Repeat off" }));
         fireEvent.click(screen.getByRole("button", { name: "Mute" }));
 
         expect(props.onHandleTogglePlay).toHaveBeenCalledTimes(1);
-        expect(props.onHandleRewind).toHaveBeenCalledTimes(1);
-        expect(props.onHandleFastForward).toHaveBeenCalledTimes(1);
-        expect(props.onHandleShuffle).toHaveBeenCalledTimes(1);
-        expect(props.onCycleRepeatMode).toHaveBeenCalledTimes(1);
         expect(props.onHandleToggleMute).toHaveBeenCalledTimes(1);
     });
 
@@ -73,27 +66,67 @@ describe("MiniAudioPlayer", () => {
         expect(props.onHandleSkipPrev).toHaveBeenCalledTimes(1);
     });
 
-    it("places the skip buttons around Play: rewind, previous, play, next, fast forward", () => {
+    it("shows only previous, play and next as transport controls", () => {
         setup();
 
         const icons = Array.from(document.querySelectorAll(".RowEvenly img")).map((img) =>
             img.getAttribute("src")?.replace("/assets/audio_player_icons/", ""),
         );
-        expect(icons.slice(1, 6)).toEqual([
-            "rewind.svg",
-            "skip-prev.svg",
-            "play.svg",
-            "skip-next.svg",
-            "fast-forward.svg",
-        ]);
+        expect(icons).toEqual(["skip-prev.svg", "play.svg", "skip-next.svg"]);
     });
 
-    it("reflects repeat, shuffle and mute state", () => {
-        setup({ repeatMode: "all", isShuffle: true, isMuted: true });
+    it.each(["Rewind", "Fast Forward", "Shuffle Off", "Repeat off"])("does not show the %s button", (name) => {
+        setup();
 
-        expect(screen.getByRole("button", { name: "Repeat all" })).toBeTruthy();
-        expect(screen.getByRole("button", { name: "Shuffle On" })).toBeTruthy();
+        expect(screen.queryByRole("button", { name })).toBeNull();
+    });
+
+    it("reflects mute state", () => {
+        setup({ isMuted: true });
+
         expect(screen.getByRole("button", { name: "Unmute" })).toBeTruthy();
+    });
+
+    describe("track title", () => {
+        function titleText() {
+            return document.querySelector(".MiniCover .MiniTitleText") as HTMLElement;
+        }
+
+        it("sits under the cover, inside the cover column", () => {
+            const { container } = setup();
+            const cover = container.querySelector(".MiniCover") as HTMLElement;
+
+            expect(cover.children[0].tagName).toBe("IMG");
+            expect(cover.children[1].className).toBe("MiniTitle");
+            expect(titleText().textContent?.trim()).toBe("Track 1");
+        });
+
+        it("shows the full title as a tooltip", () => {
+            setup({ track: makeTrack(1, { title: "A Very Long Song Title Indeed" }) });
+
+            expect(document.querySelector(".MiniTitle")?.getAttribute("title")).toBe("A Very Long Song Title Indeed");
+        });
+
+        it("does not scroll titles of up to 14 characters", () => {
+            setup({ track: makeTrack(1, { title: "A".repeat(14) }) });
+
+            expect(titleText().className).toBe("MiniTitleText");
+        });
+
+        it("scrolls titles longer than 14 characters", () => {
+            setup({ track: makeTrack(1, { title: "A".repeat(15) }) });
+
+            expect(titleText().className).toBe("MiniTitleText MiniScrollText");
+        });
+
+        it("updates when the track changes", () => {
+            const { rerender, props } = setup({ track: makeTrack(1, { title: "Short" }) });
+
+            rerender(<MiniAudioPlayer {...props} track={makeTrack(2, { title: "Murder She Wrote (Remix)" })} />);
+
+            expect(titleText().textContent?.trim()).toBe("Murder She Wrote (Remix)");
+            expect(titleText().className).toBe("MiniTitleText MiniScrollText");
+        });
     });
 
     it("seek and volume sliders reflect state and call their handlers", () => {
