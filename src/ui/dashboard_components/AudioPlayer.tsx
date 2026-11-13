@@ -263,8 +263,13 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 artist: track.handle,
                 artwork: [{ src: track.artwork, sizes: "480x480" }],
             });
+
+            navigator.mediaSession.setActionHandler("play", handleTogglePlay);
+            navigator.mediaSession.setActionHandler("previoustrack", handleSkipPrev);
+            navigator.mediaSession.setActionHandler("nexttrack", handleSkipNext);
+
         }
-    }, [track.title, track.handle, track.artwork, track.url])
+    }, [track, handleTogglePlay, handleSkipPrev, handleSkipNext])
 
     return (
         <>
