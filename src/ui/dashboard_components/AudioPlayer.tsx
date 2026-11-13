@@ -1,6 +1,6 @@
 import type { AudioPlayerProps, TrackObject } from "../../utils/types";
 
-import { useRef, useState, useEffect, type ChangeEvent } from "react";
+import { useRef, useState, useEffect, type ChangeEvent, useEffectEvent } from "react";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
@@ -32,6 +32,19 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
     const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+
+    const onMediaAction = useEffectEvent(({ action, seekTime }: MediaSessionActionDetails) => {
+        if (action === "play") handleTogglePlay();
+        if (action === "pause") handleTogglePlay();
+        if (action === "nexttrack") handleSkipNext();
+        if (action === "previoustrack") handleSkipPrev();
+        if (action === "seekbackward") handleRewind();
+        if (action === "seekforward") handleFastForward();
+        if (action === "seekto" && seekTime !== undefined && audioRef.current) {
+            audioRef.current.currentTime = seekTime;
+            setCurrentTime(seekTime);
+        }
+    });
 
     const cycleRepeatMode = () => {
         const nextMode = REPEAT_MODES[(REPEAT_MODES.indexOf(repeatMode) + 1) % REPEAT_MODES.length];
@@ -253,6 +266,42 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         return () => window.removeEventListener("scroll", handleScroll)
 
     }, [])
+
+    useEffect(() => {
+        if (!track.url) return;
+
+        if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: track.title,
+                artist: track.handle,
+                artwork: [{ src: track.artwork, sizes: "480x480" }],
+            });
+        }
+    }, [track])
+    
+    useEffect(() => {
+        if (!("mediaSession" in navigator)) return;
+
+        // setPositionState throws on an invalid duration or a position past the end,
+        // which can happen briefly before a new track's duration has loaded.
+        if (!Number.isFinite(duration) || duration <= 0) return;
+
+        navigator.mediaSession.setPositionState({
+            duration,
+            position: Math.min(Math.max(currentTime, 0), duration),
+        });
+    }, [currentTime, duration])
+
+    useEffect(() => {
+        if (!("mediaSession" in navigator)) return;
+
+        const actions: MediaSessionAction[] = [
+            "play", "pause", "nexttrack", "previoustrack", "seekbackward", "seekforward", "seekto"
+        ];
+        actions.forEach((action) => navigator.mediaSession.setActionHandler(action, (details) => onMediaAction(details)));
+
+        return () => actions.forEach((action) => navigator.mediaSession.setActionHandler(action, null));
+    }, []);
 
     return (
         <>
