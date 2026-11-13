@@ -254,6 +254,18 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     }, [])
 
+    useEffect(() => {
+        if (!track.url) return;
+
+        if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: track.title,
+                artist: track.handle,
+                artwork: [{ src: track.artwork, sizes: "480x480" }],
+            });
+        }
+    }, [track.title, track.handle, track.artwork, track.url])
+
     return (
         <>
             <audio
