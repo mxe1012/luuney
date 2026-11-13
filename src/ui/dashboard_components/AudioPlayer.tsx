@@ -1,6 +1,6 @@
 import type { AudioPlayerProps, TrackObject } from "../../utils/types";
 
-import { useRef, useState, useEffect, type ChangeEvent } from "react";
+import { useRef, useState, useEffect, type ChangeEvent, useEffectEvent } from "react";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
@@ -32,6 +32,15 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
     const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+
+    const onMediaAction = useEffectEvent((action: MediaSessionAction) => {
+        if (action === "play") handleTogglePlay();
+        if (action === "pause") handleTogglePlay();
+        if (action === "nexttrack") handleSkipNext();
+        if (action === "previoustrack") handleSkipPrev();
+        if (action === "seekbackward") handleRewind();
+        if (action === "seekforward") handleFastForward();
+    });
 
     const cycleRepeatMode = () => {
         const nextMode = REPEAT_MODES[(REPEAT_MODES.indexOf(repeatMode) + 1) % REPEAT_MODES.length];
@@ -263,13 +272,22 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 artist: track.handle,
                 artwork: [{ src: track.artwork, sizes: "480x480" }],
             });
-
-            navigator.mediaSession.setActionHandler("play", handleTogglePlay);
-            navigator.mediaSession.setActionHandler("previoustrack", handleSkipPrev);
-            navigator.mediaSession.setActionHandler("nexttrack", handleSkipNext);
+            
+            navigator.mediaSession.setPositionState({ duration, position: currentTime })
 
         }
-    }, [track, handleTogglePlay, handleSkipPrev, handleSkipNext])
+    }, [track, currentTime, duration])
+
+    useEffect(() => {
+        if (!("mediaSession" in navigator)) return;
+
+        const actions: MediaSessionAction[] = [
+            "play", "pause", "nexttrack", "previoustrack", "seekbackward", "seekforward"
+        ];
+        actions.forEach((action) => navigator.mediaSession.setActionHandler(action, () => onMediaAction(action)));
+
+        return () => actions.forEach((action) => navigator.mediaSession.setActionHandler(action, null));
+    }, []);
 
     return (
         <>
