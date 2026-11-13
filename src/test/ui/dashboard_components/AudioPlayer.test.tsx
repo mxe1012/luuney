@@ -552,6 +552,81 @@ describe("AudioPlayer", () => {
         });
     });
 
+    describe("up next", () => {
+        function upNextPane() {
+            return document.querySelector(".UpNextList") as HTMLElement;
+        }
+
+        function upNextTitles() {
+            return Array.from(document.querySelectorAll(".UpNextTitle")).map((title) => title.textContent);
+        }
+
+        it("is hidden by default", () => {
+            setup({ tracks: makeTracks(3) });
+
+            expect(upNextPane().className).toBe("UpNextList hidden");
+        });
+
+        it("the up next button toggles it open and closed", () => {
+            setup({ tracks: makeTracks(3) });
+
+            fireEvent.click(screen.getByLabelText("up next"));
+            expect(upNextPane().className).toBe("UpNextList");
+
+            fireEvent.click(screen.getByLabelText("up next"));
+            expect(upNextPane().className).toBe("UpNextList hidden");
+        });
+
+        it("lists only the tracks after the one playing", () => {
+            setup({ tracks: makeTracks(4), initialIndex: 1 });
+
+            expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+        });
+
+        it("updates when skipping to the next track", () => {
+            setup({ tracks: makeTracks(4), initialIndex: 0 });
+
+            fireEvent.click(mainButton("Next"));
+
+            expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+        });
+
+        it("updates when a track ends", () => {
+            const { audio } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+            fireEvent.ended(audio);
+
+            expect(upNextTitles()).toEqual(["Track 3"]);
+        });
+
+        it("is empty when the last track in the queue is playing", () => {
+            setup({ tracks: makeTracks(3), initialIndex: 2 });
+
+            expect(upNextTitles()).toEqual([]);
+            expect(screen.getByText("Nothing up next.")).toBeTruthy();
+        });
+
+        it("shows the shuffled order when shuffle is on", () => {
+            // Sort keys for the non-playing tracks [2, 3, 4] → shuffled order [1, 4, 3, 2].
+            vi.spyOn(Math, "random").mockReturnValueOnce(0.9).mockReturnValueOnce(0.5).mockReturnValueOnce(0.1);
+            setup({ tracks: makeTracks(4), initialIndex: 0 });
+
+            fireEvent.click(mainButton("Shuffle Off"));
+
+            expect(upNextTitles()).toEqual(["Track 4", "Track 3", "Track 2"]);
+        });
+
+        it("goes back to the original order when shuffle is turned off", () => {
+            vi.spyOn(Math, "random").mockReturnValueOnce(0.9).mockReturnValueOnce(0.5).mockReturnValueOnce(0.1);
+            setup({ tracks: makeTracks(4), initialIndex: 0 });
+
+            fireEvent.click(mainButton("Shuffle Off"));
+            fireEvent.click(mainButton("Shuffle On"));
+
+            expect(upNextTitles()).toEqual(["Track 2", "Track 3", "Track 4"]);
+        });
+    });
+
     describe("media session", () => {
         // jsdom has no Media Session API, so install a small fake on navigator.
         let handlers: Map<MediaSessionAction, MediaSessionActionHandler | null>;
