@@ -34,7 +34,8 @@ export default function MainAudioPlayer({
     onCycleRepeatMode,
     onAddToFavorites,
     onHandleAddToPlaylist,
-    onHandleCreatePlaylist}: AudioPlayerUIProps) {
+    onHandleCreatePlaylist,
+    onHandleUpNextVisibiliy}: AudioPlayerUIProps) {
 
     const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
@@ -67,10 +68,7 @@ export default function MainAudioPlayer({
                     </h2>
                     <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
                 </div>
-                <div className="RowCenter">
-                    <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
-                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
-                    </button>
+                <div className="RowCenter ActionButtonRow">
                     <div className="PlaylistMenuWrapper">
                         <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)} aria-label="playlist">
                             <img src={"/assets/audio_player_icons/playlist.svg"} alt="playlist" />
@@ -111,6 +109,12 @@ export default function MainAudioPlayer({
                             </div>
                         </div>
                     </div>
+                    <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
+                        <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
+                    </button>
+                    <button className="ActionBtn" onClick={onHandleUpNextVisibiliy} aria-label="up next">
+                        <img src={"/assets/audio_player_icons/eye.svg"} alt="Up Next" />
+                    </button>
                 </div>
                 <div className="RowCenter">
                     <input

@@ -5,6 +5,7 @@ import { useRef, useState, useEffect, type ChangeEvent, useEffectEvent } from "r
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
+import UpNextList from "./audioplayer_components/UpNextList";
 
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
@@ -21,6 +22,8 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     
     const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
 
+    const [isUpNextVisible, setIsUpNextVisible] = useState(false);
+
     const [isScrolled, setIsScrolled] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement>(null);
@@ -32,6 +35,9 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
     const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
+
+    // the tracks after the one playing, in the order they will play
+    const upNext = (isShuffle ? shuffleTrackQueue : tracks).slice(currentTrackIndex + 1);
 
     const onMediaAction = useEffectEvent(({ action, seekTime }: MediaSessionActionDetails) => {
         if (action === "play") handleTogglePlay();
@@ -55,6 +61,11 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     
     const { showSnackbar } = useSnackbar();
     
+    function handleUpNextVisibiliy() {
+        const current = isUpNextVisible;
+        setIsUpNextVisible(!current)
+    }
+
     function handleShuffle() {
 
         const nextIsShuffle = !isShuffle;
@@ -346,8 +357,10 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onAddToFavorites={onAddToFavorites}
                 onHandleAddToPlaylist={onHandleAddToPlaylist}
                 onHandleCreatePlaylist={onHandleCreatePlaylist}
+                onHandleUpNextVisibiliy={handleUpNextVisibiliy}
             />
             <Visualizer audioRef={audioRef} isPlaying={isPlaying}/>
+            <UpNextList queue={upNext} isUpNextVisible={isUpNextVisible}/>
         </>
     )
 }

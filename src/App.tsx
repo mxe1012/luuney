@@ -12,6 +12,7 @@ import './styles/extra_list.css'
 import './styles/skeleton.css'
 import './styles/pagination.css'
 import './styles/visualizer.css'
+import './styles/upnext.css'
 
 import { MainPane } from './ui/Containers';
 import Dashboard from './ui/Dashboard';

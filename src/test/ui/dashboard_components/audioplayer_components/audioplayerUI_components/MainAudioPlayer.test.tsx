@@ -169,6 +169,16 @@ describe("MainAudioPlayer", () => {
         });
     });
 
+    describe("up next button", () => {
+        it("calls onHandleUpNextVisibiliy when clicked", () => {
+            const { props } = setup();
+
+            fireEvent.click(screen.getByLabelText("up next"));
+
+            expect(props.onHandleUpNextVisibiliy).toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe("favorite button", () => {
         it("shows the correct icon and toggles the current track", () => {
             const { props } = setup({ isFavorited: true });

@@ -32,6 +32,7 @@ export function makeAudioPlayerUIProps(overrides: Partial<AudioPlayerUIProps> = 
         onAddToFavorites: vi.fn(),
         onHandleAddToPlaylist: vi.fn(),
         onHandleCreatePlaylist: vi.fn(),
+        onHandleUpNextVisibiliy: vi.fn(),
         ...overrides,
     };
 }
