@@ -33,13 +33,17 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
     const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
 
-    const onMediaAction = useEffectEvent((action: MediaSessionAction) => {
+    const onMediaAction = useEffectEvent(({ action, seekTime }: MediaSessionActionDetails) => {
         if (action === "play") handleTogglePlay();
         if (action === "pause") handleTogglePlay();
         if (action === "nexttrack") handleSkipNext();
         if (action === "previoustrack") handleSkipPrev();
         if (action === "seekbackward") handleRewind();
         if (action === "seekforward") handleFastForward();
+        if (action === "seekto" && seekTime !== undefined && audioRef.current) {
+            audioRef.current.currentTime = seekTime;
+            setCurrentTime(seekTime);
+        }
     });
 
     const cycleRepeatMode = () => {
@@ -282,9 +286,9 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         if (!("mediaSession" in navigator)) return;
 
         const actions: MediaSessionAction[] = [
-            "play", "pause", "nexttrack", "previoustrack", "seekbackward", "seekforward"
+            "play", "pause", "nexttrack", "previoustrack", "seekbackward", "seekforward", "seekto"
         ];
-        actions.forEach((action) => navigator.mediaSession.setActionHandler(action, () => onMediaAction(action)));
+        actions.forEach((action) => navigator.mediaSession.setActionHandler(action, (details) => onMediaAction(details)));
 
         return () => actions.forEach((action) => navigator.mediaSession.setActionHandler(action, null));
     }, []);
