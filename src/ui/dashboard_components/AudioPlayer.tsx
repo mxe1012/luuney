@@ -7,6 +7,7 @@ import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 
 const SCROLL_THRESHOLD = 555; 
+const SKIP_PREV_THRESHOLD = 3;
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
@@ -172,7 +173,9 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     };
 
     function handleSkipNext() {
-        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
+
+        if (currentQueue.length  === 0 ) return;
 
         const next = currentTrackIndex < (currentQueue.length - 1) ? currentTrackIndex + 1 : 0;
 
@@ -181,16 +184,27 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     }
 
     function handleSkipPrev() {
-        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+        const audio = audioRef.current;
+        if(!audio) return;
+
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
+
+        if (currentQueue.length  === 0 ) return;
 
         const prev = currentTrackIndex > 0 ? currentTrackIndex - 1 : (currentQueue.length - 1);
         
+        if (currentTime > SKIP_PREV_THRESHOLD) {
+            audio.currentTime = 0;
+            setCurrentTime(audio.currentTime);
+        }
+        else {
         onSetCurrentTrackIndex(prev)
         onHandleFetch(currentQueue[prev].track_id)
+        }
     }
 
     function handleOnEnded() {
-        const currentQueue = isShuffle ? shuffleTrackQueue : tracks
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
         let nextIndex = currentTrackIndex + 1;
 
         if(currentQueue.length <= 1 && repeatMode === "all") {
