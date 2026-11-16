@@ -6,7 +6,7 @@ export default function UpNextList({queue, isUpNextVisible}: UpNextListProps) {
 
     return (
         <>
-            <div className={isUpNextVisible ? "UpNextList" : "UpNextList hidden"}>
+            <div className={isUpNextVisible ? "GlassCard UpNextList" : "GlassCard UpNextList hidden"}>
                 <h3>Up Next</h3>
                 {queue.length === 0 ? (
                     <p className="UpNextEmpty">Nothing up next.</p>
