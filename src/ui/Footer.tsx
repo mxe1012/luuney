@@ -1,11 +1,11 @@
 export default function Footer() {
     return (
         <>
-            <p className="CreamColor" style={{textAlign: "center", padding: 0, margin: 0}}>
+            <p className="CreamColor CenterText NoMargin">
                 Built By Manny E. | <a href="https://github.com/mxe1012">Github</a>
             </p>
             <br />
-            <p className="CreamColor" style={{textAlign: "center", padding: 0, margin: 0}}>
+            <p className="CreamColor CenterText NoMargin">
                 Audio sourced from <a href="https://audius.co/feed">Audius</a>
             </p>
         </>
