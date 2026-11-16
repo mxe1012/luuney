@@ -43,19 +43,19 @@ describe("MainAudioPlayer", () => {
     it("is hidden once the page is scrolled", () => {
         const { container } = setup({ isScrolled: true });
 
-        expect(playerRoot(container).className).toBe("AudioPlayer hidden");
+        expect(playerRoot(container).className).toBe("GlassCard AudioPlayer hidden");
     });
 
     it("scrolls long titles (22+ characters)", () => {
         setup({ track: makeTrack(1, { title: "A".repeat(22) }) });
 
-        expect(screen.getByRole("heading", { level: 2 }).className).toBe("ScrollText CreamColor");
+        expect(screen.getByRole("heading", { level: 2 }).className).toBe("ScrollText CreamColor CenterText");
     });
 
     it("does not scroll short titles", () => {
         setup({ track: makeTrack(1, { title: "Short" }) });
 
-        expect(screen.getByRole("heading", { level: 2 }).className).toBe("CreamColor");
+        expect(screen.getByRole("heading", { level: 2 }).className).toBe("CreamColor CenterText");
     });
 
     describe("transport controls", () => {
