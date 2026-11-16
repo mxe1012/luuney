@@ -13,7 +13,7 @@ import { useSnackbar } from "../../../hooks/SnackbarContext";
 
 const EMPTY_TRACKS: TrackObject[] = [];
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState("");
 
@@ -92,7 +92,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                             display: (visible && list.length >= 1) ? "" : "none", 
                         }}
                         className="PlaylistPaneControllerButton" 
-                        onClick={() => {showSnackbar("All playlists cleared!"); onSetPlaylist?.([])}}>
+                        onClick={() => {showSnackbar("All playlists cleared!"); onSetPlaylist?.([]); list.forEach(p => onClearQueue?.(p.id))}}>
                             Clear
                         </button>
                     </div>
@@ -155,6 +155,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                 onSetPlaylist(prev =>
                                     prev.map(p => p.id === playlistId ? { ...p, tracks: [] } : p)
                                 );
+                                onClearQueue?.(playlistId);
                             }}>
                                 Clear
                             </button>
