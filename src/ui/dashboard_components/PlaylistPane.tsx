@@ -8,7 +8,7 @@ import FavoritesList from "./playlistpane_components/FavoritesList";
 import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionList";
 import PlaylistPaneController from "./playlistpane_components/PlaylistPaneController";
 
-export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onDeleteEntry, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onDeleteEntry, onClearQueue, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(false);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -31,6 +31,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             <RecentsList 
                 list={recents} 
                 onRecentsList={onRecentsList} 
+                onClearQueue={onClearQueue}
                 onAddToFavorites={onAddToFavorites}
                 onDeleteEntry={onDeleteEntry} 
                 isFavorited={isFavorited} 
@@ -43,6 +44,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             <FavoritesList 
                 list={favorites}  
                 onFavoritesList={onFavoritesList} 
+                onClearQueue={onClearQueue}
                 visible={isFavoritesVisible}
                 onDeleteEntry={onDeleteEntry} 
                 onHandleFetch={onHandleFetch} 
@@ -60,6 +62,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 onAddToFavorites={onAddToFavorites}
                 onDeletePlaylist={onDeletePlaylist} 
                 onDeletePlaylistEntry={onDeletePlaylistEntry}
+                onClearQueue={onClearQueue}
                 onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
                 onHandleFetch={onHandleFetch} 
                 onIsPlaying={onIsPlaying} 
