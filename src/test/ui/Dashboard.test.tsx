@@ -268,7 +268,8 @@ describe("Dashboard", () => {
         });
 
         it("adds the current track to an existing playlist only once", async () => {
-            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [], "Chill")]));
+            // playlists need a track, since empty playlists are deleted automatically
+            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [makeTrack(9)], "Chill")]));
             render_();
             await flushInitialFetch();
             await playFromTrending("Track 2");
@@ -277,12 +278,12 @@ describe("Dashboard", () => {
             fireEvent.click(within(mainPlayer()).getByText("Chill"));
             fireEvent.click(within(mainPlayer()).getByText("Chill"));
 
-            expect(stored<Playlist[]>("user_playlists")[0].tracks.map((t) => t.track_id)).toEqual([2]);
+            expect(stored<Playlist[]>("user_playlists")[0].tracks.map((t) => t.track_id)).toEqual([9, 2]);
         });
 
         it("does not change other playlists when adding a track", async () => {
             const other = makePlaylist("p2", [makeTrack(9)], "Other");
-            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [], "Chill"), other]));
+            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [makeTrack(8)], "Chill"), other]));
             render_();
             await flushInitialFetch();
             await playFromTrending("Track 1");
@@ -296,7 +297,7 @@ describe("Dashboard", () => {
         it("deletes a playlist", () => {
             localStorage.setItem(
                 "user_playlists",
-                JSON.stringify([makePlaylist("p1", [], "Keep"), makePlaylist("p2", [], "Drop")]),
+                JSON.stringify([makePlaylist("p1", [makeTrack(1)], "Keep"), makePlaylist("p2", [makeTrack(2)], "Drop")]),
             );
             render_();
             fireEvent.click(screen.getByText("Playlists"));
