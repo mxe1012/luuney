@@ -46,11 +46,15 @@
     border-bottom: none;
 }
 
-.UpNextTitle {
+.UpNextTitle,
+.UpNextArtist {
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis; /* long titles end with "..." */
+    text-overflow: ellipsis; /* long titles and artist names end with "..." */
+}
+
+.UpNextTitle {
     color: #F3D9C7;
 }
 
