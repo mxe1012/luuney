@@ -230,8 +230,18 @@ export default function Dashboard() {
         return filteredList;
     }
 
+    function handleClearQueue(source: string) {
+        // only a queue started from the cleared list is emptied; the playing track still finishes
+        if (source !== queueSource) return;
+
+        setTrackQueue([]);
+        setShuffleTrackQueue([]);
+        setCurrentTrackIndex(0);
+    }
+
     function handleDeletePlaylist(entry: Playlist) {
         const filtered = playlists.filter((element) => element.id !== entry.id);
+        handleClearQueue(entry.id);
         showSnackbar("Removed playlist.")
         return filtered;
     }
@@ -296,6 +306,7 @@ export default function Dashboard() {
                         onDeletePlaylist={handleDeletePlaylist} 
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}
                         onDeleteEntry={handleDeleteEntry} 
+                        onClearQueue={handleClearQueue}
                         onAddToFavorites={handleAddToFavorites} 
                         onHandleFetch={handleFetch} 
                         onIsPlaying={setIsPlaying} 
