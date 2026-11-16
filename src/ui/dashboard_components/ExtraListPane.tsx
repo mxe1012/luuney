@@ -16,7 +16,7 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
                     <div className="ExtraListPane">
                         <div className="RowBetween">
                             <div>
-                                <h1 style={{color: '#F3D9C7'}}>{heading}</h1>
+                                <h1 className="CreamColor">{heading}</h1>
                             </div>
                             <div>
                                 <PaginationController
