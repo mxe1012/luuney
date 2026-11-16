@@ -63,10 +63,10 @@ export default function MainAudioPlayer({
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
                 <div className={isLongTitle ? "ScrollContainer" : ""}>
-                    <h2 className={isLongTitle ? "ScrollText" : ""} style={{textAlign: "center", color: "#F3D9C7"}}>                    
+                    <h2 className={isLongTitle ? "ScrollText CreamColor" : "CreamColor"} style={{textAlign: "center"}}>                    
                         {track.title}
                     </h2>
-                    <h3 style={{textAlign: "center", color: "rgba(220, 204, 247, 0.75)"}}>{track.handle}</h3>   
+                    <h3 className="MutedLavenderColor" style={{textAlign: "center"}}>{track.handle}</h3>   
                 </div>
                 <div className="RowCenter ActionButtonRow">
                     <div className="PlaylistMenuWrapper">
@@ -131,10 +131,10 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowBetween">
                     <div>
-                        <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(currentTime)}</h4>
+                        <h4 className="MutedLavenderColor" style={{margin: 0}}>{formatTime(currentTime)}</h4>
                     </div>
                     <div>
-                        <h4 style={{margin: 0, color: "rgba(220, 204, 247, 0.75)"}}>{formatTime(duration)}</h4>
+                        <h4 className="MutedLavenderColor" style={{margin: 0}}>{formatTime(duration)}</h4>
                     </div>
                 </div>
                 <div className="RowEvenly">
