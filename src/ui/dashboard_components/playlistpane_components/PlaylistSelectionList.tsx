@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import type { PlaylistSelectionProps, TrackObject } from "../../../utils/types";
 
@@ -34,7 +34,17 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         prev: trackPrev,
         start: trackStart
     } = usePagination(selectedPlaylist, 10);
-    
+
+    useEffect(() => {
+        list.map((playlist) => {
+            if (playlist.tracks.length === 0) {
+                onSetPlaylist(onDeletePlaylist(playlist))
+                onIsSelectedPlaylist(false)
+                onSetIsPlaylistSelectionVisible(true)
+            }
+        })
+    }, [list, onDeletePlaylist, onSetPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible])
+
     if(!isSelectedPlaylist) {
         return (
             <>
