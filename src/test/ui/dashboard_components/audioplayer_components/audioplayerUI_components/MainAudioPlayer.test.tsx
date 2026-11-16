@@ -49,13 +49,13 @@ describe("MainAudioPlayer", () => {
     it("scrolls long titles (22+ characters)", () => {
         setup({ track: makeTrack(1, { title: "A".repeat(22) }) });
 
-        expect(screen.getByRole("heading", { level: 2 }).className).toBe("ScrollText");
+        expect(screen.getByRole("heading", { level: 2 }).className).toBe("ScrollText CreamColor");
     });
 
     it("does not scroll short titles", () => {
         setup({ track: makeTrack(1, { title: "Short" }) });
 
-        expect(screen.getByRole("heading", { level: 2 }).className).toBe("");
+        expect(screen.getByRole("heading", { level: 2 }).className).toBe("CreamColor");
     });
 
     describe("transport controls", () => {
