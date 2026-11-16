@@ -102,7 +102,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     }
     return (
         <>
-            <h2 style={{margin: 0, padding: 0, textAlign: "center", color: "#F3D9C7"}}>{selectedPlaylistName}</h2>
+            <h2 className="CreamColor" style={{margin: 0, padding: 0, textAlign: "center"}}>{selectedPlaylistName}</h2>
             {list.map((playlist) => (
                 <Fragment key={playlist.id}>
                 <ul  
