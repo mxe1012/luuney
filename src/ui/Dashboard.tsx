@@ -57,6 +57,13 @@ export default function Dashboard() {
     
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
+    const [isShuffle, setIsShuffle] = useState(false);
+
+    const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
+
+    // the list the queue was started from: "recents", "favorites", a playlist id, or null for any other list
+    const [queueSource, setQueueSource] = useState<string | null>(null);
+
     const { showSnackbar, hideSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
@@ -187,14 +194,54 @@ export default function Dashboard() {
             );
     }
 
+    function handleSetTrackQueue(list: TrackObject[]) {
+        // lists are passed by reference, so the queue's source can be found before copying it
+        if (list === recents) setQueueSource("recents");
+        else if (list === favorites) setQueueSource("favorites");
+        else setQueueSource(playlists.find((playlist) => playlist.tracks === list)?.id ?? null);
+
+        setTrackQueue([...list]);
+    }
+
+    function removeFromQueue(source: string | null, entry: TrackObject) {
+        // only a queue started from the same list is affected
+        if (source === null || source !== queueSource) return;
+
+        const activeQueue = isShuffle ? shuffleTrackQueue : trackQueue;
+        const removedIndex = activeQueue.findIndex((element) => element.track_id === entry.track_id);
+
+        if (removedIndex === -1) return;
+
+        // keep the index on the playing track; if the playing track itself is removed,
+        // it finishes and playback continues with the track that followed it
+        if (removedIndex <= currentTrackIndex) setCurrentTrackIndex(currentTrackIndex - 1);
+
+        const filteredQueue = activeQueue.filter((element) => element.track_id !== entry.track_id);
+
+        // while shuffled only the shuffle queue changes, since changing trackQueue would reshuffle it
+        if (isShuffle) setShuffleTrackQueue(filteredQueue);
+        else setTrackQueue(filteredQueue);
+    }
+
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
-        const filtered = list.filter((element) => element.track_id !== entry.track_id);
-        showSnackbar("Removed track from list.")
-        return filtered;
+        const filteredList = list.filter((element) => element.track_id !== entry.track_id);
+        showSnackbar("Removed track from list.");
+        removeFromQueue(list === recents ? "recents" : list === favorites ? "favorites" : null, entry);
+        return filteredList;
+    }
+
+    function handleClearQueue(source: string) {
+        // only a queue started from the cleared list is emptied; the playing track still finishes
+        if (source !== queueSource) return;
+
+        setTrackQueue([]);
+        setShuffleTrackQueue([]);
+        setCurrentTrackIndex(0);
     }
 
     function handleDeletePlaylist(entry: Playlist) {
         const filtered = playlists.filter((element) => element.id !== entry.id);
+        handleClearQueue(entry.id);
         showSnackbar("Removed playlist.")
         return filtered;
     }
@@ -210,6 +257,7 @@ export default function Dashboard() {
                 : playlist
             )
         );
+        removeFromQueue(playlistId, entry);
         showSnackbar("Removed track from playlist.")
     }
 
@@ -258,10 +306,11 @@ export default function Dashboard() {
                         onDeletePlaylist={handleDeletePlaylist} 
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}
                         onDeleteEntry={handleDeleteEntry} 
+                        onClearQueue={handleClearQueue}
                         onAddToFavorites={handleAddToFavorites} 
                         onHandleFetch={handleFetch} 
                         onIsPlaying={setIsPlaying} 
-                        onSetTrackQueue={setTrackQueue}
+                        onSetTrackQueue={handleSetTrackQueue}
                         onSetCurrentTrackIndex={setCurrentTrackIndex}
                     />
                 </div>
@@ -274,6 +323,11 @@ export default function Dashboard() {
                         playlists={playlists} 
                         isPlaying={isPlaying} 
                         isFavorited={isCurrentTrackFavorited} 
+                        isShuffle={isShuffle}
+                        shuffleTrackQueue={shuffleTrackQueue}
+                        onSetIsShuffle={setIsShuffle}
+                        onSetShuffleTrackQueue={setShuffleTrackQueue}
+                        onSetTrackQueue={setTrackQueue}
                         onHandleFetch={handleFetch}
                         onAddToFavorites={handleAddToFavorites} 
                         onIsPlaying={setIsPlaying}
@@ -288,7 +342,7 @@ export default function Dashboard() {
                         onAddToFavorites={handleAddToFavorites} 
                         onIsPlaying={setIsPlaying}
                         onSetCurrentTrackIndex={setCurrentTrackIndex}
-                        onSetTrackQueue={setTrackQueue}
+                        onSetTrackQueue={handleSetTrackQueue}
                     />
                 </div>
             </div>
@@ -298,7 +352,7 @@ export default function Dashboard() {
                 heading="Trending Tracks (Top 100)"
                 onHandleFetch={handleFetch}
                 onIsPlaying={setIsPlaying}
-                onSetTrackQueue={setTrackQueue}
+                onSetTrackQueue={handleSetTrackQueue}
                 onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
             <ExtraListPane 
@@ -307,7 +361,7 @@ export default function Dashboard() {
                 heading="Latest Tracks"
                 onHandleFetch={handleFetch}
                 onIsPlaying={setIsPlaying}
-                onSetTrackQueue={setTrackQueue}
+                onSetTrackQueue={handleSetTrackQueue}
                 onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
         </>

@@ -91,5 +91,14 @@ describe("FavoritesList", () => {
             expect(props.onFavoritesList).toHaveBeenCalledWith([]);
             expect(document.getElementById("snackbar")?.textContent).toBe("Favorites cleared!");
         });
+
+        it("asks to clear a queue started from Favorites", () => {
+            const onClearQueue = vi.fn();
+            setup({ onClearQueue });
+
+            fireEvent.click(screen.getByText("Clear"));
+
+            expect(onClearQueue).toHaveBeenCalledWith("favorites");
+        });
     });
 });

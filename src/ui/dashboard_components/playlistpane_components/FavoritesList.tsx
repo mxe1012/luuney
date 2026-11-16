@@ -6,7 +6,7 @@ import PaginationController from "../../PaginationController";
 
 import ListButton from "./ListButton";
 
-export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
+export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onClearQueue, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
     
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start} = usePagination(list, 10);
 
@@ -52,7 +52,7 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                         display: (visible && list.length >= 1) ? "" : "none", 
                     }}
                     className="PlaylistPaneControllerButton" 
-                    onClick={() => {showSnackbar("Favorites cleared!"); onFavoritesList?.([])}}>
+                    onClick={() => {showSnackbar("Favorites cleared!"); onFavoritesList?.([]); onClearQueue?.("favorites")}}>
                         Clear
                     </button>
                 </div>

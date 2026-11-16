@@ -23,11 +23,11 @@ describe("MiniAudioPlayer", () => {
 
     it("is hidden until the page is scrolled", () => {
         const { container } = setup({ isScrolled: false });
-        expect(root(container).className).toBe("MiniAudioPlayer hidden");
+        expect(root(container).className).toBe("GlassCard NoBg MiniAudioPlayer hidden");
         cleanup();
 
         const scrolled = setup({ isScrolled: true });
-        expect(root(scrolled.container).className).toBe("MiniAudioPlayer");
+        expect(root(scrolled.container).className).toBe("GlassCard NoBg MiniAudioPlayer");
     });
 
     it("shows the artwork", () => {

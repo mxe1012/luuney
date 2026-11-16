@@ -22,10 +22,10 @@ describe("UpNextList", () => {
 
     it("is hidden unless isUpNextVisible is true", () => {
         const { container, rerender } = render(<UpNextList queue={makeTracks(2)} isUpNextVisible={false} />);
-        expect(root(container).className).toBe("UpNextList hidden");
+        expect(root(container).className).toBe("GlassCard NoBg UpNextList hidden");
 
         rerender(<UpNextList queue={makeTracks(2)} isUpNextVisible={true} />);
-        expect(root(container).className).toBe("UpNextList");
+        expect(root(container).className).toBe("GlassCard NoBg UpNextList");
     });
 
     it("shows the heading", () => {
@@ -50,12 +50,14 @@ describe("UpNextList", () => {
         ]);
     });
 
-    it("shows only titles and durations", () => {
-        const { container } = render(<UpNextList queue={[makeTrack(1)]} isUpNextVisible={true} />);
+    it("shows each track's title, artist and duration, and nothing else", () => {
+        const { container } = render(<UpNextList queue={[makeTrack(1, { duration: 65 })]} isUpNextVisible={true} />);
 
+        expect(container.querySelector(".UpNextTitle")?.textContent).toBe("Track 1");
+        expect(container.querySelector(".UpNextArtist")?.textContent).toBe("artist1");
+        expect(container.querySelector(".UpNextDuration")?.textContent).toBe("1:05");
         expect(container.querySelector("img")).toBeNull();
         expect(container.querySelector("button")).toBeNull();
-        expect(screen.queryByText("artist1")).toBeNull();
     });
 
     it("shows a message instead of a list when nothing is up next", () => {

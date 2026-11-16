@@ -98,6 +98,15 @@ describe("PlaylistSelectionList", () => {
             expect(snackbarText()).toBe("All playlists cleared!");
         });
 
+        it("Clear asks to clear a queue started from any of the playlists", () => {
+            const onClearQueue = vi.fn();
+            setup(PLAYLISTS, { onClearQueue });
+
+            fireEvent.click(screen.getByText("Clear"));
+
+            expect(onClearQueue.mock.calls).toEqual([["a"], ["b"]]);
+        });
+
         it("hides Clear when there are no playlists", () => {
             setup([]);
 
@@ -105,7 +114,7 @@ describe("PlaylistSelectionList", () => {
         });
 
         it("paginates playlists at 10 per page", () => {
-            const many = Array.from({ length: 11 }, (_, i) => makePlaylist(`p${i}`, [], `List ${i}`));
+            const many = Array.from({ length: 11 }, (_, i) => makePlaylist(`p${i}`, [makeTrack(i + 1)], `List ${i}`));
             setup(many);
 
             expect(screen.queryByText("List 10")).toBeNull();
@@ -174,6 +183,16 @@ describe("PlaylistSelectionList", () => {
             const updater = spies.onSetPlaylist.mock.calls[0][0] as (prev: Playlist[]) => Playlist[];
             expect(updater(PLAYLISTS)).toEqual([{ ...PLAYLISTS[0], tracks: [] }, PLAYLISTS[1]]);
             expect(snackbarText()).toBe("Playlist cleared!");
+        });
+
+        it("Clear asks to clear a queue started from the open playlist only", () => {
+            const onClearQueue = vi.fn();
+            setup(PLAYLISTS, { onClearQueue });
+            open("Chill");
+
+            fireEvent.click(screen.getByText("Clear"));
+
+            expect(onClearQueue.mock.calls).toEqual([["a"]]);
         });
 
         it("paginates tracks inside a playlist", () => {

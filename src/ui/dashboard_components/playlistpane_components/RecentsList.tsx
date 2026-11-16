@@ -6,7 +6,7 @@ import PaginationController from "../../PaginationController";
 
 import ListButton from "./ListButton";
 
-export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, isFavorited, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
+export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, onClearQueue, isFavorited, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
     
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } = usePagination(list, 10);
 
@@ -54,7 +54,7 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                         display: (visible && list.length >= 1) ? "" : "none", 
                     }}
                     className="PlaylistPaneControllerButton" 
-                    onClick={() => {showSnackbar("Recents cleared!"); onRecentsList?.([])}}>
+                    onClick={() => {showSnackbar("Recents cleared!"); onRecentsList?.([]); onClearQueue?.("recents")}}>
                         Clear
                     </button>
                 </div>

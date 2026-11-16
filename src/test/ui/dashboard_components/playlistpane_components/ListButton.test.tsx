@@ -48,9 +48,8 @@ describe("ListButton", () => {
         expect(props.onHandleFetch).toHaveBeenCalledWith(2);
         expect(props.onIsPlaying).toHaveBeenCalledWith(false);
         expect(onSetCurrentTrackIndex).toHaveBeenCalledWith(1);
-        expect(onSetTrackQueue).toHaveBeenCalledWith(props.list);
-        // A copy is queued so later edits to the source list don't mutate the queue.
-        expect(onSetTrackQueue.mock.calls[0][0]).not.toBe(props.list);
+        // The list itself is passed so Dashboard can tell which list the queue came from.
+        expect(onSetTrackQueue.mock.calls[0][0]).toBe(props.list);
     });
 
     it("works without the optional queue callbacks", () => {

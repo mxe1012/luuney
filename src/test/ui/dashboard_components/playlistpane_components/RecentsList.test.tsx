@@ -109,5 +109,14 @@ describe("RecentsList", () => {
             expect(props.onRecentsList).toHaveBeenCalledWith([]);
             expect(document.getElementById("snackbar")?.textContent).toBe("Recents cleared!");
         });
+
+        it("asks to clear a queue started from Recents", () => {
+            const onClearQueue = vi.fn();
+            setup({ onClearQueue });
+
+            fireEvent.click(screen.getByText("Clear"));
+
+            expect(onClearQueue).toHaveBeenCalledWith("recents");
+        });
     });
 });

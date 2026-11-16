@@ -1,4 +1,4 @@
-import type { AudioPlayerProps, TrackObject } from "../../utils/types";
+import type { AudioPlayerProps } from "../../utils/types";
 
 import { useRef, useState, useEffect, type ChangeEvent, useEffectEvent } from "react";
 
@@ -10,17 +10,13 @@ import UpNextList from "./audioplayer_components/UpNextList";
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
 
-export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
-
-    const [isShuffle, setIsShuffle] = useState(false);
-    
-    const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
 
     const [isUpNextVisible, setIsUpNextVisible] = useState(false);
 
@@ -72,7 +68,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         const activeQueue = isShuffle ? shuffleTrackQueue : tracks;
         const playing = activeQueue[currentTrackIndex];
 
-        setIsShuffle(nextIsShuffle);
+        onSetIsShuffle(nextIsShuffle);
 
         if (nextIsShuffle) {
             const rest = tracks
@@ -82,12 +78,16 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 .map(({ value }) => value);
 
             // playing track goes first, so the rest of the shuffle follows it
-            setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+            onSetShuffleTrackQueue(playing ? [playing, ...rest] : rest);
             onSetCurrentTrackIndex(0);
             showSnackbar("Shuffle Enabled!")
         } 
         else {
-            const originalIndex = tracks.findIndex(track => track.track_id === playing?.track_id);
+            // tracks deleted while shuffled are only removed from the shuffle queue, so drop them here too
+            const remaining = tracks.filter(track => shuffleTrackQueue.some(entry => entry.track_id === track.track_id));
+            onSetTrackQueue(remaining);
+
+            const originalIndex = remaining.findIndex(track => track.track_id === playing?.track_id);
             if (originalIndex !== -1) onSetCurrentTrackIndex(originalIndex);
             showSnackbar("Shuffle Disabled!")
         }
@@ -260,8 +260,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             .sort((a, b) => a.sort - b.sort)
             .map(({ value }) => value);
 
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+        onSetShuffleTrackQueue(playing ? [playing, ...rest] : rest);
         onSetCurrentTrackIndex(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tracks]);
