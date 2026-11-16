@@ -30,7 +30,12 @@ export interface AudioPlayerProps {
     playlists: Playlist[];
     isPlaying: boolean;
     isFavorited: boolean;
+    isShuffle: boolean;
+    shuffleTrackQueue: TrackObject[];
     onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
+    onSetIsShuffle: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetShuffleTrackQueue: React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onHandleFetch: (id: number) => Promise<void>;
     onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
@@ -43,7 +48,7 @@ export interface SearchListPaneProps {
     isFavorited: (entry: TrackObject) => boolean;
     onAddToFavorites: (entry: TrackObject) => void
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue?: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -62,7 +67,7 @@ export interface PlaylistPaneProps {
     onHandleFetch: (id: number) => Promise<void>;
     onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-    onSetTrackQueue:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue: (list: TrackObject[]) => void;
 }
 
 export interface PlaylistPaneControllerProps {
@@ -87,7 +92,7 @@ export interface MainListProps {
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
-    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue?: (list: TrackObject[]) => void;
 }
 
 export interface PlaylistSelectionProps {
@@ -106,7 +111,7 @@ export interface PlaylistSelectionProps {
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
-    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue?: (list: TrackObject[]) => void;
 }
 
 export interface AudioPlayerButtonProps {
@@ -157,7 +162,7 @@ export interface ListButtonProps {
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => TrackObject[];
     onDeletePlaylistEntry?: (playlistId: string, entry: TrackObject) => void
-    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue?: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
     hasDeleteButton: boolean;
     hasFavoriteButton: boolean;
@@ -169,7 +174,7 @@ export interface ExtraListPaneProps {
     isLoaded: boolean;
     onHandleFetch: (id: number) => Promise<void>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-    onSetTrackQueue:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -195,7 +200,7 @@ export interface TrackSearchListProps {
     onAddToFavorites: (entry: TrackObject) => void;
     onIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
     isFavorited: (entry: TrackObject) => boolean;
-    onSetTrackQueue?:  React.Dispatch<React.SetStateAction<TrackObject[]>>;
+    onSetTrackQueue?: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
 }
 
