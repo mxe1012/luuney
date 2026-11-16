@@ -23,11 +23,11 @@ describe("AudioPlayerUI", () => {
         });
 
         expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer");
-        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard MiniAudioPlayer hidden");
+        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard NoBg MiniAudioPlayer hidden");
 
         rerender(<AudioPlayerUI {...makeAudioPlayerUIProps({ isScrolled: true })} />);
 
         expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer hidden");
-        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard MiniAudioPlayer");
+        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard NoBg MiniAudioPlayer");
     });
 });
