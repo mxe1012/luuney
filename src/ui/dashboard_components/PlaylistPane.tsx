@@ -18,7 +18,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
     const [isSelectedPlaylist, setIsSelectedPlaylist] = useState(false);
 
     return (
-        <div className="PlaylistPane">
+        <div className="GlassCard PlaylistPane">
             <PlaylistPaneController
                 isRecentsVisible={isRecentsVisible}
                 isFavoritesVisible={isFavoritesVisible}
