@@ -42,40 +42,51 @@ body {
   --scroll-thumb-active: #F3D9C7;
 }
 
+.GlassCard {
+    border-radius: 24px;
+    border: 1px solid rgba(220, 204, 247, 0.18);
+    background:
+        radial-gradient(circle at 20% 0%, rgba(167, 139, 250, 0.18), transparent 55%), rgba(36, 22, 55, 0.5);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow:
+        0 8px 32px rgba(10, 5, 20, 0.45), 0 0 24px rgba(167, 139, 250, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
 /* Chrome, Edge, Safari */
 *::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+    width: 12px;
+    height: 12px;
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--scroll-track);
-  border-radius: 999px;
+    background: var(--scroll-track);
+    border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-thumb);
-  border: 3px solid transparent;
-  background-clip: padding-box;
-  border-radius: 999px;
+    background-color: var(--scroll-thumb);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scroll-thumb-hover);
+    background-color: var(--scroll-thumb-hover);
 }
 
 *::-webkit-scrollbar-thumb:active {
-  background-color: var(--scroll-thumb-active);
+    background-color: var(--scroll-thumb-active);
 }
 
 *::-webkit-scrollbar-corner {
-  background: transparent;
+    background: transparent;
 }
 
 /* Firefox only */
 @supports not selector(::-webkit-scrollbar) {
-  * {
+    * {
     scrollbar-width: thin;
     scrollbar-color: var(--scroll-thumb) transparent;
-  }
+    }
 }
