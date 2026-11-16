@@ -325,6 +325,171 @@ describe("Dashboard", () => {
         });
     });
 
+    describe("deleting queued tracks", () => {
+        // Favorites and trending both hold tracks 1-4, so the same tracks can be queued from either list.
+        beforeEach(() => {
+            localStorage.setItem("favorite_tracks", JSON.stringify(makeTracks(4)));
+            mockFetchTrending.mockResolvedValue({ data: [1, 2, 3, 4].map((id) => makeApiTrack(id)) });
+        });
+
+        function upNextTitles() {
+            return Array.from(document.querySelectorAll(".UpNextTitle")).map((title) => title.textContent);
+        }
+
+        // The row for a track in whichever playlist pane list is currently shown.
+        function shownRow(title: string) {
+            const element = playlistPane()
+                .getAllByText(title)
+                .find((el) => !el.closest("ul.hidden") && el.closest("ul")?.style.display !== "none");
+            return element?.closest(".ListRow") as HTMLElement;
+        }
+
+        async function playFromPane(title: string) {
+            await act(async () => {
+                fireEvent.click(within(shownRow(title)).getAllByRole("button")[0]);
+            });
+        }
+
+        function deleteFromPane(title: string) {
+            fireEvent.click(within(shownRow(title)).getByLabelText("Delete Entry"));
+        }
+
+        async function endTrack() {
+            await act(async () => {
+                fireEvent.ended(document.querySelector("audio") as HTMLAudioElement);
+            });
+        }
+
+        function nowPlaying() {
+            return within(mainPlayer()).getByRole("heading", { level: 2 }).textContent?.trim();
+        }
+
+        async function playFromFavorites(title: string) {
+            render_();
+            await flushInitialFetch();
+            fireEvent.click(screen.getByText("Favorites"));
+            await playFromPane(title);
+        }
+
+        function enableShuffle() {
+            // Sort keys for the non-playing tracks [2, 3, 4] → shuffled order [1, 4, 3, 2].
+            vi.spyOn(Math, "random").mockReturnValueOnce(0.9).mockReturnValueOnce(0.5).mockReturnValueOnce(0.1);
+            fireEvent.click(within(mainPlayer()).getByRole("button", { name: "Shuffle Off" }));
+        }
+
+        it("deleting an upcoming track removes it from up next and from playback", async () => {
+            await playFromFavorites("Track 2");
+            expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+
+            deleteFromPane("Track 3");
+            expect(upNextTitles()).toEqual(["Track 4"]);
+
+            await endTrack();
+            expect(mockFetchTrackById).toHaveBeenLastCalledWith(4);
+        });
+
+        it("deleting a track before the playing one keeps playback on course", async () => {
+            await playFromFavorites("Track 2");
+
+            deleteFromPane("Track 1");
+            expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+
+            await endTrack();
+            expect(mockFetchTrackById).toHaveBeenLastCalledWith(3);
+        });
+
+        it("deleting the playing track lets it finish, then continues with the track after it", async () => {
+            await playFromFavorites("Track 2");
+
+            deleteFromPane("Track 2");
+            expect(nowPlaying()).toBe("Track 2");
+            expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+
+            await endTrack();
+            expect(mockFetchTrackById).toHaveBeenLastCalledWith(3);
+        });
+
+        it("deleting the first track while it plays still continues with the next one", async () => {
+            await playFromFavorites("Track 1");
+
+            deleteFromPane("Track 1");
+            expect(upNextTitles()).toEqual(["Track 2", "Track 3", "Track 4"]);
+
+            await endTrack();
+            expect(mockFetchTrackById).toHaveBeenLastCalledWith(2);
+        });
+
+        it("does not touch a queue started from a different list", async () => {
+            render_();
+            await flushInitialFetch();
+            await playFromTrending("Track 1");
+
+            fireEvent.click(screen.getByText("Favorites"));
+            deleteFromPane("Track 3");
+
+            expect(upNextTitles()).toEqual(["Track 2", "Track 3", "Track 4"]);
+        });
+
+        it("deleting from Recents does not touch a queue started from Favorites", async () => {
+            await playFromFavorites("Track 1");
+            await endTrack(); // Track 2 now plays, so Recents holds tracks 1 and 2
+
+            fireEvent.click(screen.getByText("Recents"));
+            deleteFromPane("Track 1");
+
+            expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+        });
+
+        it("deleting from a playlist updates a queue started from that playlist", async () => {
+            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", makeTracks(3), "Chill")]));
+            render_();
+            await flushInitialFetch();
+            fireEvent.click(screen.getByText("Playlists"));
+            fireEvent.click(playlistPane().getByText("Chill").closest("button")!);
+            await playFromPane("Track 1");
+
+            deleteFromPane("Track 2");
+
+            expect(upNextTitles()).toEqual(["Track 3"]);
+        });
+
+        describe("while shuffled", () => {
+            it("keeps the shuffled order and the playing track", async () => {
+                await playFromFavorites("Track 1");
+                enableShuffle();
+                expect(upNextTitles()).toEqual(["Track 4", "Track 3", "Track 2"]);
+
+                deleteFromPane("Track 3");
+                expect(upNextTitles()).toEqual(["Track 4", "Track 2"]);
+
+                await endTrack();
+                expect(mockFetchTrackById).toHaveBeenLastCalledWith(4);
+            });
+
+            it("a deleted track stays deleted after turning shuffle off", async () => {
+                await playFromFavorites("Track 1");
+                enableShuffle();
+                deleteFromPane("Track 3");
+
+                fireEvent.click(within(mainPlayer()).getByRole("button", { name: "Shuffle On" }));
+
+                expect(upNextTitles()).toEqual(["Track 2", "Track 4"]);
+            });
+
+            it("deleting from an unrelated list does not reshuffle", async () => {
+                render_();
+                await flushInitialFetch();
+                await playFromTrending("Track 1");
+                enableShuffle();
+
+                fireEvent.click(screen.getByText("Favorites"));
+                deleteFromPane("Track 3");
+
+                expect(upNextTitles()).toEqual(["Track 4", "Track 3", "Track 2"]);
+            });
+        });
+    });
+
     describe("connectivity", () => {
         it("shows a persistent offline notice when starting offline", () => {
             vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
