@@ -114,7 +114,7 @@ describe("PlaylistSelectionList", () => {
         });
 
         it("paginates playlists at 10 per page", () => {
-            const many = Array.from({ length: 11 }, (_, i) => makePlaylist(`p${i}`, [], `List ${i}`));
+            const many = Array.from({ length: 11 }, (_, i) => makePlaylist(`p${i}`, [makeTrack(i + 1)], `List ${i}`));
             setup(many);
 
             expect(screen.queryByText("List 10")).toBeNull();
