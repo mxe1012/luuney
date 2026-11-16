@@ -14,7 +14,7 @@ export default function ListButton({list, track, playlist, index, onHandleFetch,
                         onHandleFetch(track.track_id);
                         onIsPlaying(false);
                         onSetCurrentTrackIndex?.(index);
-                        onSetTrackQueue?.([...list])
+                        onSetTrackQueue?.(list)
                         }}>
                             <div className="ListItem">
                                 <div className="ListCover">
