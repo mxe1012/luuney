@@ -58,7 +58,7 @@ export default function MainAudioPlayer({
 
     return (
         <>
-            <div className={isScrolled ? "AudioPlayer hidden" : "AudioPlayer"}>
+            <div className={isScrolled ? "GlassCard AudioPlayer hidden" : "GlassCard AudioPlayer"}>
                 <div className="RowCenter">
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
