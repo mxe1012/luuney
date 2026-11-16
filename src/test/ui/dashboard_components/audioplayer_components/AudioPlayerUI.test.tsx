@@ -22,12 +22,12 @@ describe("AudioPlayerUI", () => {
             wrapper: SnackbarProvider,
         });
 
-        expect(container.querySelector(".AudioPlayer")?.className).toBe("AudioPlayer");
-        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("MiniAudioPlayer hidden");
+        expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer");
+        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard MiniAudioPlayer hidden");
 
         rerender(<AudioPlayerUI {...makeAudioPlayerUIProps({ isScrolled: true })} />);
 
-        expect(container.querySelector(".AudioPlayer")?.className).toBe("AudioPlayer hidden");
-        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("MiniAudioPlayer");
+        expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer hidden");
+        expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard MiniAudioPlayer");
     });
 });
