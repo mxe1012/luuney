@@ -22,10 +22,10 @@ describe("UpNextList", () => {
 
     it("is hidden unless isUpNextVisible is true", () => {
         const { container, rerender } = render(<UpNextList queue={makeTracks(2)} isUpNextVisible={false} />);
-        expect(root(container).className).toBe("UpNextList hidden");
+        expect(root(container).className).toBe("GlassCard UpNextList hidden");
 
         rerender(<UpNextList queue={makeTracks(2)} isUpNextVisible={true} />);
-        expect(root(container).className).toBe("UpNextList");
+        expect(root(container).className).toBe("GlassCard UpNextList");
     });
 
     it("shows the heading", () => {
