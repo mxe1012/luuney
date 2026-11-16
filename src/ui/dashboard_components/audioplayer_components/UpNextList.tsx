@@ -21,7 +21,7 @@ export default function UpNextList({queue, isUpNextVisible}: UpNextListProps) {
                                 <li className="UpNextItem" key={element.track_id}>
                                     <div className="ColumnCenter">
                                         <h4 className="UpNextTitle NoMargin">{element.title}</h4>
-                                        <h5 className="UpNextTitle NoMargin">{element.handle}</h5>
+                                        <h5 className="UpNextArtist MutedLavenderColor NoMargin">{element.handle}</h5>
                                     </div>
                                     <time className="UpNextDuration">{formatTime(element.duration)}</time>
                                 </li>
