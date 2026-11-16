@@ -14,18 +14,21 @@ type Spies = {
     onSetCurrentTrackIndex: ReturnType<typeof vi.fn<(i: number) => void>>;
     onIsPlaying: ReturnType<typeof vi.fn<(v: boolean) => void>>;
     onHandleFetch: ReturnType<typeof vi.fn<(id: number) => Promise<void>>>;
+    onSetTrackQueue: ReturnType<typeof vi.fn<(queue: TrackObject[]) => void>>;
 };
 
-type HarnessProps = Partial<Omit<AudioPlayerProps, "currentTrackIndex" | "onSetCurrentTrackIndex" | "isPlaying" | "onIsPlaying">> & {
+type HarnessProps = Partial<Omit<AudioPlayerProps, "currentTrackIndex" | "onSetCurrentTrackIndex" | "isPlaying" | "onIsPlaying" | "isShuffle" | "onSetIsShuffle" | "shuffleTrackQueue" | "onSetShuffleTrackQueue" | "onSetTrackQueue">> & {
     initialIndex?: number;
     spies: Spies;
 };
 
-// Owns currentTrackIndex / isPlaying the way Dashboard does so index changes
-// made by the player (shuffle, track end) feed back into it.
+// Owns currentTrackIndex / isPlaying / shuffle state the way Dashboard does so
+// changes made by the player (shuffle, track end) feed back into it.
 function Harness({ initialIndex = 0, spies, ...rest }: HarnessProps) {
     const [index, setIndex] = useState(initialIndex);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isShuffle, setIsShuffle] = useState(false);
+    const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
     const tracks = rest.tracks ?? [];
 
     return (
@@ -50,6 +53,11 @@ function Harness({ initialIndex = 0, spies, ...rest }: HarnessProps) {
                 spies.onIsPlaying(next);
                 setIsPlaying(next);
             }}
+            isShuffle={isShuffle}
+            onSetIsShuffle={setIsShuffle}
+            shuffleTrackQueue={shuffleTrackQueue}
+            onSetShuffleTrackQueue={setShuffleTrackQueue}
+            onSetTrackQueue={(v) => spies.onSetTrackQueue(typeof v === "function" ? v(tracks) : v)}
             onHandleFetch={spies.onHandleFetch}
         />
     );
@@ -85,6 +93,7 @@ function setup(props: Partial<HarnessProps> = {}) {
         onSetCurrentTrackIndex: vi.fn(),
         onIsPlaying: vi.fn(),
         onHandleFetch: vi.fn().mockResolvedValue(undefined),
+        onSetTrackQueue: vi.fn(),
     };
     const utils = render(<Harness spies={spies} {...props} />, { wrapper: SnackbarProvider });
     const audio = utils.container.querySelector("audio") as HTMLAudioElement;
@@ -390,6 +399,7 @@ describe("AudioPlayer", () => {
                 onSetCurrentTrackIndex: vi.fn(),
                 onIsPlaying: vi.fn(),
                 onHandleFetch: vi.fn().mockResolvedValue(undefined),
+                onSetTrackQueue: vi.fn(),
             };
             const { rerender, container } = render(<Harness spies={spies} tracks={makeTracks(2)} />, {
                 wrapper: SnackbarProvider,
