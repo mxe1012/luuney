@@ -26,7 +26,7 @@ export default function MiniAudioPlayer({
 
     return (
         <>
-            <div className={isScrolled ? "GlassCard MiniAudioPlayer" : "GlassCard MiniAudioPlayer hidden"}>
+            <div className={isScrolled ? "GlassCard NoBg MiniAudioPlayer" : "GlassCard NoBg MiniAudioPlayer hidden"}>
                 <div className="ListCover MiniCover">
                     <CoverImage styles={{borderRadius: "15px"}} src={track.artwork} size={100}/>
                     <div className="MiniTitle" title={track.title}>
