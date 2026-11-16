@@ -6,7 +6,7 @@ export default function SkeletonExtraListPane({children, isLoaded}: SkeletonProp
         return (
             <>
                 <div className="RowCenter">
-                    <div className="ExtraListPane">
+                    <div className="GlassCard ExtraListPane">
                         <h1><div className="skeleton skeleton-heading"></div></h1>
                         <ul className="ExtraListItems">
                             {Array.from({length: 5}, (_, i) => (

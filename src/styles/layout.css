@@ -1,11 +1,22 @@
+/* colors */
+.CreamColor { color: #F3D9C7; }
+.LavenderColor { color: #DCCCF7; }
+.MutedLavenderColor { color: rgba(220, 204, 247, 0.75); }
+.FaintLavenderColor { color: rgba(220, 204, 247, 0.55); }
+.GrayColor { color: gray;}
+
 /* text */
 .NoMargin { margin: 0; padding: 0; }
+.CenterText { text-align: center; }
 
 /* rows */
 .RowStart   { display: flex; justify-content: flex-start; }
 .RowCenter  { display: flex; justify-content: center; }
 .RowBetween { display: flex; justify-content: space-between; }
 .RowEvenly  { display: flex; justify-content: space-evenly; }
+
+/* columns */
+.ColumnCenter {display: grid; align-items: center;}
 
 /* list item layout (ListButton, playlists, artists) */
 .ListRow    { display: flex; justify-content: flex-start; gap: 6px; }

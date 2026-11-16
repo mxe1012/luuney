@@ -574,17 +574,17 @@ describe("AudioPlayer", () => {
         it("is hidden by default", () => {
             setup({ tracks: makeTracks(3) });
 
-            expect(upNextPane().className).toBe("UpNextList hidden");
+            expect(upNextPane().className).toBe("GlassCard NoBg UpNextList hidden");
         });
 
         it("the up next button toggles it open and closed", () => {
             setup({ tracks: makeTracks(3) });
 
             fireEvent.click(screen.getByLabelText("up next"));
-            expect(upNextPane().className).toBe("UpNextList");
+            expect(upNextPane().className).toBe("GlassCard NoBg UpNextList");
 
             fireEvent.click(screen.getByLabelText("up next"));
-            expect(upNextPane().className).toBe("UpNextList hidden");
+            expect(upNextPane().className).toBe("GlassCard NoBg UpNextList hidden");
         });
 
         it("lists only the tracks after the one playing", () => {
@@ -890,11 +890,11 @@ describe("AudioPlayer", () => {
             const { container } = setup({ tracks: [makeTrack(1)] });
 
             scrollTo(556);
-            expect(container.querySelector(".AudioPlayer")?.className).toBe("AudioPlayer hidden");
-            expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("MiniAudioPlayer");
+            expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer hidden");
+            expect(container.querySelector(".MiniAudioPlayer")?.className).toBe("GlassCard NoBg MiniAudioPlayer");
 
             scrollTo(555);
-            expect(container.querySelector(".AudioPlayer")?.className).toBe("AudioPlayer");
+            expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer");
         });
 
         it("removes the scroll listener on unmount", () => {

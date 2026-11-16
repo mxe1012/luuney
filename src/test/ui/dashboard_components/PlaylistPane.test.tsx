@@ -41,10 +41,10 @@ describe("PlaylistPane", () => {
         cleanup();
     });
 
-    it("starts with every list hidden", () => {
+    it("starts with Recents shown and every other list hidden", () => {
         setup();
 
-        expect(isShown("Track 1")).toBe(false);
+        expect(isShown("Track 1")).toBe(true);
         expect(isShown("Track 2")).toBe(false);
         expect(isShown("Road Trip")).toBe(false);
     });

@@ -115,7 +115,7 @@ export default function Visualizer({ audioRef, isPlaying }: VisualizerProps) {
     }, []);
 
     return (
-        <div id="visualizer">
+        <div id="visualizer" className="GlassCard">
             <canvas
                 ref={canvasRef}
                 aria-hidden="true"
