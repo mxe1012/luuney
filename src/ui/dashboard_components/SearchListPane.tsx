@@ -197,7 +197,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
 
     return (
         <>
-            <div className="SearchPane">
+            <div className="GlassCard SearchPane">
                 <SearchController 
                     searchType={searchType}
                     searchTypes={searchTypes}
