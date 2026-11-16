@@ -13,7 +13,7 @@ export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, o
         <>  
             <SkeletonExtraListPane isLoaded={isLoaded}>
                 <div className="RowCenter">
-                    <div className="ExtraListPane">
+                    <div className="GlassCard ExtraListPane">
                         <div className="RowBetween">
                             <div>
                                 <h1 className="CreamColor">{heading}</h1>
