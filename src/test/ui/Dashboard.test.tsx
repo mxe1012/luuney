@@ -453,6 +453,114 @@ describe("Dashboard", () => {
             expect(upNextTitles()).toEqual(["Track 3"]);
         });
 
+        describe("clearing a list", () => {
+            // Every list has a Clear button; only the open tab's is displayed.
+            function clickShownClear() {
+                fireEvent.click(playlistPane().getAllByText("Clear").find((button) => button.style.display !== "none")!);
+            }
+
+            it("clearing Favorites empties a queue started from Favorites, and the playing track finishes", async () => {
+                await playFromFavorites("Track 2");
+                const fetches = mockFetchTrackById.mock.calls.length;
+
+                clickShownClear();
+
+                expect(upNextTitles()).toEqual([]);
+                expect(nowPlaying()).toBe("Track 2");
+
+                await endTrack();
+                expect(mockFetchTrackById).toHaveBeenCalledTimes(fetches);
+            });
+
+            it("clearing Favorites leaves a queue started from another list alone", async () => {
+                render_();
+                await flushInitialFetch();
+                await playFromTrending("Track 1");
+
+                fireEvent.click(screen.getByText("Favorites"));
+                clickShownClear();
+
+                expect(upNextTitles()).toEqual(["Track 2", "Track 3", "Track 4"]);
+            });
+
+            it("clearing Recents empties a queue started from Recents", async () => {
+                localStorage.setItem("recent_tracks", JSON.stringify(makeTracks(3)));
+                render_();
+                await flushInitialFetch();
+                fireEvent.click(screen.getByText("Recents"));
+                await playFromPane("Track 1");
+
+                clickShownClear();
+
+                expect(upNextTitles()).toEqual([]);
+            });
+
+            describe("playlists", () => {
+                beforeEach(() => {
+                    localStorage.setItem(
+                        "user_playlists",
+                        JSON.stringify([makePlaylist("p1", makeTracks(3), "Chill"), makePlaylist("p2", makeTracks(2), "Gym")]),
+                    );
+                });
+
+                async function playFromPlaylist(name: string, title: string) {
+                    render_();
+                    await flushInitialFetch();
+                    fireEvent.click(screen.getByText("Playlists"));
+                    fireEvent.click(playlistPane().getByText(name).closest("button")!);
+                    await playFromPane(title);
+                }
+
+                it("clearing the open playlist empties a queue started from it", async () => {
+                    await playFromPlaylist("Chill", "Track 1");
+
+                    clickShownClear();
+
+                    expect(upNextTitles()).toEqual([]);
+                });
+
+                it("deleting a playlist empties a queue started from it", async () => {
+                    await playFromPlaylist("Chill", "Track 1");
+                    fireEvent.click(screen.getByText("< Back"));
+
+                    const row = playlistPane().getByText("Chill").closest(".ListRow") as HTMLElement;
+                    fireEvent.click(within(row).getByLabelText("delete playlist"));
+
+                    expect(upNextTitles()).toEqual([]);
+                });
+
+                it("deleting a different playlist leaves the queue alone", async () => {
+                    await playFromPlaylist("Chill", "Track 1");
+                    fireEvent.click(screen.getByText("< Back"));
+
+                    const row = playlistPane().getByText("Gym").closest(".ListRow") as HTMLElement;
+                    fireEvent.click(within(row).getByLabelText("delete playlist"));
+
+                    expect(upNextTitles()).toEqual(["Track 2", "Track 3"]);
+                });
+
+                it("clearing all playlists empties a queue started from any of them", async () => {
+                    await playFromPlaylist("Gym", "Track 1");
+                    fireEvent.click(screen.getByText("< Back"));
+
+                    clickShownClear();
+
+                    expect(upNextTitles()).toEqual([]);
+                });
+            });
+
+            it("clearing while shuffled empties the queue, and it stays empty after turning shuffle off", async () => {
+                await playFromFavorites("Track 1");
+                enableShuffle();
+
+                clickShownClear();
+                expect(upNextTitles()).toEqual([]);
+
+                fireEvent.click(within(mainPlayer()).getByRole("button", { name: "Shuffle On" }));
+                expect(upNextTitles()).toEqual([]);
+            });
+        });
+
         describe("while shuffled", () => {
             it("keeps the shuffled order and the playing track", async () => {
                 await playFromFavorites("Track 1");
