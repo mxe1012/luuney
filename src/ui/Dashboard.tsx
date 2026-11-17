@@ -271,13 +271,8 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-
-        const id = setTimeout(() => {
-            handleGetTrendingAndLatest()
-        }, 600)
-
-        return () => clearTimeout(id)
-
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        handleGetTrendingAndLatest()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
