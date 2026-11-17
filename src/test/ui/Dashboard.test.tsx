@@ -197,6 +197,58 @@ describe("Dashboard", () => {
             expect(snackbarText()).toBe("Error loading track!");
             expect(localStorage.getItem("recent_tracks")).toBe("[]");
         });
+
+        describe("when requests overlap", () => {
+            // each fetch waits until the test settles it, so responses can arrive in any order
+            function deferFetches() {
+                const pending = new Map<number, { resolve: () => void; reject: () => void }>();
+
+                mockFetchTrackById.mockImplementation((id: number) => new Promise((resolve, reject) => {
+                    pending.set(id, {
+                        resolve: () => resolve(trackFromApi(id)),
+                        reject: () => reject(new Error("404")),
+                    });
+                }));
+
+                return async (id: number, outcome: "resolve" | "reject") => {
+                    await act(async () => {
+                        pending.get(id)![outcome]();
+                    });
+                };
+            }
+
+            it("plays the most recently clicked track when an older request finishes last", async () => {
+                const settle = deferFetches();
+                render_();
+                await flushInitialFetch();
+
+                await playFromTrending("Track 1");
+                await playFromTrending("Track 2");
+
+                await settle(2, "resolve");
+                await settle(1, "resolve");
+
+                expect(within(mainPlayer()).getByRole("heading", { level: 2 }).textContent?.trim()).toBe("Track 2");
+                expect(document.querySelector("audio")?.getAttribute("src")).toBe("https://example.com/stream/2");
+                expect(snackbarText()).toBe("Now playing:\nTrack 2\nartist2");
+                expect(stored<TrackObject[]>("recent_tracks").map((t) => t.track_id)).toEqual([2]);
+            });
+
+            it("does not show an error when an older request fails after a newer one succeeds", async () => {
+                const settle = deferFetches();
+                render_();
+                await flushInitialFetch();
+
+                await playFromTrending("Track 1");
+                await playFromTrending("Track 2");
+
+                await settle(2, "resolve");
+                await settle(1, "reject");
+
+                expect(within(mainPlayer()).getByRole("heading", { level: 2 }).textContent?.trim()).toBe("Track 2");
+                expect(snackbarText()).toBe("Now playing:\nTrack 2\nartist2");
+            });
+        });
     });
 
     describe("favorites", () => {
