@@ -170,12 +170,12 @@ describe("MainAudioPlayer", () => {
     });
 
     describe("up next button", () => {
-        it("calls onHandleUpNextVisibiliy when clicked", () => {
+        it("calls onHandleUpNextVisibility when clicked", () => {
             const { props } = setup();
 
             fireEvent.click(screen.getByLabelText("up next"));
 
-            expect(props.onHandleUpNextVisibiliy).toHaveBeenCalledTimes(1);
+            expect(props.onHandleUpNextVisibility).toHaveBeenCalledTimes(1);
         });
     });
 

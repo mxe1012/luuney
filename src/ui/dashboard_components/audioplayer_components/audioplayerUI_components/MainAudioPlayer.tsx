@@ -35,7 +35,7 @@ export default function MainAudioPlayer({
     onAddToFavorites,
     onHandleAddToPlaylist,
     onHandleCreatePlaylist,
-    onHandleUpNextVisibiliy}: AudioPlayerUIProps) {
+    onHandleUpNextVisibility}: AudioPlayerUIProps) {
 
     const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
@@ -112,7 +112,7 @@ export default function MainAudioPlayer({
                     <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
                     </button>
-                    <button className="ActionBtn" onClick={onHandleUpNextVisibiliy} aria-label="up next">
+                    <button className="ActionBtn" onClick={onHandleUpNextVisibility} aria-label="up next">
                         <img src={"/assets/audio_player_icons/eye.svg"} alt="Up Next" />
                     </button>
                 </div>

@@ -251,7 +251,7 @@ export interface AudioPlayerUIProps {
     onAddToFavorites: (entry: TrackObject) => void;
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onHandleCreatePlaylist: (name: string, entry: TrackObject) => void
-    onHandleUpNextVisibiliy: () => void;
+    onHandleUpNextVisibility: () => void;
 }
 
 export interface VisualizerProps {

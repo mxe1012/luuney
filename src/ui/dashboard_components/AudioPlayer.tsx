@@ -57,7 +57,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     
     const { showSnackbar } = useSnackbar();
     
-    function handleUpNextVisibiliy() {
+    function handleUpNextVisibility() {
         const current = isUpNextVisible;
         setIsUpNextVisible(!current)
     }
@@ -356,7 +356,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onAddToFavorites={onAddToFavorites}
                 onHandleAddToPlaylist={onHandleAddToPlaylist}
                 onHandleCreatePlaylist={onHandleCreatePlaylist}
-                onHandleUpNextVisibiliy={handleUpNextVisibiliy}
+                onHandleUpNextVisibility={handleUpNextVisibility}
             />
             <Visualizer audioRef={audioRef} isPlaying={isPlaying}/>
             <UpNextList queue={upNext} isUpNextVisible={isUpNextVisible}/>
