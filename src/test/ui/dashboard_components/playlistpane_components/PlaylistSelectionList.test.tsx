@@ -32,7 +32,7 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
                 setList(v);
             }}
             onSetIsPlaylistSelectionVisible={vi.fn()}
-            onDeletePlaylist={(entry) => list.filter((p) => p.id !== entry.id)}
+            onDeletePlaylist={(entry) => (prev) => prev.filter((p) => p.id !== entry.id)}
             onDeletePlaylistEntry={vi.fn()}
             onHandleFetch={vi.fn().mockResolvedValue(undefined)}
             onIsPlaying={vi.fn()}
@@ -85,7 +85,8 @@ describe("PlaylistSelectionList", () => {
 
             fireEvent.click(screen.getAllByLabelText("delete playlist")[0]);
 
-            expect(spies.onSetPlaylist).toHaveBeenCalledWith([PLAYLISTS[1]]);
+            const updater = spies.onSetPlaylist.mock.calls[0][0] as (prev: Playlist[]) => Playlist[];
+            expect(updater(PLAYLISTS)).toEqual([PLAYLISTS[1]]);
             expect(screen.queryByText("Chill")).toBeNull();
         });
 

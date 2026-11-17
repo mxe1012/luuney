@@ -249,10 +249,10 @@ export default function Dashboard() {
     }
 
     function handleDeletePlaylist(entry: Playlist) {
-        const filtered = playlists.filter((element) => element.id !== entry.id);
         handleClearQueue(entry.id);
         showSnackbar("Removed playlist.")
-        return filtered;
+        // returns an updater so the caller's setter filters the latest playlists, not this render's copy
+        return (prev: Playlist[]) => prev.filter((element) => element.id !== entry.id);
     }
 
     function handleDeletePlaylistEntry(playlistId: string, entry: TrackObject) {
