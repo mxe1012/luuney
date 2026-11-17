@@ -23,15 +23,14 @@ const mockFetchTrackById = vi.mocked(fetchTrackById);
 const mockFetchTrending = vi.mocked(fetchTrackTrending);
 const mockFetchLatest = vi.mocked(fetchTrackLatest);
 
-const INITIAL_FETCH_DELAY_MS = 600;
-
 function render_() {
     return render(<Dashboard />, { wrapper: SnackbarProvider });
 }
 
+// lets the trending and latest fetches started on mount resolve
 async function flushInitialFetch() {
     await act(async () => {
-        await vi.advanceTimersByTimeAsync(INITIAL_FETCH_DELAY_MS);
+        await vi.advanceTimersByTimeAsync(0);
     });
 }
 
@@ -88,11 +87,12 @@ describe("Dashboard", () => {
     });
 
     describe("trending and latest", () => {
-        it("shows skeletons until the delayed fetch completes", async () => {
+        it("fetches on mount and shows skeletons until the fetch completes", async () => {
             const { container } = render_();
 
+            expect(mockFetchTrending).toHaveBeenCalledTimes(1);
+            expect(mockFetchLatest).toHaveBeenCalledTimes(1);
             expect(container.querySelectorAll(".skeleton-heading")).toHaveLength(2);
-            expect(mockFetchTrending).not.toHaveBeenCalled();
 
             await flushInitialFetch();
 
@@ -136,17 +136,6 @@ describe("Dashboard", () => {
             await flushInitialFetch();
 
             expect(snackbarText()).toBe("Failed to fetch latest tracks.");
-        });
-
-        it("does not fetch if unmounted before the delay elapses", async () => {
-            const { unmount } = render_();
-
-            unmount();
-            await act(async () => {
-                await vi.advanceTimersByTimeAsync(INITIAL_FETCH_DELAY_MS);
-            });
-
-            expect(mockFetchTrending).not.toHaveBeenCalled();
         });
     });
 
