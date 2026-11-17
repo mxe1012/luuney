@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { fetchTrackById, fetchTrackLatest, fetchTrackTrending } from "../utils/data";
 
@@ -64,11 +64,17 @@ export default function Dashboard() {
     // the list the queue was started from: "recents", "favorites", a playlist id, or null for any other list
     const [queueSource, setQueueSource] = useState<string | null>(null);
 
+    const latestTrackRequestId = useRef(0);
+
     const { showSnackbar, hideSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
 
         showSnackbar("Loading track...", undefined, true);
+
+        latestTrackRequestId.current++;
+
+        const trackRequestId = latestTrackRequestId.current;
 
         try {
             const result = await fetchTrackById(id);
@@ -88,14 +94,17 @@ export default function Dashboard() {
                 duration,
             };
 
+            if (latestTrackRequestId.current !== trackRequestId) return;
+
             setTrack(newTrack);
             showSnackbar("Now playing:\n" + title + "\n" + handle);
             handleAddToRecents(newTrack);
 
         }
         catch(e) {
+            if (latestTrackRequestId.current !== trackRequestId) return;
             showSnackbar("Error loading track!", 12000)
-            console.log(e);
+            console.error(e);
         }
         
     }
