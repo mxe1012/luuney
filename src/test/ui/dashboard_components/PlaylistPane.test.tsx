@@ -3,7 +3,7 @@ import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import PlaylistPane from "../../../ui/dashboard_components/PlaylistPane";
 import SnackbarProvider from "../../../hooks/SnackbarContext";
-import type { PlaylistPaneProps } from "../../../utils/types";
+import type { PlaylistPaneProps, TrackObject } from "../../../utils/types";
 import { makePlaylist, makeTrack } from "../../fixtures";
 
 function setup(overrides: Partial<PlaylistPaneProps> = {}) {
@@ -15,7 +15,7 @@ function setup(overrides: Partial<PlaylistPaneProps> = {}) {
         onFavoritesList: vi.fn(),
         onSetPlaylist: vi.fn(),
         isFavorited: () => false,
-        onDeleteEntry: vi.fn((list) => list),
+        onDeleteEntry: vi.fn(() => (prev: TrackObject[]) => prev),
         onClearQueue: vi.fn(),
         onDeletePlaylist: vi.fn(() => []),
         onDeletePlaylistEntry: vi.fn(),

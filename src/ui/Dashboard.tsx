@@ -233,10 +233,10 @@ export default function Dashboard() {
     }
 
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
-        const filteredList = list.filter((element) => element.track_id !== entry.track_id);
         showSnackbar("Removed track from list.");
         removeFromQueue(list === recents ? "recents" : list === favorites ? "favorites" : null, entry);
-        return filteredList;
+        // returns an updater so the caller's setter filters the latest list, not this render's copy
+        return (prev: TrackObject[]) => prev.filter((element) => element.track_id !== entry.track_id);
     }
 
     function handleClearQueue(source: string) {

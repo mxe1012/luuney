@@ -3,7 +3,7 @@ import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import RecentsList from "../../../../ui/dashboard_components/playlistpane_components/RecentsList";
 import SnackbarProvider from "../../../../hooks/SnackbarContext";
-import type { MainListProps } from "../../../../utils/types";
+import type { MainListProps, TrackObject } from "../../../../utils/types";
 import { makeTracks } from "../../../fixtures";
 
 function setup(overrides: Partial<MainListProps> = {}) {
@@ -12,7 +12,7 @@ function setup(overrides: Partial<MainListProps> = {}) {
         visible: true,
         onRecentsList: vi.fn(),
         onAddToFavorites: vi.fn(),
-        onDeleteEntry: vi.fn((list, entry) => list.filter((t) => t.track_id !== entry.track_id)),
+        onDeleteEntry: vi.fn((_list, entry) => (prev: TrackObject[]) => prev.filter((t) => t.track_id !== entry.track_id)),
         isFavorited: () => false,
         onHandleFetch: vi.fn().mockResolvedValue(undefined),
         onIsPlaying: vi.fn(),
@@ -82,7 +82,8 @@ describe("RecentsList", () => {
 
         fireEvent.click(screen.getAllByLabelText("Delete Entry")[0]);
 
-        expect(props.onRecentsList).toHaveBeenCalledWith([props.list[1], props.list[2]]);
+        const updater = vi.mocked(props.onRecentsList!).mock.calls[0][0] as (prev: TrackObject[]) => TrackObject[];
+        expect(updater(props.list)).toEqual([props.list[1], props.list[2]]);
     });
 
     describe("Clear button", () => {
