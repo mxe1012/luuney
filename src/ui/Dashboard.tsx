@@ -167,15 +167,15 @@ export default function Dashboard() {
         const isInList = favorites.some((element) => isSameEntry(element, entry));
 
         if(isInList) {
-            const filtered = favorites.filter((element) => element.track_id !== entry.track_id);
-            setFavorites(filtered)
+            setFavorites(prev => prev.filter((element) => element.track_id !== entry.track_id))
             showSnackbar("Removed track from favorites!") 
         }
         else {
-            setFavorites([
-                ...favorites,
-                entry
-            ])
+            setFavorites(prev =>
+                prev.some((element) => isSameEntry(element, entry))
+                    ? prev
+                    : [...prev, entry]
+            )
             showSnackbar("Added track to favorites!") 
         }
     }
