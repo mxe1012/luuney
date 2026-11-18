@@ -31,6 +31,11 @@ body {
     height: 100%;
 }
 
+/* form controls don't inherit the page font by default */
+button, input, select, textarea {
+    font-family: inherit;
+}
+
 #root {
     min-height: 100%;
 }
