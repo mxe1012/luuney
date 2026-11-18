@@ -9,12 +9,16 @@ export function isSameEntry(a: TrackObject, b: TrackObject): boolean {
 export function toTrackObject(apiTrack: ApiTrack): TrackObject {
     const { track_id, artwork, title, duration } = apiTrack;
 
+    const { handle } = apiTrack.user;
+
+    const { url } = apiTrack.stream;
+
     return {
         track_id,
         artwork: artwork?.["480x480"] ?? PLACEHOLDER_ARTWORK,
         title,
-        handle: apiTrack.user.handle,
-        url: apiTrack.stream.url,
+        handle,
+        url,
         duration,
     };
 }
