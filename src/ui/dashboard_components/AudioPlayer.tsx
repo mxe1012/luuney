@@ -3,6 +3,7 @@ import type { AudioPlayerProps } from "../../utils/types";
 import { useRef, useState, useEffect, type ChangeEvent, useEffectEvent } from "react";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
+import { shuffleWithPlayingFirst } from "../../utils/helpers";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 import UpNextList from "./audioplayer_components/UpNextList";
@@ -71,14 +72,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         onSetIsShuffle(nextIsShuffle);
 
         if (nextIsShuffle) {
-            const rest = tracks
-                .filter(track => track.track_id !== playing?.track_id)
-                .map(value => ({ value, sort: Math.random() }))
-                .sort((a, b) => a.sort - b.sort)
-                .map(({ value }) => value);
-
-            // playing track goes first, so the rest of the shuffle follows it
-            onSetShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+            onSetShuffleTrackQueue(shuffleWithPlayingFirst(tracks, playing));
             onSetCurrentTrackIndex(0);
             showSnackbar("Shuffle Enabled!")
         } 
@@ -253,14 +247,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     useEffect(() => {
         if (!isShuffle) return;
 
-        const playing = tracks[currentTrackIndex];
-        const rest = tracks
-            .filter(track => track.track_id !== playing?.track_id)
-            .map(value => ({ value, sort: Math.random() }))
-            .sort((a, b) => a.sort - b.sort)
-            .map(({ value }) => value);
-
-        onSetShuffleTrackQueue(playing ? [playing, ...rest] : rest);
+        onSetShuffleTrackQueue(shuffleWithPlayingFirst(tracks, tracks[currentTrackIndex]));
         onSetCurrentTrackIndex(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tracks]);
