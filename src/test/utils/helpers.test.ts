@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { formatTime, getDurationSum, isOnline } from "../../utils/helpers";
+import { formatTime, getDurationSum, isOnline, isSameEntry } from "../../utils/helpers";
 import { makePlaylist, makeTrack } from "../fixtures";
 
 describe("formatTime", () => {
@@ -63,5 +63,12 @@ describe("isOnline", () => {
 
         spy.mockReturnValue(false);
         expect(isOnline()).toBe(false);
+    });
+});
+
+describe("isSameEntry", () => {
+    it("compares tracks by track_id only", () => {
+        expect(isSameEntry(makeTrack(1), makeTrack(1, { title: "Renamed" }))).toBe(true);
+        expect(isSameEntry(makeTrack(1), makeTrack(2))).toBe(false);
     });
 });

@@ -14,7 +14,7 @@ import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import ExtraListPane from "./dashboard_components/ExtraListPane";
-import { isOnline } from "../utils/helpers";
+import { isOnline, isSameEntry } from "../utils/helpers";
 
 const MAX_LENGTH = 50;
 
@@ -36,10 +36,6 @@ export default function Dashboard() {
     const [favorites, setFavorites] = useLocalStorage<TrackObject[]>("favorite_tracks", [])
 
     const [playlists, setPlaylists] = useLocalStorage<Playlist[]>("user_playlists", []);
-
-    const isSameEntry = (a: TrackObject, b: TrackObject) => {
-        return a.track_id === b.track_id
-    }
 
     const isCurrentTrackFavorited = favorites.some((element) => isSameEntry(element, track));
 

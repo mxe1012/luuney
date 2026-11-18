@@ -1,4 +1,8 @@
-import type { Playlist } from "./types";
+import type { Playlist, TrackObject } from "./types";
+
+export function isSameEntry(a: TrackObject, b: TrackObject): boolean {
+    return a.track_id === b.track_id;
+}
 
 export function formatTime(seconds: number): string {
     if (!Number.isFinite(seconds)) return "0:00";
