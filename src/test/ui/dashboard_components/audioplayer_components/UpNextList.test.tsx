@@ -31,7 +31,7 @@ describe("UpNextList", () => {
     it("shows the heading", () => {
         render(<UpNextList queue={[]} isUpNextVisible={true} />);
 
-        expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("Up Next");
+        expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("Queue");
     });
 
     it("lists each track's title and formatted duration, in order", () => {
