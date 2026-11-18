@@ -40,6 +40,10 @@ button, input, select, textarea {
     min-height: 100%;
 }
 
+time {
+    font-variant-numeric: tabular-nums;
+}
+
 :root {
   --scroll-track: rgba(36, 22, 55, 0.35);
   --scroll-thumb: rgba(167, 139, 250, 0.65);
