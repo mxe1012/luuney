@@ -54,7 +54,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 ? 
                 <EmptyListMessage 
                     listName="Favorites"
-                    extraMessage="Click on any ❤️ icon to favorite songs!"
+                    extraMessage="Click any ❤️ icon to favorite songs!"
                 /> 
                 : 
                 <FavoritesList 
@@ -73,7 +73,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 ? 
                 <EmptyListMessage 
                     listName="Playlists"
-                    extraMessage="Click on the + icon in the playlist menu to create a playlist!"
+                    extraMessage="Click the + icon to create a new playlist or add to an exsiting playlist!"
                 /> 
                 : 
                 <PlaylistSelectionList 
