@@ -43,10 +43,14 @@ export function shuffleWithPlayingFirst(tracks: TrackObject[], playing: TrackObj
 
 export function formatTime(seconds: number): string {
     if (!Number.isFinite(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
+
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
     
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
+    return hrs <= 0 
+        ? `${mins}:${secs.toString().padStart(2, "0")}` 
+        : `${hrs}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
 export function getDurationSum(playlist: Playlist): number {
