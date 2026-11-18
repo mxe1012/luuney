@@ -173,7 +173,7 @@ describe("MainAudioPlayer", () => {
         it("calls onHandleUpNextVisibility when clicked", () => {
             const { props } = setup();
 
-            fireEvent.click(screen.getByLabelText("up next"));
+            fireEvent.click(screen.getByLabelText("queue"));
 
             expect(props.onHandleUpNextVisibility).toHaveBeenCalledTimes(1);
         });

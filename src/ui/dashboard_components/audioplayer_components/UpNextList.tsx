@@ -13,7 +13,7 @@ export default function UpNextList({queue, isUpNextVisible}: UpNextListProps) {
             <div className={isUpNextVisible ? "GlassCard NoBg UpNextList" : "GlassCard NoBg UpNextList hidden"}>
                 <h3>Queue</h3>
                 {queue.length === 0 ? (
-                    <p className="UpNextEmpty">Nothing up next.</p>
+                    <p className="UpNextEmpty">Nothing in the queue.</p>
                 ) : (
                     <>
                         <ul className="UpNextItems">

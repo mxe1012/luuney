@@ -63,13 +63,13 @@ describe("UpNextList", () => {
     it("shows a message instead of a list when nothing is up next", () => {
         const { container } = render(<UpNextList queue={[]} isUpNextVisible={true} />);
 
-        expect(screen.getByText("Nothing up next.")).toBeTruthy();
+        expect(screen.getByText("Nothing in the queue.")).toBeTruthy();
         expect(container.querySelector(".UpNextItems")).toBeNull();
     });
 
     it("does not show the empty message when there are tracks", () => {
         render(<UpNextList queue={makeTracks(1)} isUpNextVisible={true} />);
 
-        expect(screen.queryByText("Nothing up next.")).toBeNull();
+        expect(screen.queryByText("Nothing in the queue.")).toBeNull();
     });
 });

@@ -112,8 +112,8 @@ export default function MainAudioPlayer({
                     <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
                     </button>
-                    <button className="ActionBtn" onClick={onHandleUpNextVisibility} aria-label="up next">
-                        <img src={"/assets/audio_player_icons/playlist.svg"} alt="Up Next" />
+                    <button className="ActionBtn" onClick={onHandleUpNextVisibility} aria-label="queue">
+                        <img src={"/assets/audio_player_icons/playlist.svg"} alt="queue" />
                     </button>
                 </div>
                 <div className="RowCenter">

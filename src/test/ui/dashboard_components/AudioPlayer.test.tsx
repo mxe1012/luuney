@@ -580,10 +580,10 @@ describe("AudioPlayer", () => {
         it("the up next button toggles it open and closed", () => {
             setup({ tracks: makeTracks(3) });
 
-            fireEvent.click(screen.getByLabelText("up next"));
+            fireEvent.click(screen.getByLabelText("queue"));
             expect(upNextPane().className).toBe("GlassCard NoBg UpNextList");
 
-            fireEvent.click(screen.getByLabelText("up next"));
+            fireEvent.click(screen.getByLabelText("queue"));
             expect(upNextPane().className).toBe("GlassCard NoBg UpNextList hidden");
         });
 
@@ -613,7 +613,7 @@ describe("AudioPlayer", () => {
             setup({ tracks: makeTracks(3), initialIndex: 2 });
 
             expect(upNextTitles()).toEqual([]);
-            expect(screen.getByText("Nothing up next.")).toBeTruthy();
+            expect(screen.getByText("Nothing in the queue.")).toBeTruthy();
         });
 
         it("shows the shuffled order when shuffle is on", () => {
