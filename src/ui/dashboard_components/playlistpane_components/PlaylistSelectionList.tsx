@@ -66,7 +66,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                             <h5>({playlist.tracks.length} tracks)</h5>
                                         </div>
                                         <div className="ListMeta">
-                                            <h6>{formatTime(getDurationSum(playlist))}</h6>
+                                            <h6><time>{formatTime(getDurationSum(playlist))}</time></h6>
                                         </div>
                                     </div>
                                 </button>

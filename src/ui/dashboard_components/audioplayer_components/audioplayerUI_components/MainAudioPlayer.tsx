@@ -131,10 +131,10 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowBetween">
                     <div>
-                        <h4 className="MutedLavenderColor NoMargin">{formatTime(currentTime)}</h4>
+                        <h4 className="MutedLavenderColor NoMargin"><time>{formatTime(currentTime)}</time></h4>
                     </div>
                     <div>
-                        <h4 className="MutedLavenderColor NoMargin">{formatTime(duration)}</h4>
+                        <h4 className="MutedLavenderColor NoMargin"><time>{formatTime(duration)}</time></h4>
                     </div>
                 </div>
                 <div className="RowEvenly">
