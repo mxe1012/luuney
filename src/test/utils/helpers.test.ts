@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { formatTime, getDurationSum, isOnline, isSameEntry, shuffleWithPlayingFirst } from "../../utils/helpers";
-import { makePlaylist, makeTrack, makeTracks } from "../fixtures";
+import { formatTime, getDurationSum, isOnline, isSameEntry, shuffleWithPlayingFirst, toTrackObject, toTrackObjects } from "../../utils/helpers";
+import type { ApiTrack } from "../../utils/types";
+import { makeApiTrack, makePlaylist, makeTrack, makeTracks } from "../fixtures";
 
 describe("formatTime", () => {
     it("formats zero as 0:00", () => {
@@ -70,6 +71,26 @@ describe("isSameEntry", () => {
     it("compares tracks by track_id only", () => {
         expect(isSameEntry(makeTrack(1), makeTrack(1, { title: "Renamed" }))).toBe(true);
         expect(isSameEntry(makeTrack(1), makeTrack(2))).toBe(false);
+    });
+});
+
+describe("toTrackObject", () => {
+    it("maps an API track to a TrackObject", () => {
+        expect(toTrackObject(makeApiTrack(1) as ApiTrack)).toEqual(makeTrack(1));
+    });
+
+    it("falls back to the placeholder artwork", () => {
+        const track = toTrackObject(makeApiTrack(1, { artwork: null }) as ApiTrack);
+
+        expect(track.artwork).toBe("/assets/placeholder-cover-purple.svg");
+    });
+});
+
+describe("toTrackObjects", () => {
+    it("maps every track and leaves out those without a stream URL", () => {
+        const apiTracks = [makeApiTrack(1), makeApiTrack(2, { stream: {} }), makeApiTrack(3)] as ApiTrack[];
+
+        expect(toTrackObjects(apiTracks)).toEqual([makeTrack(1), makeTrack(3)]);
     });
 });
 

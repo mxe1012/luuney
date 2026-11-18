@@ -1,7 +1,29 @@
-import type { Playlist, TrackObject } from "./types";
+import type { ApiTrack, Playlist, TrackObject } from "./types";
+
+const PLACEHOLDER_ARTWORK = "/assets/placeholder-cover-purple.svg";
 
 export function isSameEntry(a: TrackObject, b: TrackObject): boolean {
     return a.track_id === b.track_id;
+}
+
+export function toTrackObject(apiTrack: ApiTrack): TrackObject {
+    const { track_id, artwork, title, duration } = apiTrack;
+
+    return {
+        track_id,
+        artwork: artwork?.["480x480"] ?? PLACEHOLDER_ARTWORK,
+        title,
+        handle: apiTrack.user.handle,
+        url: apiTrack.stream.url,
+        duration,
+    };
+}
+
+// tracks without a stream URL can't be played, so they are left out
+export function toTrackObjects(apiTracks: ApiTrack[]): TrackObject[] {
+    return apiTracks
+        .filter((apiTrack) => apiTrack.stream?.url)
+        .map(toTrackObject);
 }
 
 // the playing track goes first, so the rest of the shuffle follows it

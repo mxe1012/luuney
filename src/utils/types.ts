@@ -15,6 +15,16 @@ export interface TrackObject {
     duration: number;
 }
 
+// The fields of an Audius API track that Luuney reads.
+export interface ApiTrack {
+    track_id: number;
+    title: string;
+    duration: number;
+    artwork?: { "480x480"?: string } | null;
+    user: { handle: string };
+    stream: { url: string };
+}
+
 export interface ArtistObject {
     user_id: number;
     profile_picture: string;

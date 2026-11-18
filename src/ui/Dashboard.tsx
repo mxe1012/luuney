@@ -14,7 +14,7 @@ import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import ExtraListPane from "./dashboard_components/ExtraListPane";
-import { isOnline, isSameEntry } from "../utils/helpers";
+import { isOnline, isSameEntry, toTrackObject, toTrackObjects } from "../utils/helpers";
 
 const MAX_LENGTH = 50;
 
@@ -75,25 +75,12 @@ export default function Dashboard() {
         try {
             const result = await fetchTrackById(id);
 
-            const { track_id, artwork, title, duration } = result.data;
-
-            const { handle } = result.data.user;
-
-            const { url } = result.data.stream;
-
-            const newTrack: TrackObject = {
-                track_id,
-                artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
-                title,
-                handle,
-                url,
-                duration,
-            };
+            const newTrack = toTrackObject(result.data);
 
             if (latestTrackRequestId.current !== trackRequestId) return;
 
             setTrack(newTrack);
-            showSnackbar("Now playing:\n" + title + "\n" + handle);
+            showSnackbar("Now playing:\n" + newTrack.title + "\n" + newTrack.handle);
             handleAddToRecents(newTrack);
 
         }
@@ -129,27 +116,6 @@ export default function Dashboard() {
             showSnackbar("Failed to fetch latest tracks.");
             console.error("Failed to fetch latest tracks:", latestResult.reason);
         }
-    }
-
-    type TrackResponse = Awaited<ReturnType<typeof fetchTrackTrending>>;
-
-    function toTrackObjects(data: TrackResponse["data"]): TrackObject[] {
-        return data
-            .filter((element) => element.stream?.url)
-            .map((element) => {
-                const { track_id, artwork, title, duration } = element;
-                const { handle } = element.user;
-                const { url } = element.stream;
-
-                return {
-                    track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
-                    title,
-                    handle,
-                    url,
-                    duration,
-                };
-            });
     }
 
     function handleAddToRecents(entry: TrackObject) {
