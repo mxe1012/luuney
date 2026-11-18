@@ -289,7 +289,7 @@ describe("Dashboard", () => {
 
     describe("playlists", () => {
         function openPlaylistMenu() {
-            fireEvent.click(within(mainPlayer()).getByLabelText("playlist"));
+            fireEvent.click(within(mainPlayer()).getByLabelText("playlist menu"));
         }
 
         it("creates a playlist from the current track with a trimmed name", async () => {

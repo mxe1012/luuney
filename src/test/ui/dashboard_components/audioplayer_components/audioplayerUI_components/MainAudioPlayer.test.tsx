@@ -193,7 +193,7 @@ describe("MainAudioPlayer", () => {
 
     describe("playlist menu", () => {
         function openMenu() {
-            fireEvent.click(screen.getByLabelText("playlist"));
+            fireEvent.click(screen.getByLabelText("playlist menu"));
         }
 
         it("is hidden by default and toggled by the playlist button", () => {
