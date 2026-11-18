@@ -70,8 +70,8 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowCenter ActionButtonRow">
                     <div className="PlaylistMenuWrapper">
-                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)} aria-label="playlist">
-                            <img src={"/assets/audio_player_icons/playlist.svg"} alt="playlist" />
+                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)} aria-label="playlist menu">
+                            <img src={"/assets/audio_player_icons/plus.svg"} alt="playlist menu" />
                         </button>
                         <div
                         ref={playlistWrapperRef} 
@@ -113,7 +113,7 @@ export default function MainAudioPlayer({
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
                     </button>
                     <button className="ActionBtn" onClick={onHandleUpNextVisibility} aria-label="up next">
-                        <img src={"/assets/audio_player_icons/eye.svg"} alt="Up Next" />
+                        <img src={"/assets/audio_player_icons/playlist.svg"} alt="Up Next" />
                     </button>
                 </div>
                 <div className="RowCenter">
