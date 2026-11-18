@@ -19,8 +19,14 @@ describe("formatTime", () => {
         expect(formatTime(600)).toBe("10:00");
     });
 
-    it("does not roll minutes over into hours", () => {
-        expect(formatTime(3661)).toBe("61:01");
+    it("stays in minutes just under an hour", () => {
+        expect(formatTime(3599)).toBe("59:59");
+    });
+
+    it("adds hours from one hour up, padding minutes and seconds", () => {
+        expect(formatTime(3600)).toBe("1:00:00");
+        expect(formatTime(3661)).toBe("1:01:01");
+        expect(formatTime(36000)).toBe("10:00:00");
     });
 
     it("floors fractional seconds", () => {
