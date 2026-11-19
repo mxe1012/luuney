@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { formatTime, getDurationSum, isOnline } from "../../utils/helpers";
-import { makePlaylist, makeTrack } from "../fixtures";
+import { formatTime, getDurationSum, isOnline, isSameEntry, shuffleWithPlayingFirst, toTrackObject, toTrackObjects } from "../../utils/helpers";
+import type { ApiTrack } from "../../utils/types";
+import { makeApiTrack, makePlaylist, makeTrack, makeTracks } from "../fixtures";
 
 describe("formatTime", () => {
     it("formats zero as 0:00", () => {
@@ -18,8 +19,14 @@ describe("formatTime", () => {
         expect(formatTime(600)).toBe("10:00");
     });
 
-    it("does not roll minutes over into hours", () => {
-        expect(formatTime(3661)).toBe("61:01");
+    it("stays in minutes just under an hour", () => {
+        expect(formatTime(3599)).toBe("59:59");
+    });
+
+    it("adds hours from one hour up, padding minutes and seconds", () => {
+        expect(formatTime(3600)).toBe("1:00:00");
+        expect(formatTime(3661)).toBe("1:01:01");
+        expect(formatTime(36000)).toBe("10:00:00");
     });
 
     it("floors fractional seconds", () => {
@@ -63,5 +70,60 @@ describe("isOnline", () => {
 
         spy.mockReturnValue(false);
         expect(isOnline()).toBe(false);
+    });
+});
+
+describe("isSameEntry", () => {
+    it("compares tracks by track_id only", () => {
+        expect(isSameEntry(makeTrack(1), makeTrack(1, { title: "Renamed" }))).toBe(true);
+        expect(isSameEntry(makeTrack(1), makeTrack(2))).toBe(false);
+    });
+});
+
+describe("toTrackObject", () => {
+    it("maps an API track to a TrackObject", () => {
+        expect(toTrackObject(makeApiTrack(1) as ApiTrack)).toEqual(makeTrack(1));
+    });
+
+    it("falls back to the placeholder artwork", () => {
+        const track = toTrackObject(makeApiTrack(1, { artwork: null }) as ApiTrack);
+
+        expect(track.artwork).toBe("/assets/placeholder-cover-purple.svg");
+    });
+});
+
+describe("toTrackObjects", () => {
+    it("maps every track and leaves out those without a stream URL", () => {
+        const apiTracks = [makeApiTrack(1), makeApiTrack(2, { stream: {} }), makeApiTrack(3)] as ApiTrack[];
+
+        expect(toTrackObjects(apiTracks)).toEqual([makeTrack(1), makeTrack(3)]);
+    });
+});
+
+describe("shuffleWithPlayingFirst", () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("puts the playing track first, followed by the rest in random order", () => {
+        const tracks = makeTracks(4);
+        // sort keys for tracks 1, 3, 4 (track 2 is playing): 4 sorts first, then 1, then 3
+        vi.spyOn(Math, "random").mockReturnValueOnce(0.5).mockReturnValueOnce(0.9).mockReturnValueOnce(0.1);
+
+        expect(shuffleWithPlayingFirst(tracks, tracks[1]).map((t) => t.track_id)).toEqual([2, 4, 1, 3]);
+    });
+
+    it("keeps every track exactly once", () => {
+        const tracks = makeTracks(5);
+        const result = shuffleWithPlayingFirst(tracks, tracks[2]);
+
+        expect(result[0]).toBe(tracks[2]);
+        expect([...result].sort((a, b) => a.track_id - b.track_id)).toEqual(tracks);
+    });
+
+    it("shuffles all tracks when nothing is playing", () => {
+        const tracks = makeTracks(3);
+
+        expect(shuffleWithPlayingFirst(tracks, undefined)).toHaveLength(3);
     });
 });

@@ -1,11 +1,56 @@
-import type { Playlist } from "./types";
+import type { ApiTrack, Playlist, TrackObject } from "./types";
+
+const PLACEHOLDER_ARTWORK = "/assets/placeholder-cover-purple.svg";
+
+export function isSameEntry(a: TrackObject, b: TrackObject): boolean {
+    return a.track_id === b.track_id;
+}
+
+export function toTrackObject(apiTrack: ApiTrack): TrackObject {
+    const { track_id, artwork, title, duration } = apiTrack;
+
+    const { handle } = apiTrack.user;
+
+    const { url } = apiTrack.stream;
+
+    return {
+        track_id,
+        artwork: artwork?.["480x480"] ?? PLACEHOLDER_ARTWORK,
+        title,
+        handle,
+        url,
+        duration,
+    };
+}
+
+// tracks without a stream URL can't be played, so they are left out
+export function toTrackObjects(apiTracks: ApiTrack[]): TrackObject[] {
+    return apiTracks
+        .filter((apiTrack) => apiTrack.stream?.url)
+        .map(toTrackObject);
+}
+
+// the playing track goes first, so the rest of the shuffle follows it
+export function shuffleWithPlayingFirst(tracks: TrackObject[], playing: TrackObject | undefined): TrackObject[] {
+    const rest = tracks
+        .filter((track) => track.track_id !== playing?.track_id)
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+    return playing ? [playing, ...rest] : rest;
+}
 
 export function formatTime(seconds: number): string {
     if (!Number.isFinite(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
+
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
     
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
+    return hrs === 0 
+        ? `${mins}:${secs.toString().padStart(2, "0")}` 
+        : `${hrs}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
 export function getDurationSum(playlist: Playlist): number {

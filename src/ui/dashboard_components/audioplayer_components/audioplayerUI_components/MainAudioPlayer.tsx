@@ -35,7 +35,7 @@ export default function MainAudioPlayer({
     onAddToFavorites,
     onHandleAddToPlaylist,
     onHandleCreatePlaylist,
-    onHandleUpNextVisibiliy}: AudioPlayerUIProps) {
+    onHandleUpNextVisibility}: AudioPlayerUIProps) {
 
     const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
@@ -70,8 +70,8 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowCenter ActionButtonRow">
                     <div className="PlaylistMenuWrapper">
-                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)} aria-label="playlist">
-                            <img src={"/assets/audio_player_icons/playlist.svg"} alt="playlist" />
+                        <button className="ActionBtn" onClick={() => setIsPlaylistMenuVisible(!isPlaylistMenuVisible)} aria-label="playlist menu">
+                            <img src={"/assets/audio_player_icons/plus.svg"} alt="playlist menu" />
                         </button>
                         <div
                         ref={playlistWrapperRef} 
@@ -112,8 +112,8 @@ export default function MainAudioPlayer({
                     <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">
                         <img src={isFavorited ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="favorite" />
                     </button>
-                    <button className="ActionBtn" onClick={onHandleUpNextVisibiliy} aria-label="up next">
-                        <img src={"/assets/audio_player_icons/eye.svg"} alt="Up Next" />
+                    <button className="ActionBtn" onClick={onHandleUpNextVisibility} aria-label="queue">
+                        <img src={"/assets/audio_player_icons/playlist.svg"} alt="queue" />
                     </button>
                 </div>
                 <div className="RowCenter">
@@ -131,10 +131,10 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowBetween">
                     <div>
-                        <h4 className="MutedLavenderColor NoMargin">{formatTime(currentTime)}</h4>
+                        <h4 className="MutedLavenderColor NoMargin"><time>{formatTime(currentTime)}</time></h4>
                     </div>
                     <div>
-                        <h4 className="MutedLavenderColor NoMargin">{formatTime(duration)}</h4>
+                        <h4 className="MutedLavenderColor NoMargin"><time>{formatTime(duration)}</time></h4>
                     </div>
                 </div>
                 <div className="RowEvenly">

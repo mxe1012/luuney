@@ -5,6 +5,7 @@ import { fetchTrackByQuery, fetchTracksByUser, fetchUsers } from "../../utils/da
 import type { ArtistObject, SearchListPaneProps, TrackObject } from "../../utils/types";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
+import { toTrackObjects } from "../../utils/helpers";
 
 import SkeletonSearchListPane from "../skeletons/SkeletonSearchListPane";
 
@@ -43,27 +44,6 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
         showSnackbar("Searching by " + type)
     }
 
-    type TrackResponse = Awaited<ReturnType<typeof fetchTrackByQuery>>;
-
-    function mapTracksData(data: TrackResponse["data"]): TrackObject[] {
-        return data
-            .filter((e) => e.stream?.url)
-            .map((e) => {
-                const { track_id, artwork, title, duration } = e;
-                const { handle } = e.user;
-                const { url } = e.stream;
-
-                return {
-                    track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
-                    title,
-                    handle,
-                    url,
-                    duration,
-                };
-            });
-    }
-
     async function handleSearchTracks(e: React.ChangeEvent<HTMLInputElement>) {
 
         setIsLoaded(false);
@@ -100,7 +80,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                 return;
             }
 
-            setTrackList(mapTracksData(result.data));
+            setTrackList(toTrackObjects(result.data));
             setIsLoaded(true);
         }
         catch(e) {
@@ -185,7 +165,7 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
         try {
             const result = await fetchTracksByUser(id);
 
-            setTrackList(mapTracksData(result.data));
+            setTrackList(toTrackObjects(result.data));
             setIsLoaded(true);
         }
         catch(e) {

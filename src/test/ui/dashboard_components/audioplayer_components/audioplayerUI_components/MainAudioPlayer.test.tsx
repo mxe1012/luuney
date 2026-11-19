@@ -170,12 +170,12 @@ describe("MainAudioPlayer", () => {
     });
 
     describe("up next button", () => {
-        it("calls onHandleUpNextVisibiliy when clicked", () => {
+        it("calls onHandleUpNextVisibility when clicked", () => {
             const { props } = setup();
 
-            fireEvent.click(screen.getByLabelText("up next"));
+            fireEvent.click(screen.getByLabelText("queue"));
 
-            expect(props.onHandleUpNextVisibiliy).toHaveBeenCalledTimes(1);
+            expect(props.onHandleUpNextVisibility).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -193,7 +193,7 @@ describe("MainAudioPlayer", () => {
 
     describe("playlist menu", () => {
         function openMenu() {
-            fireEvent.click(screen.getByLabelText("playlist"));
+            fireEvent.click(screen.getByLabelText("playlist menu"));
         }
 
         it("is hidden by default and toggled by the playlist button", () => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { fetchTrackById, fetchTrackLatest, fetchTrackTrending } from "../utils/data";
 
@@ -14,7 +14,7 @@ import PlaylistPane from "./dashboard_components/PlaylistPane";
 
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import ExtraListPane from "./dashboard_components/ExtraListPane";
-import { isOnline } from "../utils/helpers";
+import { isOnline, isSameEntry, toTrackObject, toTrackObjects } from "../utils/helpers";
 
 const MAX_LENGTH = 50;
 
@@ -36,10 +36,6 @@ export default function Dashboard() {
     const [favorites, setFavorites] = useLocalStorage<TrackObject[]>("favorite_tracks", [])
 
     const [playlists, setPlaylists] = useLocalStorage<Playlist[]>("user_playlists", []);
-
-    const isSameEntry = (a: TrackObject, b: TrackObject) => {
-        return a.track_id === b.track_id
-    }
 
     const isCurrentTrackFavorited = favorites.some((element) => isSameEntry(element, track));
 
@@ -64,38 +60,34 @@ export default function Dashboard() {
     // the list the queue was started from: "recents", "favorites", a playlist id, or null for any other list
     const [queueSource, setQueueSource] = useState<string | null>(null);
 
+    const latestTrackRequestId = useRef(0);
+
     const { showSnackbar, hideSnackbar } = useSnackbar();
 
     async function handleFetch(id: number) {
 
         showSnackbar("Loading track...", undefined, true);
 
+        latestTrackRequestId.current++;
+
+        const trackRequestId = latestTrackRequestId.current;
+
         try {
             const result = await fetchTrackById(id);
 
-            const { track_id, artwork, title, duration } = result.data;
+            const newTrack = toTrackObject(result.data);
 
-            const { handle } = result.data.user;
-
-            const { url } = result.data.stream;
-
-            const newTrack: TrackObject = {
-                track_id,
-                artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
-                title,
-                handle,
-                url,
-                duration,
-            };
+            if (latestTrackRequestId.current !== trackRequestId) return;
 
             setTrack(newTrack);
-            showSnackbar("Now playing:\n" + title + "\n" + handle);
+            showSnackbar("Now playing:\n" + newTrack.title + "\n" + newTrack.handle);
             handleAddToRecents(newTrack);
 
         }
         catch(e) {
+            if (latestTrackRequestId.current !== trackRequestId) return;
             showSnackbar("Error loading track!", 12000)
-            console.log(e);
+            console.error(e);
         }
         
     }
@@ -126,27 +118,6 @@ export default function Dashboard() {
         }
     }
 
-    type TrackResponse = Awaited<ReturnType<typeof fetchTrackTrending>>;
-
-    function toTrackObjects(data: TrackResponse["data"]): TrackObject[] {
-        return data
-            .filter((element) => element.stream?.url)
-            .map((element) => {
-                const { track_id, artwork, title, duration } = element;
-                const { handle } = element.user;
-                const { url } = element.stream;
-
-                return {
-                    track_id,
-                    artwork: artwork?.["480x480"] ?? "/assets/placeholder-cover-purple.svg",
-                    title,
-                    handle,
-                    url,
-                    duration,
-                };
-            });
-    }
-
     function handleAddToRecents(entry: TrackObject) {
        setRecents(prev => [
             entry,
@@ -158,15 +129,15 @@ export default function Dashboard() {
         const isInList = favorites.some((element) => isSameEntry(element, entry));
 
         if(isInList) {
-            const filtered = favorites.filter((element) => element.track_id !== entry.track_id);
-            setFavorites(filtered)
+            setFavorites(prev => prev.filter((element) => element.track_id !== entry.track_id))
             showSnackbar("Removed track from favorites!") 
         }
         else {
-            setFavorites([
-                ...favorites,
-                entry
-            ])
+            setFavorites(prev =>
+                prev.some((element) => isSameEntry(element, entry))
+                    ? prev
+                    : [...prev, entry]
+            )
             showSnackbar("Added track to favorites!") 
         }
     }
@@ -224,10 +195,10 @@ export default function Dashboard() {
     }
 
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
-        const filteredList = list.filter((element) => element.track_id !== entry.track_id);
         showSnackbar("Removed track from list.");
         removeFromQueue(list === recents ? "recents" : list === favorites ? "favorites" : null, entry);
-        return filteredList;
+        // returns an updater so the caller's setter filters the latest list, not this render's copy
+        return (prev: TrackObject[]) => prev.filter((element) => element.track_id !== entry.track_id);
     }
 
     function handleClearQueue(source: string) {
@@ -240,10 +211,10 @@ export default function Dashboard() {
     }
 
     function handleDeletePlaylist(entry: Playlist) {
-        const filtered = playlists.filter((element) => element.id !== entry.id);
         handleClearQueue(entry.id);
         showSnackbar("Removed playlist.")
-        return filtered;
+        // returns an updater so the caller's setter filters the latest playlists, not this render's copy
+        return (prev: Playlist[]) => prev.filter((element) => element.id !== entry.id);
     }
 
     function handleDeletePlaylistEntry(playlistId: string, entry: TrackObject) {
@@ -262,13 +233,8 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-
-        const id = setTimeout(() => {
-            handleGetTrendingAndLatest()
-        }, 600)
-
-        return () => clearTimeout(id)
-
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        handleGetTrendingAndLatest()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

@@ -32,7 +32,7 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
                 setList(v);
             }}
             onSetIsPlaylistSelectionVisible={vi.fn()}
-            onDeletePlaylist={(entry) => list.filter((p) => p.id !== entry.id)}
+            onDeletePlaylist={(entry) => (prev) => prev.filter((p) => p.id !== entry.id)}
             onDeletePlaylistEntry={vi.fn()}
             onHandleFetch={vi.fn().mockResolvedValue(undefined)}
             onIsPlaying={vi.fn()}
@@ -85,8 +85,23 @@ describe("PlaylistSelectionList", () => {
 
             fireEvent.click(screen.getAllByLabelText("delete playlist")[0]);
 
-            expect(spies.onSetPlaylist).toHaveBeenCalledWith([PLAYLISTS[1]]);
+            const updater = spies.onSetPlaylist.mock.calls[0][0] as (prev: Playlist[]) => Playlist[];
+            expect(updater(PLAYLISTS)).toEqual([PLAYLISTS[1]]);
             expect(screen.queryByText("Chill")).toBeNull();
+        });
+
+        it("removes every empty playlist in one pass, deleting each only once", () => {
+            const onDeletePlaylist = vi.fn((entry: Playlist) => (prev: Playlist[]) => prev.filter((p) => p.id !== entry.id));
+            setup([
+                makePlaylist("e1", [], "Empty One"),
+                makePlaylist("keep", [makeTrack(1)], "Keeper"),
+                makePlaylist("e2", [], "Empty Two"),
+            ], { onDeletePlaylist });
+
+            expect(screen.queryByText("Empty One")).toBeNull();
+            expect(screen.queryByText("Empty Two")).toBeNull();
+            expect(screen.getByText("Keeper")).toBeTruthy();
+            expect(onDeletePlaylist.mock.calls.map(([entry]) => entry.id)).toEqual(["e1", "e2"]);
         });
 
         it("Clear removes all playlists and shows a snackbar", () => {
