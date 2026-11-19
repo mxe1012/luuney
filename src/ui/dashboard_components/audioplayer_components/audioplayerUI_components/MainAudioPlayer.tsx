@@ -139,19 +139,19 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowEvenly">
                     <AudioPlayerButton 
-                    onClick={onHandleShuffle} size={32} toggleAction={isShuffle} 
+                    onClick={onHandleShuffle} size={20} toggleAction={isShuffle} 
                     labelTrue="Shuffle On" labelFalse="Shuffle Off"
                     srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
-                    <AudioPlayerButton onClick={onHandleRewind} size={32} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
-                    <AudioPlayerButton onClick={onHandleSkipPrev} size={36} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
+                    <AudioPlayerButton onClick={onHandleRewind} size={20} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                    <AudioPlayerButton onClick={onHandleSkipPrev} size={22} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
                     <AudioPlayerButton 
-                    onClick={onHandleTogglePlay} size={64} toggleAction={isPlaying} 
+                    onClick={onHandleTogglePlay} size={48} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                    <AudioPlayerButton onClick={onHandleSkipNext} size={36} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
-                    <AudioPlayerButton onClick={onHandleFastForward} size={32} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                    <AudioPlayerButton onClick={onHandleSkipNext} size={22} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
+                    <AudioPlayerButton onClick={onHandleFastForward} size={20} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                     <AudioPlayerModeButton
-                        size={32}
+                        size={20}
                         onClick={onCycleRepeatMode}
                         states={[
                             { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
@@ -163,7 +163,7 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowEvenly">
                     <AudioPlayerButton
-                    onClick={onHandleToggleMute} size={40} toggleAction={isMuted}
+                    onClick={onHandleToggleMute} size={24} toggleAction={isMuted}
                     labelTrue="Unmute" labelFalse="Mute"
                     srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
                     <input
