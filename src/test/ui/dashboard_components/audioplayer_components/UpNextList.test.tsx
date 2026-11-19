@@ -50,13 +50,14 @@ describe("UpNextList", () => {
         ]);
     });
 
-    it("shows each track's title, artist and duration, and nothing else", () => {
+    it("shows each track's cover, title, artist and duration, and nothing else", () => {
         const { container } = render(<UpNextList queue={[makeTrack(1, { duration: 65 })]} isUpNextVisible={true} />);
 
+        expect(container.querySelectorAll("img")).toHaveLength(1);
+        expect(container.querySelector("img")?.getAttribute("src")).toBe("https://example.com/art/1.jpg");
         expect(container.querySelector(".UpNextTitle")?.textContent).toBe("Track 1");
         expect(container.querySelector(".UpNextArtist")?.textContent).toBe("artist1");
         expect(container.querySelector(".UpNextDuration")?.textContent).toBe("1:05");
-        expect(container.querySelector("img")).toBeNull();
         expect(container.querySelector("button")).toBeNull();
     });
 
