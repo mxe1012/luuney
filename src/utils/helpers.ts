@@ -11,6 +11,8 @@ export function toTrackObject(apiTrack: ApiTrack): TrackObject {
 
     const { handle } = apiTrack.user;
 
+    const { url } = apiTrack.stream
+
     if (!apiTrack.stream?.url) throw new Error(`Track ${track_id} has no stream`);
 
     return {
@@ -18,7 +20,7 @@ export function toTrackObject(apiTrack: ApiTrack): TrackObject {
         artwork: artwork?.["480x480"] ?? PLACEHOLDER_ARTWORK,
         title,
         handle,
-        url: apiTrack.stream.url,
+        url,
         duration,
     };
 }
