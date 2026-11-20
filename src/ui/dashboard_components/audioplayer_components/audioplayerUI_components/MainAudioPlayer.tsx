@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useSnackbar } from "../../../../hooks/SnackbarContext";
-import { formatTime } from "../../../../utils/helpers";
+import { formatTime, switchVolumeIcon } from "../../../../utils/helpers";
 import type { AudioPlayerUIProps } from "../../../../utils/types";
 import CoverImage from "../../../CoverImage";
 import AudioPlayerButton from "../AudioPlayerButton";
@@ -165,7 +165,7 @@ export default function MainAudioPlayer({
                     <AudioPlayerButton
                     onClick={onHandleToggleMute} size={24} toggleAction={isMuted}
                     labelTrue="Unmute" labelFalse="Mute"
-                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
+                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse={switchVolumeIcon(volume)} />
                     <input
                         className="progress-slider" 
                         style={{ "--progress": `${progressVolume}%` } as React.CSSProperties}

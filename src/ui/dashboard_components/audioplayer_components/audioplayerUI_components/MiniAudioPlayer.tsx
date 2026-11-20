@@ -1,3 +1,4 @@
+import { switchVolumeIcon } from "../../../../utils/helpers";
 import type { AudioPlayerUIProps } from "../../../../utils/types";
 import CoverImage from "../../../CoverImage";
 import AudioPlayerButton from "../AudioPlayerButton";
@@ -62,7 +63,7 @@ export default function MiniAudioPlayer({
                         <AudioPlayerButton
                             onClick={onHandleToggleMute} size={24} toggleAction={isMuted}
                             labelTrue="Unmute" labelFalse="Mute"
-                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" 
+                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse={switchVolumeIcon(volume)}
                         />
                         <input
                             className="progress-slider" 
