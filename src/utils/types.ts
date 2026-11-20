@@ -150,6 +150,7 @@ export interface CoverImageProps {
     styles?: React.CSSProperties
     src?: string;
     size: number;
+    placeholderSrc?: string;
 }
 
 export interface SnackbarContextType {
