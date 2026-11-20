@@ -371,7 +371,7 @@ describe("AudioPlayer", () => {
 
             fireEvent.error(audio);
 
-            expect(snackbarText()).toBe('Couldn\'t play "Track 1". Skipping...');
+            expect(snackbarText()).toBe("Couldn't play:\nTrack 1\nSkipping...");
             expect(spies.onHandleFetch).not.toHaveBeenCalled();
 
             waitForSkip();
@@ -425,7 +425,7 @@ describe("AudioPlayer", () => {
             fireEvent.error(audio);
             waitForSkip();
 
-            expect(snackbarText()).toBe('Couldn\'t play "Track 1".');
+            expect(snackbarText()).toBe("Couldn't play:\nTrack 1");
             expect(spies.onHandleFetch).not.toHaveBeenCalled();
             expect(spies.onIsPlaying).toHaveBeenLastCalledWith(false);
         });
