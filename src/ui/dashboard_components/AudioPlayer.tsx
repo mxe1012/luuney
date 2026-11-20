@@ -269,7 +269,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         if (currentQueue.length <= 1) {
             failedStreamsRef.current = 0;
             onIsPlaying(false);
-            showSnackbar(`Couldn't play "${track.title}".`, 4000);
+            showSnackbar(`Couldn't play:\n"${track.title}"`, 4000);
             return;
         }
 
@@ -281,7 +281,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             return;
         }
 
-        showSnackbar(`Couldn't play "${track.title}". Skipping...`, STREAM_ERROR_SKIP_DELAY);
+        showSnackbar(`Couldn't play:\n"${track.title}"\nSkipping...`, STREAM_ERROR_SKIP_DELAY);
         skipTimerRef.current = setTimeout(handleSkipNext, STREAM_ERROR_SKIP_DELAY);
     }
 
