@@ -366,10 +366,35 @@ describe("AudioPlayer", () => {
             });
         }
 
-        it("says which track failed, then skips to the next one", () => {
+        // the track's own node fails, then the Audius stream endpoint fails too
+        function failTrack(audio: HTMLAudioElement) {
+            fireEvent.error(audio);
+            fireEvent.error(audio);
+        }
+
+        it("switches to the Audius stream endpoint when the track's own node fails", () => {
             const { audio, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
             fireEvent.error(audio);
+            waitForSkip();
+
+            expect(audio.src).toBe("https://api.audius.co/v1/tracks/1/stream");
+            expect(spies.onHandleFetch).not.toHaveBeenCalled();
+        });
+
+        it("resumes from where it stopped when the node fails partway through", () => {
+            const { audio, media } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+            media.state.currentTime = 42;
+
+            fireEvent.error(audio);
+
+            expect(audio.src).toBe("https://api.audius.co/v1/tracks/1/stream#t=42");
+        });
+
+        it("says which track failed, then skips to the next one, when the endpoint fails too", () => {
+            const { audio, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+
+            failTrack(audio);
 
             expect(snackbarText()).toBe("Couldn't play:\nTrack 1\nSkipping...");
             expect(spies.onHandleFetch).not.toHaveBeenCalled();
@@ -383,11 +408,11 @@ describe("AudioPlayer", () => {
         it("stops once every track in the queue has failed in a row", () => {
             const { audio, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
 
             expect(snackbarText()).toBe("Couldn't play any track in the queue.");
@@ -398,12 +423,12 @@ describe("AudioPlayer", () => {
         it("counts again from zero once a track starts playing", () => {
             const { audio, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
             fireEvent.playing(audio);
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
 
             expect(spies.onHandleFetch.mock.calls).toEqual([[2], [3], [1]]);
@@ -412,7 +437,7 @@ describe("AudioPlayer", () => {
         it("cancels the pending skip when another track is picked while it waits", () => {
             const { audio, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
 
-            fireEvent.error(audio);
+            failTrack(audio);
             fireEvent.click(mainButton("Next"));
             waitForSkip();
 
@@ -422,38 +447,12 @@ describe("AudioPlayer", () => {
         it("only reports the error when there is nothing to skip to", () => {
             const { audio, spies } = setup({ tracks: [makeTrack(1)] });
 
-            fireEvent.error(audio);
+            failTrack(audio);
             waitForSkip();
 
             expect(snackbarText()).toBe("Couldn't play:\nTrack 1");
             expect(spies.onHandleFetch).not.toHaveBeenCalled();
             expect(spies.onIsPlaying).toHaveBeenLastCalledWith(false);
-        });
-
-        it("reloads a stream that fails partway through and resumes where it stopped", () => {
-            const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
-            audio.load = vi.fn();
-            media.state.currentTime = 42;
-
-            fireEvent.error(audio);
-            waitForSkip();
-
-            expect(audio.load).toHaveBeenCalledTimes(1);
-            expect(media.state.currentTime).toBe(42);
-            expect(spies.onHandleFetch).not.toHaveBeenCalled();
-        });
-
-        it("skips a stream that fails again after its retry", () => {
-            const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
-            audio.load = vi.fn();
-            media.state.currentTime = 42;
-
-            fireEvent.error(audio);
-            fireEvent.error(audio);
-            waitForSkip();
-
-            expect(audio.load).toHaveBeenCalledTimes(1);
-            expect(spies.onHandleFetch).toHaveBeenCalledWith(2);
         });
     });
 
