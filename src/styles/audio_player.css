@@ -16,6 +16,11 @@
     } 
 }
 
+/* lets the title block shrink to the player's width, so a long scrolling title can't widen the grid */
+.PlayerTitle {
+    min-width: 0;
+}
+
 .ScrollContainer {
     width: 100%;             /* Adjust to fit your layout */
     overflow: hidden;        /* Hides the text when it goes out of bounds */
