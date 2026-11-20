@@ -4,6 +4,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import CoverImage from "../../ui/CoverImage";
 
 const PLACEHOLDER = "/assets/placeholder-cover-purple.svg";
+const ARTIST_PLACEHOLDER = "/assets/person-placeholder.svg";
 
 function getImg(container: HTMLElement) {
     const img = container.querySelector("img");
@@ -50,6 +51,22 @@ describe("CoverImage", () => {
         fireEvent.error(getImg(container));
 
         expect(getImg(container).getAttribute("src")).toBe(PLACEHOLDER);
+    });
+
+    it("shows the given placeholder when no src is given", () => {
+        const { container } = render(<CoverImage size={64} placeholderSrc={ARTIST_PLACEHOLDER} />);
+
+        expect(getImg(container).getAttribute("src")).toBe(ARTIST_PLACEHOLDER);
+    });
+
+    it("falls back to the given placeholder when the image fails to load", () => {
+        const { container } = render(
+            <CoverImage src="https://example.com/broken.jpg" size={64} placeholderSrc={ARTIST_PLACEHOLDER} />
+        );
+
+        fireEvent.error(getImg(container));
+
+        expect(getImg(container).getAttribute("src")).toBe(ARTIST_PLACEHOLDER);
     });
 
     it("tries a new src again after a previous src failed", () => {
