@@ -21,7 +21,12 @@ export default function ArtistSearchList({list, onHandleFetchTracksByUserId, onS
                         }}>
                             <div className="ListItem">
                                 <div className="ListCover">
-                                    <CoverImage styles={{borderRadius: '10px'}} src={element.profile_picture} size={64}/>
+                                    <CoverImage 
+                                        styles={{borderRadius: '10px'}} 
+                                        src={element.profile_picture} 
+                                        placeholderSrc="/assets/person-placeholder.svg" 
+                                        size={64} 
+                                    />
                                 </div>
                                 <div className="ListText">
                                     <h4>{element.name}</h4>
