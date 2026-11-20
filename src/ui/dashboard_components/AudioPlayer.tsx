@@ -29,7 +29,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     // streams that failed in a row; reset once a track actually starts playing
     const failedStreamsRef = useRef(0);
     const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const hasRetriedRef = useRef(false);
 
     const REPEAT_MODES = ["off", "one", "all"] as const;
     type RepeatMode = (typeof REPEAT_MODES)[number];
@@ -252,13 +251,13 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     function handleError() {
         const audio = audioRef.current;
+        const fallbackUrl = `https://api.audius.co/v1/tracks/${track.track_id}/stream`;
 
-        // a stream that fails partway through is reloaded once and resumed where it stopped
-        if (audio && audio.currentTime > 0 && !hasRetriedRef.current) {
-            hasRetriedRef.current = true;
+        // the track's own node failed, so let Audius pick a healthy node instead;
+        // "#t=" makes the browser start from where playback stopped once the new stream loads
+        if (audio && !audio.src.startsWith(fallbackUrl)) {
             const resumeAt = audio.currentTime;
-            audio.load();
-            audio.currentTime = resumeAt;
+            audio.src = resumeAt > 0 ? `${fallbackUrl}#t=${resumeAt}` : fallbackUrl;
             return;
         }
 
@@ -285,11 +284,10 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         skipTimerRef.current = setTimeout(handleSkipNext, STREAM_ERROR_SKIP_DELAY);
     }
 
-    // when the track changes, a pending skip is cancelled (e.g. the user picked another track while it waited) and the next track gets its own retry
+    // a pending skip is cancelled when the track changes, e.g. when the user picks another track while it waits
     useEffect(() => {
         return () => {
             if (skipTimerRef.current) clearTimeout(skipTimerRef.current);
-            hasRetriedRef.current = false;
         };
     }, [track]);
 
