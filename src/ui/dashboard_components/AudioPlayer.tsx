@@ -29,6 +29,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     // streams that failed in a row; reset once a track actually starts playing
     const failedStreamsRef = useRef(0);
     const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const hasRetriedRef = useRef(false);
 
     const REPEAT_MODES = ["off", "one", "all"] as const;
     type RepeatMode = (typeof REPEAT_MODES)[number];
@@ -250,12 +251,24 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     }
 
     function handleError() {
+        const audio = audioRef.current;
+
+        // a stream that fails partway through is reloaded once and resumed where it stopped
+        if (audio && audio.currentTime > 0 && !hasRetriedRef.current) {
+            hasRetriedRef.current = true;
+            const resumeAt = audio.currentTime;
+            audio.load();
+            audio.currentTime = resumeAt;
+            return;
+        }
+
         const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
 
         failedStreamsRef.current++;
 
         if (currentQueue.length <= 1) {
             failedStreamsRef.current = 0;
+            onIsPlaying(false);
             showSnackbar(`Couldn't play "${track.title}".`, 4000);
             return;
         }
@@ -263,6 +276,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         // once every track in the queue has failed in a row, stop, so a streaming outage can't cycle through the queue forever
         if (failedStreamsRef.current >= currentQueue.length) {
             failedStreamsRef.current = 0;
+            onIsPlaying(false);
             showSnackbar("Couldn't play any track in the queue.", 4000);
             return;
         }
@@ -271,10 +285,11 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         skipTimerRef.current = setTimeout(handleSkipNext, STREAM_ERROR_SKIP_DELAY);
     }
 
-    // a pending skip is cancelled when the track changes, e.g. when the user picks another track while it waits
+    // when the track changes, a pending skip is cancelled (e.g. the user picked another track while it waited) and the next track gets its own retry
     useEffect(() => {
         return () => {
             if (skipTimerRef.current) clearTimeout(skipTimerRef.current);
+            hasRetriedRef.current = false;
         };
     }, [track]);
 
