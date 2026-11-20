@@ -11,14 +11,14 @@ export function toTrackObject(apiTrack: ApiTrack): TrackObject {
 
     const { handle } = apiTrack.user;
 
-    const { url } = apiTrack.stream;
+    if (!apiTrack.stream?.url) throw new Error(`Track ${track_id} has no stream`);
 
     return {
         track_id,
         artwork: artwork?.["480x480"] ?? PLACEHOLDER_ARTWORK,
         title,
         handle,
-        url,
+        url:`https://api.audius.co/v1/tracks/${track_id}/stream`,
         duration,
     };
 }
