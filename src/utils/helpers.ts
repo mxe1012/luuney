@@ -63,6 +63,23 @@ export function getDurationSum(playlist: Playlist): number {
     return durationSum;
 }
 
+export function switchVolumeIcon(volume: number): string {
+
+    if (volume === 0) {
+        return "/assets/audio_player_icons/volume-0.svg";
+    }
+    else if (volume <= .34) {
+        return "/assets/audio_player_icons/volume-1.svg";
+    }
+    else if (volume <= .67) {
+        return "/assets/audio_player_icons/volume-2.svg";
+    }
+    else {
+        return "/assets/audio_player_icons/volume-3.svg";
+    }
+
+}
+
 export function isOnline(): boolean {
     return navigator.onLine;
 }
