@@ -81,8 +81,12 @@ describe("isSameEntry", () => {
 });
 
 describe("toTrackObject", () => {
-    it("maps an API track to a TrackObject", () => {
-        expect(toTrackObject(makeApiTrack(1) as ApiTrack)).toEqual(makeTrack(1));
+    it("maps an API track to a TrackObject that streams through the Audius stream endpoint", () => {
+        expect(toTrackObject(makeApiTrack(1) as ApiTrack)).toEqual(makeTrack(1, { url: "https://api.audius.co/v1/tracks/1/stream" }));
+    });
+
+    it("throws for a track without a stream", () => {
+        expect(() => toTrackObject(makeApiTrack(1, { stream: {} }) as ApiTrack)).toThrow();
     });
 
     it("falls back to the placeholder artwork", () => {
@@ -96,7 +100,7 @@ describe("toTrackObjects", () => {
     it("maps every track and leaves out those without a stream URL", () => {
         const apiTracks = [makeApiTrack(1), makeApiTrack(2, { stream: {} }), makeApiTrack(3)] as ApiTrack[];
 
-        expect(toTrackObjects(apiTracks)).toEqual([makeTrack(1), makeTrack(3)]);
+        expect(toTrackObjects(apiTracks)).toEqual([makeTrack(1, { url: "https://api.audius.co/v1/tracks/1/stream" }), makeTrack(3, { url: "https://api.audius.co/v1/tracks/3/stream" })]);
     });
 });
 
