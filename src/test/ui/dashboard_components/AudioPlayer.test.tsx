@@ -392,6 +392,7 @@ describe("AudioPlayer", () => {
 
             expect(snackbarText()).toBe("Couldn't play any track in the queue.");
             expect(spies.onHandleFetch.mock.calls).toEqual([[2], [3]]);
+            expect(spies.onIsPlaying).toHaveBeenLastCalledWith(false);
         });
 
         it("counts again from zero once a track starts playing", () => {
@@ -426,6 +427,33 @@ describe("AudioPlayer", () => {
 
             expect(snackbarText()).toBe('Couldn\'t play "Track 1".');
             expect(spies.onHandleFetch).not.toHaveBeenCalled();
+            expect(spies.onIsPlaying).toHaveBeenLastCalledWith(false);
+        });
+
+        it("reloads a stream that fails partway through and resumes where it stopped", () => {
+            const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+            audio.load = vi.fn();
+            media.state.currentTime = 42;
+
+            fireEvent.error(audio);
+            waitForSkip();
+
+            expect(audio.load).toHaveBeenCalledTimes(1);
+            expect(media.state.currentTime).toBe(42);
+            expect(spies.onHandleFetch).not.toHaveBeenCalled();
+        });
+
+        it("skips a stream that fails again after its retry", () => {
+            const { audio, media, spies } = setup({ tracks: makeTracks(3), initialIndex: 0 });
+            audio.load = vi.fn();
+            media.state.currentTime = 42;
+
+            fireEvent.error(audio);
+            fireEvent.error(audio);
+            waitForSkip();
+
+            expect(audio.load).toHaveBeenCalledTimes(1);
+            expect(spies.onHandleFetch).toHaveBeenCalledWith(2);
         });
     });
 
