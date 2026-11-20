@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { formatTime, getDurationSum, isOnline, isSameEntry, shuffleWithPlayingFirst, toTrackObject, toTrackObjects } from "../../utils/helpers";
+import { formatTime, getDurationSum, isOnline, isSameEntry, shuffleWithPlayingFirst, switchVolumeIcon, toTrackObject, toTrackObjects } from "../../utils/helpers";
 import type { ApiTrack } from "../../utils/types";
 import { makeApiTrack, makePlaylist, makeTrack, makeTracks } from "../fixtures";
 
@@ -125,5 +125,28 @@ describe("shuffleWithPlayingFirst", () => {
         const tracks = makeTracks(3);
 
         expect(shuffleWithPlayingFirst(tracks, undefined)).toHaveLength(3);
+    });
+});
+
+describe("switchVolumeIcon", () => {
+    const icon = (name: string) => `/assets/audio_player_icons/${name}.svg`;
+
+    it("shows the silent icon only at exactly zero", () => {
+        expect(switchVolumeIcon(0)).toBe(icon("volume-0"));
+        expect(switchVolumeIcon(0.01)).toBe(icon("volume-1"));
+    });
+
+    it("shows one wave up to and including 0.34", () => {
+        expect(switchVolumeIcon(0.34)).toBe(icon("volume-1"));
+        expect(switchVolumeIcon(0.35)).toBe(icon("volume-2"));
+    });
+
+    it("shows two waves up to and including 0.67", () => {
+        expect(switchVolumeIcon(0.67)).toBe(icon("volume-2"));
+        expect(switchVolumeIcon(0.68)).toBe(icon("volume-3"));
+    });
+
+    it("shows three waves at full volume", () => {
+        expect(switchVolumeIcon(1)).toBe(icon("volume-3"));
     });
 });
