@@ -121,6 +121,7 @@ input[type="range"] {
     -webkit-appearance: none; /* Hides default style for WebKit browsers */
     appearance: none;
     width: 100%;              /* Full-width behavior */
+    height: 20px;             /* As tall as the thumb, so every browser reserves room for it */
     background: transparent;  /* Removes white background in Chrome */
     cursor: pointer;
 }
