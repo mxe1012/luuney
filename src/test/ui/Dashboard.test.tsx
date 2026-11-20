@@ -148,7 +148,7 @@ describe("Dashboard", () => {
 
             expect(mockFetchTrackById).toHaveBeenCalledWith(2);
             expect(within(mainPlayer()).getByRole("heading", { level: 2 }).textContent?.trim()).toBe("Track 2");
-            expect(document.querySelector("audio")?.getAttribute("src")).toBe("https://api.audius.co/v1/tracks/2/stream");
+            expect(document.querySelector("audio")?.getAttribute("src")).toBe("https://example.com/stream/2");
             expect(snackbarText()).toBe("Now playing:\nTrack 2\nartist2");
         });
 
@@ -218,7 +218,7 @@ describe("Dashboard", () => {
                 await settle(1, "resolve");
 
                 expect(within(mainPlayer()).getByRole("heading", { level: 2 }).textContent?.trim()).toBe("Track 2");
-                expect(document.querySelector("audio")?.getAttribute("src")).toBe("https://api.audius.co/v1/tracks/2/stream");
+                expect(document.querySelector("audio")?.getAttribute("src")).toBe("https://example.com/stream/2");
                 expect(snackbarText()).toBe("Now playing:\nTrack 2\nartist2");
                 expect(stored<TrackObject[]>("recent_tracks").map((t) => t.track_id)).toEqual([2]);
             });

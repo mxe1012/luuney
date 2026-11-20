@@ -18,7 +18,7 @@ export function toTrackObject(apiTrack: ApiTrack): TrackObject {
         artwork: artwork?.["480x480"] ?? PLACEHOLDER_ARTWORK,
         title,
         handle,
-        url:`https://api.audius.co/v1/tracks/${track_id}/stream`,
+        url: apiTrack.stream.url,
         duration,
     };
 }
