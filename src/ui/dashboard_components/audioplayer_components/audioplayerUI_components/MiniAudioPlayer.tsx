@@ -1,3 +1,4 @@
+import { switchVolumeIcon } from "../../../../utils/helpers";
 import type { AudioPlayerUIProps } from "../../../../utils/types";
 import CoverImage from "../../../CoverImage";
 import AudioPlayerButton from "../AudioPlayerButton";
@@ -51,18 +52,18 @@ export default function MiniAudioPlayer({
                         />
                     </div>
                     <div className="RowEvenly">
-                        <AudioPlayerButton onClick={onHandleSkipPrev} size={36} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
+                        <AudioPlayerButton onClick={onHandleSkipPrev} size={22} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
                         <AudioPlayerButton 
-                        onClick={onHandleTogglePlay} size={64} toggleAction={isPlaying} 
+                        onClick={onHandleTogglePlay} size={48} toggleAction={isPlaying} 
                         labelTrue="Pause" labelFalse="Play"
                         srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                        <AudioPlayerButton onClick={onHandleSkipNext} size={36} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
+                        <AudioPlayerButton onClick={onHandleSkipNext} size={22} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
                     </div>
                     <div className="RowStart">
                         <AudioPlayerButton
-                            onClick={onHandleToggleMute} size={40} toggleAction={isMuted}
+                            onClick={onHandleToggleMute} size={24} toggleAction={isMuted}
                             labelTrue="Unmute" labelFalse="Mute"
-                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" 
+                            srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse={switchVolumeIcon(volume)}
                         />
                         <input
                             className="progress-slider" 

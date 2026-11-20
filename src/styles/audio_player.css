@@ -16,6 +16,11 @@
     } 
 }
 
+/* lets the title block shrink to the player's width, so a long scrolling title can't widen the grid */
+.PlayerTitle {
+    min-width: 0;
+}
+
 .ScrollContainer {
     width: 100%;             /* Adjust to fit your layout */
     overflow: hidden;        /* Hides the text when it goes out of bounds */
@@ -121,6 +126,7 @@ input[type="range"] {
     -webkit-appearance: none; /* Hides default style for WebKit browsers */
     appearance: none;
     width: 100%;              /* Full-width behavior */
+    height: 20px;             /* As tall as the thumb, so every browser reserves room for it */
     background: transparent;  /* Removes white background in Chrome */
     cursor: pointer;
 }

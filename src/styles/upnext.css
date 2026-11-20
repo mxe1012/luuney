@@ -6,8 +6,8 @@
     top: 0;
     right: 0;
     padding: 20px;
+    width: 260px;
     margin: 10px;
-
     z-index: 20;
     transition: opacity 200ms ease, visibility 0s linear 0s, transform 200ms ease;
 }
@@ -18,9 +18,6 @@
     transform: translateY(-8px);
     transition: opacity 200ms ease, visibility 0s linear 200ms, transform 200ms ease;
 }
-.UpNextList {
-    width: 260px;
-}
 
 .UpNextList h3 {
     margin: 0 0 12px;
@@ -29,7 +26,7 @@
 
 .UpNextItems {
     list-style: none;
-    margin: 0;
+    margin: 0 0 12px;
     padding: 0;
 }
 
@@ -39,6 +36,12 @@
     gap: 12px;
     padding: 6px 0;
     border-bottom: 1px solid rgba(220, 204, 247, 0.12);
+}
+
+/* the row's content spans the full width, so the duration can sit at the right */
+.UpNextItem > .ListItem {
+    flex: 1;
+    min-width: 0;
 }
 
 .UpNextItem:last-child {

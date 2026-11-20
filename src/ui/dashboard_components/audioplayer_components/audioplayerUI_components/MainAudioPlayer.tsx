@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useSnackbar } from "../../../../hooks/SnackbarContext";
-import { formatTime } from "../../../../utils/helpers";
+import { formatTime, switchVolumeIcon } from "../../../../utils/helpers";
 import type { AudioPlayerUIProps } from "../../../../utils/types";
 import CoverImage from "../../../CoverImage";
 import AudioPlayerButton from "../AudioPlayerButton";
@@ -62,9 +62,9 @@ export default function MainAudioPlayer({
                 <div className="RowCenter">
                     <CoverImage styles={{borderRadius: '15px', boxShadow: '0px 0px 10px'}} src={track.artwork} size={256}/>
                 </div>
-                <div className={isLongTitle ? "ScrollContainer" : ""}>
-                    <h2 className={isLongTitle ? "ScrollText CreamColor CenterText" : "CreamColor CenterText"}>                    
-                        {track.title}
+                <div className="PlayerTitle">
+                    <h2 className={isLongTitle ? "ScrollContainer CreamColor CenterText" : "CreamColor CenterText"}>
+                        {isLongTitle ? <span className="ScrollText">{track.title}</span> : track.title}
                     </h2>
                     <h3 className="MutedLavenderColor CenterText">{track.handle}</h3>   
                 </div>
@@ -139,19 +139,19 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowEvenly">
                     <AudioPlayerButton 
-                    onClick={onHandleShuffle} size={32} toggleAction={isShuffle} 
+                    onClick={onHandleShuffle} size={20} toggleAction={isShuffle} 
                     labelTrue="Shuffle On" labelFalse="Shuffle Off"
                     srcTrue="/assets/audio_player_icons/shuffle.svg" srcFalse="/assets/audio_player_icons/shuffle-off.svg" />
-                    <AudioPlayerButton onClick={onHandleRewind} size={32} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
-                    <AudioPlayerButton onClick={onHandleSkipPrev} size={36} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
+                    <AudioPlayerButton onClick={onHandleRewind} size={20} label="Rewind" src="/assets/audio_player_icons/rewind.svg" />
+                    <AudioPlayerButton onClick={onHandleSkipPrev} size={22} label="Previous" src="/assets/audio_player_icons/skip-prev.svg" />
                     <AudioPlayerButton 
-                    onClick={onHandleTogglePlay} size={64} toggleAction={isPlaying} 
+                    onClick={onHandleTogglePlay} size={48} toggleAction={isPlaying} 
                     labelTrue="Pause" labelFalse="Play"
                     srcTrue="/assets/audio_player_icons/pause.svg" srcFalse="/assets/audio_player_icons/play.svg" />
-                    <AudioPlayerButton onClick={onHandleSkipNext} size={36} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
-                    <AudioPlayerButton onClick={onHandleFastForward} size={32} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
+                    <AudioPlayerButton onClick={onHandleSkipNext} size={22} label="Next" src="/assets/audio_player_icons/skip-next.svg" />
+                    <AudioPlayerButton onClick={onHandleFastForward} size={20} label="Fast Forward" src="/assets/audio_player_icons/fast-forward.svg" />
                     <AudioPlayerModeButton
-                        size={32}
+                        size={20}
                         onClick={onCycleRepeatMode}
                         states={[
                             { label: "Repeat off", src: "/assets/audio_player_icons/repeat-off.svg" },
@@ -163,9 +163,9 @@ export default function MainAudioPlayer({
                 </div>
                 <div className="RowEvenly">
                     <AudioPlayerButton
-                    onClick={onHandleToggleMute} size={40} toggleAction={isMuted}
+                    onClick={onHandleToggleMute} size={24} toggleAction={isMuted}
                     labelTrue="Unmute" labelFalse="Mute"
-                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse="/assets/audio_player_icons/volume.svg" />
+                    srcTrue="/assets/audio_player_icons/volume-muted.svg" srcFalse={switchVolumeIcon(volume)} />
                     <input
                         className="progress-slider" 
                         style={{ "--progress": `${progressVolume}%` } as React.CSSProperties}

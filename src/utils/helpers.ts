@@ -11,7 +11,9 @@ export function toTrackObject(apiTrack: ApiTrack): TrackObject {
 
     const { handle } = apiTrack.user;
 
-    const { url } = apiTrack.stream;
+    const { url } = apiTrack.stream
+
+    if (!apiTrack.stream?.url) throw new Error(`Track ${track_id} has no stream`);
 
     return {
         track_id,
@@ -61,6 +63,23 @@ export function getDurationSum(playlist: Playlist): number {
         durationSum += (playlist.tracks[index].duration)
     }
     return durationSum;
+}
+
+export function switchVolumeIcon(volume: number): string {
+
+    if (volume === 0) {
+        return "/assets/audio_player_icons/volume-0.svg";
+    }
+    else if (volume <= .34) {
+        return "/assets/audio_player_icons/volume-1.svg";
+    }
+    else if (volume <= .67) {
+        return "/assets/audio_player_icons/volume-2.svg";
+    }
+    else {
+        return "/assets/audio_player_icons/volume-3.svg";
+    }
+
 }
 
 export function isOnline(): boolean {
