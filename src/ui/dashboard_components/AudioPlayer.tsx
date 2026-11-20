@@ -10,6 +10,7 @@ import UpNextList from "./audioplayer_components/UpNextList";
 
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
+const STREAM_ERROR_SKIP_DELAY = 1500; // long enough to read the error before the next track's "Loading track..." replaces it
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
     
@@ -24,6 +25,10 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [isScrolled, setIsScrolled] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement>(null);
+
+    // streams that failed in a row; reset once a track actually starts playing
+    const failedStreamsRef = useRef(0);
+    const skipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const REPEAT_MODES = ["off", "one", "all"] as const;
     type RepeatMode = (typeof REPEAT_MODES)[number];
@@ -244,6 +249,35 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         onHandleFetch(currentQueue[nextIndex].track_id);
     }
 
+    function handleError() {
+        const currentQueue = isShuffle ? shuffleTrackQueue : tracks;
+
+        failedStreamsRef.current++;
+
+        if (currentQueue.length <= 1) {
+            failedStreamsRef.current = 0;
+            showSnackbar(`Couldn't play "${track.title}".`, 4000);
+            return;
+        }
+
+        // once every track in the queue has failed in a row, stop, so a streaming outage can't cycle through the queue forever
+        if (failedStreamsRef.current >= currentQueue.length) {
+            failedStreamsRef.current = 0;
+            showSnackbar("Couldn't play any track in the queue.", 4000);
+            return;
+        }
+
+        showSnackbar(`Couldn't play "${track.title}". Skipping...`, STREAM_ERROR_SKIP_DELAY);
+        skipTimerRef.current = setTimeout(handleSkipNext, STREAM_ERROR_SKIP_DELAY);
+    }
+
+    // a pending skip is cancelled when the track changes, e.g. when the user picks another track while it waits
+    useEffect(() => {
+        return () => {
+            if (skipTimerRef.current) clearTimeout(skipTimerRef.current);
+        };
+    }, [track]);
+
     useEffect(() => {
         if (!isShuffle) return;
 
@@ -309,11 +343,13 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 ref={audioRef}
                 src={track.url || undefined}
                 onPlay={() => onIsPlaying(true)}
+                onPlaying={() => { failedStreamsRef.current = 0; }}
                 onPause={() => onIsPlaying(false)}
                 onEnded={handleOnEnded}
                 onLoadedData={handleLoadedMetadata}
                 onTimeUpdate={handleTimeUpdate}
                 onVolumeChange={handleElementVolumeChange} 
+                onError={handleError}
             />
             <AudioPlayerUI 
                 track={track}
