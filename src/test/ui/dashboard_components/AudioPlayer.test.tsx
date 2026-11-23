@@ -208,6 +208,61 @@ describe("AudioPlayer", () => {
         });
     });
 
+    describe("resuming the saved track", () => {
+        it("pauses the track loaded at startup and resumes it at the saved position", () => {
+            localStorage.setItem("current_track_time", "40");
+            const { audio, media } = setup({ tracks: [makeTrack(1)] });
+            media.state.duration = 200;
+
+            fireEvent.loadedData(audio);
+
+            expect(media.pause).toHaveBeenCalledTimes(1);
+            expect(media.state.currentTime).toBe(40);
+        });
+
+        it("starts from the beginning when the saved position is at or past the end", () => {
+            localStorage.setItem("current_track_time", "200");
+            const { audio, media } = setup({ tracks: [makeTrack(1)] });
+            media.state.duration = 200;
+
+            fireEvent.loadedData(audio);
+
+            expect(media.pause).toHaveBeenCalledTimes(1);
+            expect(media.state.currentTime).toBe(0);
+        });
+
+        it("only applies to the first track that loads", () => {
+            localStorage.setItem("current_track_time", "40");
+            const { audio, media } = setup({ tracks: makeTracks(2) });
+            media.state.duration = 200;
+            fireEvent.loadedData(audio);
+
+            media.state.currentTime = 0;
+            fireEvent.loadedData(audio);
+
+            expect(media.pause).toHaveBeenCalledTimes(1);
+            expect(media.state.currentTime).toBe(0);
+        });
+
+        it("does not pause the first track picked when no track was loaded at startup", () => {
+            const { audio, media } = setup({ tracks: [makeTrack(1, { url: "" })] });
+            media.state.duration = 200;
+
+            fireEvent.loadedData(audio);
+
+            expect(media.pause).not.toHaveBeenCalled();
+        });
+
+        it("saves the playback position", () => {
+            const { audio, media } = setup({ tracks: [makeTrack(1)] });
+
+            media.state.currentTime = 75;
+            fireEvent.timeUpdate(audio);
+
+            expect(localStorage.getItem("current_track_time")).toBe("75");
+        });
+    });
+
     describe("seeking", () => {
         it("seeks the audio element via the slider", () => {
             const { audio, media } = setup({ tracks: [makeTrack(1)] });
