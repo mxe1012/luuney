@@ -7,6 +7,7 @@ import { shuffleWithPlayingFirst } from "../../utils/helpers";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 import UpNextList from "./audioplayer_components/UpNextList";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
@@ -17,7 +18,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
-    const [volume, setVolume] = useState(1);
+    const [volume, setVolume] = useLocalStorage<number>("user_volume", 1);
     const [isMuted, setIsMuted] = useState(false);
 
     const [isUpNextVisible, setIsUpNextVisible] = useState(false);
