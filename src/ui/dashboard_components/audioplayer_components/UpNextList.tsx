@@ -4,10 +4,13 @@ import { formatTime } from "../../../utils/helpers";
 import usePagination from "../../../hooks/usePagination";
 import PaginationController from "../../PaginationController";
 import CoverImage from "../../CoverImage";
+import { useSnackbar } from "../../../hooks/SnackbarContext";
 
-export default function UpNextList({queue, isUpNextVisible}: UpNextListProps) {
+export default function UpNextList({queue, isUpNextVisible, onRemoveFromQueue}: UpNextListProps) {
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(queue, 5);
+
+    const { showSnackbar } = useSnackbar();
 
     return (
         <>
@@ -22,11 +25,23 @@ export default function UpNextList({queue, isUpNextVisible}: UpNextListProps) {
                                 <li className="UpNextItem" key={element.track_id}>
                                     <div className="ListItem">
                                         <CoverImage styles={{borderRadius: "8px"}} size={36} src={element.artwork}/>
-                                    <div className="ColumnCenter ListText">
-                                        <h4 className="UpNextTitle NoMargin">{element.title}</h4>
-                                        <h5 className="UpNextArtist MutedLavenderColor NoMargin">{element.handle}</h5>
-                                    </div>
-                                        <time className="UpNextDuration">{formatTime(element.duration)}</time>
+                                        <div className="ColumnCenter ListText">
+                                            <h4 className="UpNextTitle NoMargin">{element.title}</h4>
+                                            <h5 className="UpNextArtist MutedLavenderColor NoMargin">{element.handle}</h5>
+                                        </div>
+                                        <div>
+                                            <time className="UpNextDuration">{formatTime(element.duration)}</time>
+                                        </div>
+                                        <div>
+                                            <button 
+                                            className="QueueListActionBtn" 
+                                            aria-label={`Remove ${element.title} from queue`} 
+                                            onClick={() => {
+                                                onRemoveFromQueue(element); 
+                                                showSnackbar(`Removed from queue:\n${element.title}\n${element.handle}`)}}>
+                                                <img src="/assets/delete.svg" alt="" width={16} height={16}/>
+                                            </button>
+                                        </div>
                                     </div>
                                 </li>
                             ))}

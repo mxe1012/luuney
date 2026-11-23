@@ -174,10 +174,7 @@ export default function Dashboard() {
         setTrackQueue([...list]);
     }
 
-    function removeFromQueue(source: string | null, entry: TrackObject) {
-        // only a queue started from the same list is affected
-        if (source === null || source !== queueSource) return;
-
+    function removeFromQueue(entry: TrackObject) {
         const activeQueue = isShuffle ? shuffleTrackQueue : trackQueue;
         const removedIndex = activeQueue.findIndex((element) => element.track_id === entry.track_id);
 
@@ -196,7 +193,9 @@ export default function Dashboard() {
 
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
         showSnackbar("Removed track from list.");
-        removeFromQueue(list === recents ? "recents" : list === favorites ? "favorites" : null, entry);
+        const source = list === recents ? "recents" : list === favorites ? "favorites" : null;
+        // only a queue started from the same list is affected
+        if (source !== null && source === queueSource) removeFromQueue(entry);
         // returns an updater so the caller's setter filters the latest list, not this render's copy
         return (prev: TrackObject[]) => prev.filter((element) => element.track_id !== entry.track_id);
     }
@@ -228,7 +227,8 @@ export default function Dashboard() {
                 : playlist
             )
         );
-        removeFromQueue(playlistId, entry);
+        // only a queue started from the same playlist is affected
+        if (playlistId === queueSource) removeFromQueue(entry);
         showSnackbar("Removed track from playlist.")
     }
 
@@ -299,6 +299,7 @@ export default function Dashboard() {
                         onIsPlaying={setIsPlaying}
                         onHandleCreatePlaylist={handleCreatePlaylist} 
                         onHandleAddToPlaylist={handleAddToPlaylist}
+                        onRemoveFromQueue={removeFromQueue}
                     />
                 </div>
                 <div>

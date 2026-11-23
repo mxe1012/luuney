@@ -603,6 +603,47 @@ describe("Dashboard", () => {
             });
         });
 
+        describe("removing a track from the queue directly", () => {
+            function removeFromQueue(title: string) {
+                const row = Array.from(document.querySelectorAll(".UpNextItem"))
+                    .find((item) => item.querySelector(".UpNextTitle")?.textContent === title) as HTMLElement;
+                fireEvent.click(within(row).getByRole("button"));
+            }
+
+            it("removes it from up next and from playback, even for a queue not started from a saved list", async () => {
+                render_();
+                await flushInitialFetch();
+                await playFromTrending("Track 1");
+
+                removeFromQueue("Track 2");
+                expect(upNextTitles()).toEqual(["Track 3", "Track 4"]);
+                expect(nowPlaying()).toBe("Track 1");
+
+                await endTrack();
+                expect(mockFetchTrackById).toHaveBeenLastCalledWith(3);
+            });
+
+            it("leaves the list the queue was started from untouched", async () => {
+                await playFromFavorites("Track 1");
+
+                removeFromQueue("Track 3");
+
+                expect(upNextTitles()).toEqual(["Track 2", "Track 4"]);
+                expect(stored<TrackObject[]>("favorite_tracks").map((track) => track.track_id)).toEqual([1, 2, 3, 4]);
+            });
+
+            it("while shuffled, keeps the shuffled order and stays removed after turning shuffle off", async () => {
+                await playFromFavorites("Track 1");
+                enableShuffle();
+
+                removeFromQueue("Track 3");
+                expect(upNextTitles()).toEqual(["Track 4", "Track 2"]);
+
+                fireEvent.click(within(mainPlayer()).getByRole("button", { name: "Shuffle On" }));
+                expect(upNextTitles()).toEqual(["Track 2", "Track 4"]);
+            });
+        });
+
         describe("while shuffled", () => {
             it("keeps the shuffled order and the playing track", async () => {
                 await playFromFavorites("Track 1");
