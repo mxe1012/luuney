@@ -20,7 +20,7 @@ const MAX_LENGTH = 50;
 
 export default function Dashboard() {
 
-    const [track, setTrack] = useState<TrackObject>({
+    const [track, setTrack] = useLocalStorage<TrackObject>("current_track", {
         track_id: 0,
         artwork: "/assets/placeholder-cover-purple.svg",
         title: "Title",
