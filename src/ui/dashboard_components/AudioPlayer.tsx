@@ -337,6 +337,12 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         });
     }, [currentTime, duration])
 
+    // the element always starts at full volume, so the saved volume is applied to it once it mounts
+    useEffect(() => {
+        if (audioRef.current) audioRef.current.volume = volume;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useEffect(() => {
         if (!("mediaSession" in navigator)) return;
 
