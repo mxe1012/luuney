@@ -12,7 +12,7 @@ const SCROLL_THRESHOLD = 555;
 const SKIP_PREV_THRESHOLD = 3;
 const STREAM_ERROR_SKIP_DELAY = 1500; // long enough to read the error before the next track's "Loading track..." replaces it
 
-export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onRemoveFromQueueManually, onIsPlaying}: AudioPlayerProps) {
     
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -395,7 +395,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onHandleUpNextVisibility={handleUpNextVisibility}
             />
             <Visualizer audioRef={audioRef} isPlaying={isPlaying}/>
-            <UpNextList queue={upNext} isUpNextVisible={isUpNextVisible}/>
+            <UpNextList queue={upNext} isUpNextVisible={isUpNextVisible} onRemoveFromQueueManually={onRemoveFromQueueManually}/>
         </>
     )
 }
