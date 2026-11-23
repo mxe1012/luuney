@@ -194,6 +194,23 @@ export default function Dashboard() {
         else setTrackQueue(filteredQueue);
     }
 
+    function removeFromQueueManually(entry: TrackObject) {
+        const activeQueue = isShuffle ? shuffleTrackQueue : trackQueue;
+        const removedIndex = activeQueue.findIndex((element) => element.track_id === entry.track_id);
+
+        if (removedIndex === -1) return;
+
+        // keep the index on the playing track; if the playing track itself is removed,
+        // it finishes and playback continues with the track that followed it
+        if (removedIndex <= currentTrackIndex) setCurrentTrackIndex(currentTrackIndex - 1);
+
+        const filteredQueue = activeQueue.filter((element) => element.track_id !== entry.track_id);
+
+        // while shuffled only the shuffle queue changes, since changing trackQueue would reshuffle it
+        if (isShuffle) setShuffleTrackQueue(filteredQueue);
+        else setTrackQueue(filteredQueue);
+    }
+
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
         showSnackbar("Removed track from list.");
         removeFromQueue(list === recents ? "recents" : list === favorites ? "favorites" : null, entry);
@@ -299,6 +316,7 @@ export default function Dashboard() {
                         onIsPlaying={setIsPlaying}
                         onHandleCreatePlaylist={handleCreatePlaylist} 
                         onHandleAddToPlaylist={handleAddToPlaylist}
+                        onRemoveFromQueueManually={removeFromQueueManually}
                     />
                 </div>
                 <div>
