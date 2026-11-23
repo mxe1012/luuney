@@ -17,7 +17,7 @@ const VOLUME_SHORTCUT_STEP = 0.05;
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onRemoveFromQueue, onIsPlaying}: AudioPlayerProps) {
     
-    const [currentTime, setCurrentTime] = useState(0);
+    const [currentTime, setCurrentTime] = useLocalStorage<number>("current_track_time", 0);
     const [duration, setDuration] = useState(0);
     
     const [volume, setVolume] = useLocalStorage<number>("user_volume", 1);
@@ -43,6 +43,10 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     // the tracks after the one playing, in the order they will play
     const upNext = (isShuffle ? shuffleTrackQueue : tracks).slice(currentTrackIndex + 1);
+
+    const restoredTime = useRef(currentTime);
+    // with no saved track there is nothing to restore, so the first track picked still autoplays
+    const hasRestoredPosition = useRef(!track.url);
 
     const onMediaAction = useEffectEvent(({ action, seekTime }: MediaSessionActionDetails) => {
         if (action === "play") handleTogglePlay();
@@ -148,8 +152,20 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     
     function handleLoadedMetadata() {
         const audio = audioRef.current;
-    
         if (!audio) return;
+        
+        if (!hasRestoredPosition.current) {
+            // the track loaded when the page opens waits for play; pausing before the browser autoplays cancels it
+            audio.pause();
+
+            // it resumes where it was left, unless that is at or past its end
+            if (restoredTime.current > 0 && restoredTime.current < audio.duration) {
+                audio.currentTime = restoredTime.current;
+            }
+
+            hasRestoredPosition.current = true;
+        }
+
         setDuration(audio.duration);
     }
     
