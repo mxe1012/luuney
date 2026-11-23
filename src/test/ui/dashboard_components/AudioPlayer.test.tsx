@@ -40,7 +40,7 @@ function Harness({ initialIndex = 0, spies, ...rest }: HarnessProps) {
             onHandleCreatePlaylist={vi.fn()}
             onHandleAddToPlaylist={vi.fn()}
             onAddToFavorites={vi.fn()}
-            onRemoveFromQueueManually={vi.fn()}
+            onRemoveFromQueue={vi.fn()}
             {...rest}
             currentTrackIndex={index}
             onSetCurrentTrackIndex={(v) => {

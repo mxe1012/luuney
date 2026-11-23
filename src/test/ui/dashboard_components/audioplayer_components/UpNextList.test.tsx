@@ -21,15 +21,15 @@ describe("UpNextList", () => {
     });
 
     it("is hidden unless isUpNextVisible is true", () => {
-        const { container, rerender } = render(<UpNextList queue={makeTracks(2)} isUpNextVisible={false} onRemoveFromQueueManually={vi.fn()} />);
+        const { container, rerender } = render(<UpNextList queue={makeTracks(2)} isUpNextVisible={false} onRemoveFromQueue={vi.fn()} />);
         expect(root(container).className).toBe("GlassCard NoBg UpNextList hidden");
 
-        rerender(<UpNextList queue={makeTracks(2)} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        rerender(<UpNextList queue={makeTracks(2)} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
         expect(root(container).className).toBe("GlassCard NoBg UpNextList");
     });
 
     it("shows the heading", () => {
-        render(<UpNextList queue={[]} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        render(<UpNextList queue={[]} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
 
         expect(screen.getByRole("heading", { level: 3 }).textContent).toBe("Queue");
     });
@@ -41,7 +41,7 @@ describe("UpNextList", () => {
             makeTrack(3, { title: "Third", duration: 9 }),
         ];
 
-        render(<UpNextList queue={queue} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        render(<UpNextList queue={queue} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
 
         expect(rows()).toEqual([
             ["First", "1:05"],
@@ -51,7 +51,7 @@ describe("UpNextList", () => {
     });
 
     it("shows each track's cover, title, artist, duration and delete button, and nothing else", () => {
-        const { container } = render(<UpNextList queue={[makeTrack(1, { duration: 65 })]} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        const { container } = render(<UpNextList queue={[makeTrack(1, { duration: 65 })]} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
         const row = container.querySelector(".UpNextItem") as HTMLElement;
 
         expect(row.querySelectorAll("img")).toHaveLength(2);
@@ -63,33 +63,33 @@ describe("UpNextList", () => {
     });
 
     it("labels each delete button with its track's title", () => {
-        render(<UpNextList queue={makeTracks(2)} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        render(<UpNextList queue={makeTracks(2)} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
 
         expect(screen.getByRole("button", { name: "Remove Track 1 from queue" })).toBeTruthy();
         expect(screen.getByRole("button", { name: "Remove Track 2 from queue" })).toBeTruthy();
     });
 
     it("removes the clicked track from the queue", () => {
-        const onRemoveFromQueueManually = vi.fn();
+        const onRemoveFromQueue = vi.fn();
         const queue = makeTracks(3);
-        render(<UpNextList queue={queue} isUpNextVisible={true} onRemoveFromQueueManually={onRemoveFromQueueManually} />);
+        render(<UpNextList queue={queue} isUpNextVisible={true} onRemoveFromQueue={onRemoveFromQueue} />);
 
         const row = screen.getByText("Track 2").closest(".UpNextItem") as HTMLElement;
         fireEvent.click(within(row).getByRole("button"));
 
-        expect(onRemoveFromQueueManually).toHaveBeenCalledTimes(1);
-        expect(onRemoveFromQueueManually).toHaveBeenCalledWith(queue[1]);
+        expect(onRemoveFromQueue).toHaveBeenCalledTimes(1);
+        expect(onRemoveFromQueue).toHaveBeenCalledWith(queue[1]);
     });
 
     it("shows a message instead of a list when nothing is up next", () => {
-        const { container } = render(<UpNextList queue={[]} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        const { container } = render(<UpNextList queue={[]} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
 
         expect(screen.getByText("Nothing in the queue.")).toBeTruthy();
         expect(container.querySelector(".UpNextItems")).toBeNull();
     });
 
     it("does not show the empty message when there are tracks", () => {
-        render(<UpNextList queue={makeTracks(1)} isUpNextVisible={true} onRemoveFromQueueManually={vi.fn()} />);
+        render(<UpNextList queue={makeTracks(1)} isUpNextVisible={true} onRemoveFromQueue={vi.fn()} />);
 
         expect(screen.queryByText("Nothing in the queue.")).toBeNull();
     });
