@@ -140,6 +140,21 @@ describe("Dashboard", () => {
     });
 
     describe("playing a track", () => {
+        it("saves the current track and loads it into the player on the next visit", async () => {
+            render_();
+            await flushInitialFetch();
+            await playFromTrending("Track 2");
+
+            expect(stored<TrackObject>("current_track").track_id).toBe(2);
+
+            cleanup();
+            render_();
+            await flushInitialFetch();
+
+            expect(within(mainPlayer()).getByRole("heading", { level: 2 }).textContent?.trim()).toBe("Track 2");
+            expect(document.querySelector("audio")?.getAttribute("src")).toBe("https://example.com/stream/2");
+        });
+
         it("loads the track into the player and announces it", async () => {
             render_();
             await flushInitialFetch();
