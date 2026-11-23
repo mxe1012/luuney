@@ -53,7 +53,7 @@ export default function Dashboard() {
     
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
-    const [isShuffle, setIsShuffle] = useState(false);
+    const [isShuffle, setIsShuffle] = useLocalStorage<boolean>("is_shuffle", false);
 
     const [shuffleTrackQueue, setShuffleTrackQueue] = useState<TrackObject[]>([]);
 

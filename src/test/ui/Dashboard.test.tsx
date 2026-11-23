@@ -681,6 +681,41 @@ describe("Dashboard", () => {
         });
     });
 
+    describe("saved shuffle", () => {
+        beforeEach(() => {
+            mockFetchTrending.mockResolvedValue({ data: [1, 2, 3, 4].map((id) => makeApiTrack(id)) });
+        });
+
+        function upNextTitles() {
+            return Array.from(document.querySelectorAll(".UpNextTitle")).map((title) => title.textContent);
+        }
+
+        it("starts shuffled when shuffle was on last time", async () => {
+            localStorage.setItem("is_shuffle", "true");
+            render_();
+            await flushInitialFetch();
+
+            // Sort keys for the non-playing tracks [2, 3, 4] → shuffled order [4, 3, 2].
+            vi.spyOn(Math, "random").mockReturnValueOnce(0.9).mockReturnValueOnce(0.5).mockReturnValueOnce(0.1);
+            await playFromTrending("Track 1");
+
+            expect(within(mainPlayer()).getByRole("button", { name: "Shuffle On" })).toBeTruthy();
+            expect(upNextTitles()).toEqual(["Track 4", "Track 3", "Track 2"]);
+        });
+
+        it("saves shuffle when it is toggled", async () => {
+            render_();
+            await flushInitialFetch();
+            await playFromTrending("Track 1");
+
+            fireEvent.click(within(mainPlayer()).getByRole("button", { name: "Shuffle Off" }));
+            expect(stored<boolean>("is_shuffle")).toBe(true);
+
+            fireEvent.click(within(mainPlayer()).getByRole("button", { name: "Shuffle On" }));
+            expect(stored<boolean>("is_shuffle")).toBe(false);
+        });
+    });
+
     describe("connectivity", () => {
         it("shows a persistent offline notice when starting offline", () => {
             vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);

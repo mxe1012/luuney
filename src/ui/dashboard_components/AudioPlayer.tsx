@@ -7,6 +7,7 @@ import { shuffleWithPlayingFirst } from "../../utils/helpers";
 import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 import UpNextList from "./audioplayer_components/UpNextList";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
@@ -17,7 +18,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
-    const [volume, setVolume] = useState(1);
+    const [volume, setVolume] = useLocalStorage<number>("user_volume", 1);
     const [isMuted, setIsMuted] = useState(false);
 
     const [isUpNextVisible, setIsUpNextVisible] = useState(false);
@@ -33,7 +34,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const REPEAT_MODES = ["off", "one", "all"] as const;
     type RepeatMode = (typeof REPEAT_MODES)[number];
 
-    const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
+    const [repeatMode, setRepeatMode] = useLocalStorage<RepeatMode>("repeat_mode", "off");
 
     const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
     const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
@@ -335,6 +336,12 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             position: Math.min(Math.max(currentTime, 0), duration),
         });
     }, [currentTime, duration])
+
+    // the element always starts at full volume, so the saved volume is applied to it once it mounts
+    useEffect(() => {
+        if (audioRef.current) audioRef.current.volume = volume;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (!("mediaSession" in navigator)) return;

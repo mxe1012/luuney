@@ -117,6 +117,8 @@ function mainSlider(label: string) {
 
 describe("AudioPlayer", () => {
     beforeEach(() => {
+        // volume, shuffle and repeat are saved, so each test starts from the defaults
+        localStorage.clear();
         vi.spyOn(console, "error").mockImplementation(() => {});
     });
 
@@ -277,6 +279,25 @@ describe("AudioPlayer", () => {
             expect(snackbarText()).toBe("Audio unmuted!");
         });
 
+        it("restores the saved volume on the slider and the element", () => {
+            localStorage.setItem("user_volume", "0.3");
+            const spies = { onSetCurrentTrackIndex: vi.fn(), onIsPlaying: vi.fn(), onHandleFetch: vi.fn().mockResolvedValue(undefined), onSetTrackQueue: vi.fn() };
+            const { container } = render(<Harness spies={spies} tracks={[makeTrack(1)]} />, { wrapper: SnackbarProvider });
+
+            expect(mainSlider("Volume").value).toBe("0.3");
+            expect((container.querySelector("audio") as HTMLAudioElement).volume).toBe(0.3);
+        });
+
+        it("saves the volume", () => {
+            const { audio } = setup({ tracks: [makeTrack(1)] });
+
+            fireEvent.change(mainSlider("Volume"), { target: { value: "0.4" } });
+            // the saved volume updates from the element's volumechange event
+            fireEvent.volumeChange(audio);
+
+            expect(localStorage.getItem("user_volume")).toBe("0.4");
+        });
+
         it("unmuting from volume 0 restores a usable volume", () => {
             const { media } = setup({ tracks: [makeTrack(1)] });
             media.state.muted = true;
@@ -290,6 +311,18 @@ describe("AudioPlayer", () => {
     });
 
     describe("repeat", () => {
+        it("restores and saves the repeat mode", () => {
+            localStorage.setItem("repeat_mode", JSON.stringify("one"));
+            const { audio } = setup({ tracks: [makeTrack(1)] });
+
+            expect(audio.loop).toBe(true);
+            expect(mainButton("Repeat one")).toBeTruthy();
+
+            fireEvent.click(mainButton("Repeat one"));
+
+            expect(localStorage.getItem("repeat_mode")).toBe(JSON.stringify("all"));
+        });
+
         it("cycles off → one → all → off", () => {
             const { audio } = setup({ tracks: [makeTrack(1)] });
 
