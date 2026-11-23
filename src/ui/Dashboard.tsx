@@ -174,27 +174,7 @@ export default function Dashboard() {
         setTrackQueue([...list]);
     }
 
-    function removeFromQueue(source: string | null, entry: TrackObject) {
-        // only a queue started from the same list is affected
-        if (source === null || source !== queueSource) return;
-
-        const activeQueue = isShuffle ? shuffleTrackQueue : trackQueue;
-        const removedIndex = activeQueue.findIndex((element) => element.track_id === entry.track_id);
-
-        if (removedIndex === -1) return;
-
-        // keep the index on the playing track; if the playing track itself is removed,
-        // it finishes and playback continues with the track that followed it
-        if (removedIndex <= currentTrackIndex) setCurrentTrackIndex(currentTrackIndex - 1);
-
-        const filteredQueue = activeQueue.filter((element) => element.track_id !== entry.track_id);
-
-        // while shuffled only the shuffle queue changes, since changing trackQueue would reshuffle it
-        if (isShuffle) setShuffleTrackQueue(filteredQueue);
-        else setTrackQueue(filteredQueue);
-    }
-
-    function removeFromQueueManually(entry: TrackObject) {
+    function removeFromQueue(entry: TrackObject) {
         const activeQueue = isShuffle ? shuffleTrackQueue : trackQueue;
         const removedIndex = activeQueue.findIndex((element) => element.track_id === entry.track_id);
 
@@ -213,7 +193,9 @@ export default function Dashboard() {
 
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
         showSnackbar("Removed track from list.");
-        removeFromQueue(list === recents ? "recents" : list === favorites ? "favorites" : null, entry);
+        const source = list === recents ? "recents" : list === favorites ? "favorites" : null;
+        // only a queue started from the same list is affected
+        if (source !== null && source === queueSource) removeFromQueue(entry);
         // returns an updater so the caller's setter filters the latest list, not this render's copy
         return (prev: TrackObject[]) => prev.filter((element) => element.track_id !== entry.track_id);
     }
@@ -245,7 +227,8 @@ export default function Dashboard() {
                 : playlist
             )
         );
-        removeFromQueue(playlistId, entry);
+        // only a queue started from the same playlist is affected
+        if (playlistId === queueSource) removeFromQueue(entry);
         showSnackbar("Removed track from playlist.")
     }
 
