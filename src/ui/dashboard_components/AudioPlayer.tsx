@@ -34,7 +34,7 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const REPEAT_MODES = ["off", "one", "all"] as const;
     type RepeatMode = (typeof REPEAT_MODES)[number];
 
-    const [repeatMode, setRepeatMode] = useState<RepeatMode>("off");
+    const [repeatMode, setRepeatMode] = useLocalStorage<RepeatMode>("repeat_mode", "off");
 
     const progressTrack = duration > 0 ? (currentTime / duration) * 100 : 0;
     const progressVolume = (volume > 0 && !isMuted) ? volume * 100 : 0;
