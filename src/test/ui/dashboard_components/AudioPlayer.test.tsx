@@ -776,6 +776,157 @@ describe("AudioPlayer", () => {
         });
     });
 
+    describe("keyboard shortcuts", () => {
+        function press(key: string, options: { target?: Element; repeat?: boolean; ctrlKey?: boolean } = {}) {
+            const { target = document.body, ...rest } = options;
+            return fireEvent.keyDown(target, { key, ...rest });
+        }
+
+        it("space plays and pauses, without scrolling the page", async () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+
+            let notPrevented = false;
+            await act(async () => {
+                notPrevented = press(" ");
+            });
+            expect(media.play).toHaveBeenCalledTimes(1);
+            expect(notPrevented).toBe(false);
+
+            await act(async () => {
+                press(" ");
+            });
+            expect(media.pause).toHaveBeenCalledTimes(1);
+        });
+
+        it("holding space does not toggle repeatedly", async () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+
+            await act(async () => {
+                press(" ", { repeat: true });
+            });
+
+            expect(media.play).not.toHaveBeenCalled();
+        });
+
+        it("M toggles mute, but not while held", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+
+            press("m");
+            expect(media.state.muted).toBe(true);
+
+            press("M", { repeat: true });
+            expect(media.state.muted).toBe(true);
+
+            press("M");
+            expect(media.state.muted).toBe(false);
+        });
+
+        it("the arrow keys seek by 10 seconds, and keep seeking while held", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+            media.state.duration = 200;
+            media.state.currentTime = 50;
+
+            press("ArrowRight");
+            expect(media.state.currentTime).toBe(60);
+
+            press("ArrowRight", { repeat: true });
+            expect(media.state.currentTime).toBe(70);
+
+            press("ArrowLeft");
+            expect(media.state.currentTime).toBe(60);
+        });
+
+        it("the arrow keys do not seek while a slider is focused", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+            media.state.duration = 200;
+            media.state.currentTime = 50;
+
+            press("ArrowRight", { target: mainSlider("Volume") });
+
+            expect(media.state.currentTime).toBe(50);
+        });
+
+        it("+, = and - change the volume in steps of 5", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+            media.state.volume = 0.5;
+
+            press("-");
+            expect(media.state.volume).toBe(0.45);
+            expect(snackbarText()).toBe("Volume: 45");
+
+            press("=");
+            press("+");
+            expect(media.state.volume).toBe(0.55);
+        });
+
+        it("keeps the volume between 0 and 1", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+
+            media.state.volume = 0.03;
+            press("-");
+            expect(media.state.volume).toBe(0);
+
+            media.state.volume = 0.98;
+            press("+");
+            expect(media.state.volume).toBe(1);
+        });
+
+        it("raising the volume unmutes", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+            media.state.muted = true;
+
+            press("+");
+
+            expect(media.state.muted).toBe(false);
+        });
+
+        it("the volume keys work while a slider is focused", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+            media.state.volume = 0.5;
+
+            press("-", { target: mainSlider("Volume") });
+
+            expect(media.state.volume).toBe(0.45);
+        });
+
+        it("ignores keys typed into a text field", async () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+            const input = document.body.appendChild(document.createElement("input"));
+
+            await act(async () => {
+                press(" ", { target: input });
+            });
+            press("m", { target: input });
+            press("-", { target: input });
+
+            expect(media.play).not.toHaveBeenCalled();
+            expect(media.state.muted).toBe(false);
+            expect(media.state.volume).toBe(1);
+            input.remove();
+        });
+
+        it("leaves browser shortcuts such as Ctrl+M alone", () => {
+            const { media } = setup({ tracks: [makeTrack(1)] });
+
+            press("m", { ctrlKey: true });
+
+            expect(media.state.muted).toBe(false);
+        });
+
+        it("removes the same keydown listener it added once the player unmounts", () => {
+            const add = vi.spyOn(window, "addEventListener");
+            const remove = vi.spyOn(window, "removeEventListener");
+            const { unmount } = setup({ tracks: [makeTrack(1)] });
+            const added = add.mock.calls.filter(([type]) => type === "keydown").map(([, listener]) => listener);
+
+            unmount();
+            const removed = remove.mock.calls.filter(([type]) => type === "keydown").map(([, listener]) => listener);
+
+            expect(added).toHaveLength(1);
+            expect(removed).toEqual(added);
+        });
+    });
+
     describe("media session", () => {
         // jsdom has no Media Session API, so install a small fake on navigator.
         let handlers: Map<MediaSessionAction, MediaSessionActionHandler | null>;
