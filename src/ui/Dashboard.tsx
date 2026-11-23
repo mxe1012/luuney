@@ -316,7 +316,7 @@ export default function Dashboard() {
                         onIsPlaying={setIsPlaying}
                         onHandleCreatePlaylist={handleCreatePlaylist} 
                         onHandleAddToPlaylist={handleAddToPlaylist}
-                        onRemoveFromQueueManually={removeFromQueueManually}
+                        onRemoveFromQueue={removeFromQueue}
                     />
                 </div>
                 <div>

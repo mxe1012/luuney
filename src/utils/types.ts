@@ -51,7 +51,7 @@ export interface AudioPlayerProps {
     onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void
     onAddToFavorites: (entry: TrackObject) => void;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
-    onRemoveFromQueueManually: (entry: TrackObject) => void;
+    onRemoveFromQueue: (entry: TrackObject) => void;
 }
 
 export interface SearchListPaneProps {
@@ -280,5 +280,5 @@ export interface MiniIconProps {
 export interface UpNextListProps {
     queue: TrackObject[]
     isUpNextVisible: boolean;
-    onRemoveFromQueueManually: (entry: TrackObject) => void;
+    onRemoveFromQueue: (entry: TrackObject) => void;
 }

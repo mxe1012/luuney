@@ -5,7 +5,7 @@ import usePagination from "../../../hooks/usePagination";
 import PaginationController from "../../PaginationController";
 import CoverImage from "../../CoverImage";
 
-export default function UpNextList({queue, isUpNextVisible, onRemoveFromQueueManually}: UpNextListProps) {
+export default function UpNextList({queue, isUpNextVisible, onRemoveFromQueue}: UpNextListProps) {
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(queue, 5);
 
@@ -33,7 +33,7 @@ export default function UpNextList({queue, isUpNextVisible, onRemoveFromQueueMan
                                             <button 
                                             className="QueueListActionBtn" 
                                             aria-label={`Remove ${element.title} from queue`} 
-                                            onClick={() => {onRemoveFromQueueManually(element)}}>
+                                            onClick={() => {onRemoveFromQueue(element)}}>
                                                 <img src="/assets/delete.svg" alt="" width={16} height={16}/>
                                             </button>
                                         </div>
