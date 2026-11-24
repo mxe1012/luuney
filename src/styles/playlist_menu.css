@@ -124,3 +124,9 @@
     color: #8d8b8b;
     cursor: not-allowed;
 }
+
+/* the rename menu sits at the top of the playlist pane, so it opens downward, below its icon */
+.PlaylistMenu.OpensDown {
+    bottom: auto;
+    top: calc(100% + 10px);
+}

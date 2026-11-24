@@ -155,6 +155,17 @@ export default function Dashboard() {
         ]);
     }
 
+    function handleRenamePlaylist(playlistId: string, newName: string) {
+        setPlaylists(prev => 
+            prev.map(playlist => 
+                playlist.id !== playlistId 
+                ? playlist
+                : { ...playlist, name: newName}
+            )
+        )
+        showSnackbar("Playlist renamed!")
+    }
+
     function handleAddToPlaylist(playlistId: string, entry: TrackObject) {
         setPlaylists(prev =>
             prev.map(playlist =>
@@ -268,6 +279,7 @@ export default function Dashboard() {
                         onRecentsList={setRecents} 
                         onFavoritesList={setFavorites} 
                         onSetPlaylist={setPlaylists}
+                        onHandleRenamePlaylist={handleRenamePlaylist}
                         isFavorited={isListTrackInFavorites} 
                         onDeletePlaylist={handleDeletePlaylist} 
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}

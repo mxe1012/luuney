@@ -36,6 +36,7 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
             onDeletePlaylistEntry={vi.fn()}
             onHandleFetch={vi.fn().mockResolvedValue(undefined)}
             onIsPlaying={vi.fn()}
+            onHandleRenamePlaylist={(id, name) => setList((prev) => prev.map((p) => (p.id === id ? { ...p, name } : p)))}
             {...rest}
         />
     );
@@ -135,6 +136,86 @@ describe("PlaylistSelectionList", () => {
             expect(screen.queryByText("List 10")).toBeNull();
             fireEvent.click(screen.getByAltText("next").closest("button")!);
             expect(screen.getByText("List 10")).toBeTruthy();
+        });
+    });
+
+    describe("renaming a playlist", () => {
+        function openRenameMenu(name: string) {
+            fireEvent.click(screen.getByText(name).closest("button")!);
+            fireEvent.click(screen.getByLabelText("rename playlist"));
+        }
+
+        function menu() {
+            return document.querySelector(".PlaylistMenu.OpensDown") as HTMLElement;
+        }
+
+        function input() {
+            return screen.getByPlaceholderText("Playlist name") as HTMLInputElement;
+        }
+
+        function saveButton() {
+            return menu().querySelector("button") as HTMLButtonElement;
+        }
+
+        it("the pencil button opens and closes the rename menu", () => {
+            setup(PLAYLISTS);
+
+            openRenameMenu("Chill");
+            expect(menu().classList.contains("hidden")).toBe(false);
+
+            fireEvent.click(screen.getByLabelText("rename playlist"));
+            expect(menu().classList.contains("hidden")).toBe(true);
+        });
+
+        it("saves the trimmed name for the open playlist", () => {
+            const onHandleRenamePlaylist = vi.fn();
+            setup(PLAYLISTS, { onHandleRenamePlaylist });
+            openRenameMenu("Chill");
+
+            fireEvent.change(input(), { target: { value: "  Late Night  " } });
+            fireEvent.click(saveButton());
+
+            expect(onHandleRenamePlaylist).toHaveBeenCalledWith("a", "Late Night");
+        });
+
+        it("shows the new name once saved", () => {
+            setup(PLAYLISTS);
+            openRenameMenu("Chill");
+
+            fireEvent.change(input(), { target: { value: "Late Night" } });
+            fireEvent.click(saveButton());
+
+            expect(screen.getByRole("heading", { level: 2 }).textContent).toBe("Late Night");
+        });
+
+        it("cannot save an empty or blank name", () => {
+            setup(PLAYLISTS);
+            openRenameMenu("Chill");
+
+            expect(saveButton().disabled).toBe(true);
+
+            fireEvent.change(input(), { target: { value: "   " } });
+            expect(saveButton().disabled).toBe(true);
+        });
+
+        it("stays open while clicking inside it", () => {
+            setup(PLAYLISTS);
+            openRenameMenu("Chill");
+
+            fireEvent.mouseDown(input());
+
+            expect(menu().classList.contains("hidden")).toBe(false);
+        });
+
+        it("closes and clears the input when clicking outside it", () => {
+            setup(PLAYLISTS);
+            openRenameMenu("Chill");
+            fireEvent.change(input(), { target: { value: "Late Night" } });
+
+            fireEvent.mouseDown(document.body);
+
+            expect(menu().classList.contains("hidden")).toBe(true);
+            expect(input().value).toBe("");
         });
     });
 
