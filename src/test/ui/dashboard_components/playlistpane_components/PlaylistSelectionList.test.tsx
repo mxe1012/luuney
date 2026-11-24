@@ -192,6 +192,7 @@ describe("PlaylistSelectionList", () => {
             setup(PLAYLISTS);
             openRenameMenu("Chill");
 
+            fireEvent.change(input(), { target: { value: "" } });
             expect(saveButton().disabled).toBe(true);
 
             fireEvent.change(input(), { target: { value: "   " } });
@@ -207,15 +208,25 @@ describe("PlaylistSelectionList", () => {
             expect(menu().classList.contains("hidden")).toBe(false);
         });
 
-        it("closes and clears the input when clicking outside it", () => {
+        it("closes when clicking outside it", () => {
             setup(PLAYLISTS);
             openRenameMenu("Chill");
-            fireEvent.change(input(), { target: { value: "Late Night" } });
 
             fireEvent.mouseDown(document.body);
 
             expect(menu().classList.contains("hidden")).toBe(true);
-            expect(input().value).toBe("");
+        });
+
+        it("opens with the playlist's current name, even after typing something else last time", () => {
+            setup(PLAYLISTS);
+            openRenameMenu("Chill");
+            expect(input().value).toBe("Chill");
+
+            fireEvent.change(input(), { target: { value: "Late Night" } });
+            fireEvent.mouseDown(document.body);
+            fireEvent.click(screen.getByLabelText("rename playlist"));
+
+            expect(input().value).toBe("Chill");
         });
     });
 
