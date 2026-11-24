@@ -307,6 +307,21 @@ describe("Dashboard", () => {
             fireEvent.click(within(mainPlayer()).getByLabelText("playlist menu"));
         }
 
+        it("renames a playlist with a trimmed name", async () => {
+            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", makeTracks(2), "Chill")]));
+            render_();
+            await flushInitialFetch();
+            fireEvent.click(screen.getByText("Playlists"));
+            fireEvent.click(playlistPane().getByText("Chill").closest("button")!);
+
+            fireEvent.click(playlistPane().getByLabelText("rename playlist"));
+            fireEvent.change(playlistPane().getByPlaceholderText("Playlist name"), { target: { value: "  Late Night  " } });
+            fireEvent.click(document.querySelector(".PlaylistMenu.OpensDown button") as HTMLButtonElement);
+
+            expect(stored<Playlist[]>("user_playlists").map((p) => p.name)).toEqual(["Late Night"]);
+            expect(playlistPane().getByRole("heading", { level: 2 }).textContent).toBe("Late Night");
+        });
+
         it("creates a playlist from the current track with a trimmed name", async () => {
             render_();
             await flushInitialFetch();
