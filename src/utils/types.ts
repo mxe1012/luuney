@@ -70,6 +70,7 @@ export interface PlaylistPaneProps {
     onRecentsList: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onFavoritesList: React.Dispatch<React.SetStateAction<TrackObject[]>>
     onSetPlaylist: React.Dispatch<React.SetStateAction<Playlist[]>>
+    onHandleRenamePlaylist: (playlistId: string, newName: string) => void;
     isFavorited: (entry: TrackObject) => boolean;
     onDeleteEntry: (list: TrackObject[], entry: TrackObject) => (prev: TrackObject[]) => TrackObject[];
     onClearQueue: (source: string) => void;
@@ -115,6 +116,7 @@ export interface PlaylistSelectionProps {
     onIsSelectedPlaylist:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetIsPlaylistSelectionVisible: React.Dispatch<React.SetStateAction<boolean>>;
     onSetPlaylist: React.Dispatch<React.SetStateAction<Playlist[]>>
+    onHandleRenamePlaylist: (playlistId: string, newName: string) => void;
     isFavorited?: (entry: TrackObject) => boolean;
     onRecentsList?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onFavoritesList?: React.Dispatch<React.SetStateAction<TrackObject[]>>
