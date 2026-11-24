@@ -17,7 +17,6 @@ button.ListActionBtn {
     border: 1px solid rgba(220, 204, 247, 0.15);
     border-radius: 100%;
     padding: 5px;
-    width: 100%;
     box-shadow:
         0 4px 14px rgba(10, 5, 20, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
