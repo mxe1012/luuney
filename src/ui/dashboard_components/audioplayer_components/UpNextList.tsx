@@ -34,7 +34,7 @@ export default function UpNextList({queue, isUpNextVisible, onRemoveFromQueue}: 
                                         </div>
                                         <div>
                                             <button 
-                                            className="QueueListActionBtn" 
+                                            className="ListActionBtn" 
                                             aria-label={`Remove ${element.title} from queue`} 
                                             onClick={() => {
                                                 onRemoveFromQueue(element); 
