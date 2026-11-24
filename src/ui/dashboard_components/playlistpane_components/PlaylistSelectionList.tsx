@@ -54,7 +54,10 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
 
     useEffect(() => {
         const handleMouseDown = (e: MouseEvent) => {
-            if (!renameWrapperRef.current?.contains(e.target as Node)) setIsRenameMenuVisible(false);
+            if (!renameWrapperRef.current?.contains(e.target as Node)) {
+                setIsRenameMenuVisible(false)
+                setRenameValue("")
+            };
         };
 
         document.addEventListener("mousedown", handleMouseDown);
@@ -131,7 +134,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
             <div ref={renameWrapperRef} className="RowCenter PlaylistMenuWrapper" style={{gap: '6px'}}>
                 <h2 className="CreamColor CenterText NoMargin">{selectedPlaylistName}</h2>
                 <button className="ListActionBtn"
-                    onClick={() => setIsRenameMenuVisible(!isRenameMenuVisible)}
+                    onClick={() => {setIsRenameMenuVisible(!isRenameMenuVisible); setRenameValue("")}}
                     aria-label="rename playlist">
                     <MiniIcon src="/assets/edit.svg" size={16} />
                 </button>
@@ -142,7 +145,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         />
                         <button className="PlaylistMenuAddItemBtn" 
                             disabled={renameValue.trim().length === 0}
-                            onClick={() => onHandleRenamePlaylist(playlistId, renameValue)}>
+                            onClick={() => onHandleRenamePlaylist(playlistId, renameValue.trim())}>
                                 <MiniIcon src="/assets/check.svg" size={12} />
                         </button>
                     </div>
