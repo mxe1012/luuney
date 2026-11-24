@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import type { PlaylistSelectionProps, TrackObject } from "../../../utils/types";
 
@@ -10,12 +10,19 @@ import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
 import PaginationController from "../../PaginationController";
 import { useSnackbar } from "../../../hooks/SnackbarContext";
+import { MiniIcon } from "../../Containers";
 
 const EMPTY_TRACKS: TrackObject[] = [];
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleRenamePlaylist}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState("");
+
+    const [isRenameMenuVisible, setIsRenameMenuVisible] = useState(false);
+
+    const [renameValue, setRenameValue] = useState("");
+
+    const renameWrapperRef = useRef<HTMLDivElement>(null);
 
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev } = usePagination(list, 10);
     
@@ -44,6 +51,15 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
             }
         })
     }, [list, onDeletePlaylist, onSetPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible])
+
+    useEffect(() => {
+        const handleMouseDown = (e: MouseEvent) => {
+            if (!renameWrapperRef.current?.contains(e.target as Node)) setIsRenameMenuVisible(false);
+        };
+
+        document.addEventListener("mousedown", handleMouseDown);
+        return () => document.removeEventListener("mousedown", handleMouseDown);
+    }, []);
 
     if(!isSelectedPlaylist) {
         return (
@@ -112,7 +128,26 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     }
     return (
         <>
-            <h2 className="CreamColor CenterText NoMargin">{selectedPlaylistName}</h2>
+            <div ref={renameWrapperRef} className="RowCenter PlaylistMenuWrapper" style={{gap: '6px'}}>
+                <h2 className="CreamColor CenterText NoMargin">{selectedPlaylistName}</h2>
+                <button className="ListActionBtn"
+                    onClick={() => setIsRenameMenuVisible(!isRenameMenuVisible)}
+                    aria-label="rename playlist">
+                    <MiniIcon src="/assets/edit.svg" size={16} />
+                </button>
+                <div className={isRenameMenuVisible ? "PlaylistMenu OpensDown" : "PlaylistMenu OpensDown hidden"}>
+                    <div className="MenuActions">
+                        <input className="PlaylistMenuInput" value={renameValue} placeholder="Playlist name"
+                            onChange={(e) => setRenameValue(e.target.value)}
+                        />
+                        <button className="PlaylistMenuAddItemBtn" 
+                            disabled={renameValue.trim().length === 0}
+                            onClick={() => onHandleRenamePlaylist(playlistId, renameValue)}>
+                                <MiniIcon src="/assets/check.svg" size={12} />
+                        </button>
+                    </div>
+                </div>
+            </div>
             {list.map((playlist) => (
                 <Fragment key={playlist.id}>
                 <ul  
