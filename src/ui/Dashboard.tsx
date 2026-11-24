@@ -163,6 +163,7 @@ export default function Dashboard() {
                 : { ...playlist, name: newName}
             )
         )
+        showSnackbar("Playlist renamed!")
     }
 
     function handleAddToPlaylist(playlistId: string, entry: TrackObject) {
