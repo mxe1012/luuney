@@ -16,15 +16,20 @@ Music is streamed from [Audius](https://audius.co), a free and open music platfo
 - **Discover**: browse the top 100 trending tracks and the latest uploads on Audius.
 - **Search**: find tracks by title, or search for an artist and open their catalog. Results appear as you type.
 - **Full audio player**: play/pause, seek, skip ±10 seconds, volume and mute, shuffle, and repeat (off / one / all).
-- **Play queue**: playing a track from any list queues the rest of that list, so playback continues automatically.
+- **Keyboard shortcuts**: <kbd>Space</kbd> plays and pauses, <kbd>M</kbd> mutes, <kbd>+</kbd> / <kbd>-</kbd> change the volume, and <kbd>←</kbd> / <kbd>→</kbd> skip back and forward 10 seconds. Shortcuts are ignored while you type in a text field.
+- **Media keys**: your keyboard's media keys and your system's media controls play, pause, skip, and seek, and show the playing track's title, artist, and cover.
+- **Play queue**: playing a track from any list queues the rest of that list, so playback continues automatically. A track that can't be streamed is skipped.
+- **Queue panel**: see what's up next and remove tracks from the queue.
+- **Play next**: choose "Play Next" on any track to have it play right after the current one.
 - **Mini player**: a compact player takes over when you scroll down the page.
 - **Visualizer**: animated frequency bars that move with the music.
 - **Favorites**: save tracks with one click and play them back as a list.
 - **Recents**: the last 50 tracks you played, newest first.
-- **Custom playlists**: create playlists from the player, add tracks to them, and remove tracks or whole playlists.
+- **Custom playlists**: create playlists from the Playlists tab or from the player, add tracks to them from the player or a track's "⋯" menu, rename them, and remove tracks or whole playlists.
+- **Picks up where you left off**: the current track, playback position, volume, shuffle, and repeat mode are restored when you reopen Luuney.
 - **Offline notice**: Luuney lets you know when you lose your connection.
 
-Your favorites, recents, and playlists are saved in your browser's `localStorage`. They stay on your device, aren't synced between browsers, and are lost if you clear the site's data.
+Your favorites, recents, playlists, and player settings are saved in your browser's `localStorage`. They stay on your device, aren't synced between browsers, and are lost if you clear the site's data.
 
 ## Tech Stack
 
