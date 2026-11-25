@@ -14,7 +14,7 @@ import PillTitle from "./PillTitle";
 
 const EMPTY_TRACKS: TrackObject[] = [];
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleRenamePlaylist, onHandleCreatePlaylist, onHandleAddToPlaylist}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleRenamePlaylist, onHandleCreatePlaylist, onHandleAddToPlaylist, onHandlePlayNext}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState("");
 
@@ -134,6 +134,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                 track={element}
                                 playlists={list}
                                 onHandleAddToPlaylist={onHandleAddToPlaylist}
+                                onHandlePlayNext={onHandlePlayNext}
                                 onHandleCreatePlaylist={onHandleCreatePlaylist}
                                 playlist={playlist}
                                 index={trackStart + index}
