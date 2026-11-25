@@ -15,6 +15,7 @@ function setup(overrides: Partial<PlaylistPaneProps> = {}) {
         onFavoritesList: vi.fn(),
         onSetPlaylist: vi.fn(),
         onHandleRenamePlaylist: vi.fn(),
+        onHandleCreatePlaylist: vi.fn(),
         isFavorited: () => false,
         onDeleteEntry: vi.fn(() => (prev: TrackObject[]) => prev),
         onClearQueue: vi.fn(),
@@ -96,7 +97,7 @@ describe("PlaylistPane", () => {
         fireEvent.click(screen.getByText("Road Trip").closest("button")!);
         fireEvent.click(screen.getByText("< Back"));
 
-        expect(screen.queryByRole("heading", { level: 2 })).toBeNull();
+        expect(screen.getByRole("heading", { level: 2 }).textContent).toBe("Create Playlist");
         expect(isShown("Road Trip")).toBe(true);
         expect(screen.getByText("Playlists")).toBeTruthy();
     });

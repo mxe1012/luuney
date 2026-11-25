@@ -74,6 +74,7 @@ export interface PlaylistPaneProps {
     isFavorited: (entry: TrackObject) => boolean;
     onDeleteEntry: (list: TrackObject[], entry: TrackObject) => (prev: TrackObject[]) => TrackObject[];
     onClearQueue: (source: string) => void;
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
     onDeletePlaylist: (entry: Playlist) => (prev: Playlist[]) => Playlist[];
     onDeletePlaylistEntry: (playlistId: string, entry: TrackObject) => void
     onAddToFavorites: (entry: TrackObject) => void
@@ -120,6 +121,7 @@ export interface PlaylistSelectionProps {
     isFavorited?: (entry: TrackObject) => boolean;
     onRecentsList?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onFavoritesList?: React.Dispatch<React.SetStateAction<TrackObject[]>>
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
     onDeletePlaylist: (entry: Playlist) => (prev: Playlist[]) => Playlist[];
     onDeletePlaylistEntry: (playlistId: string, entry: TrackObject) => void
     onClearQueue?: (source: string) => void;
@@ -283,4 +285,12 @@ export interface UpNextListProps {
     queue: TrackObject[]
     isUpNextVisible: boolean;
     onRemoveFromQueue: (entry: TrackObject) => void;
+}
+
+export interface PillTitleProps {
+    heading: string;
+    actionIcon: string;
+    actionLabel: string;
+    initialValue: string;
+    onSubmit: (name: string) => void;
 }
