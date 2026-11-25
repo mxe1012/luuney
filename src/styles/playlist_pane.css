@@ -152,6 +152,7 @@
 }
 
 ul.PlaylistPaneList {
+    margin-top: 0;
     list-style-type: none;
     padding: 0px;
     padding-top: 16px;
