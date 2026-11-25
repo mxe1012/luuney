@@ -9,7 +9,6 @@ import AddToPlaylist from "../../../AddToPlaylist";
 
 export default function MainAudioPlayer({
     track,
-    playlists,
     duration,
     currentTime,
     isPlaying,
@@ -33,8 +32,6 @@ export default function MainAudioPlayer({
     onHandleVolumeChange,
     onCycleRepeatMode,
     onAddToFavorites,
-    onHandleAddToPlaylist,
-    onHandleCreatePlaylist,
     onHandleUpNextVisibility}: AudioPlayerUIProps) {
 
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
@@ -75,9 +72,6 @@ export default function MainAudioPlayer({
                         className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
                             <AddToPlaylist
                                 track={track}
-                                playlists={playlists}
-                                onHandleAddToPlaylist={onHandleAddToPlaylist}
-                                onHandleCreatePlaylist={onHandleCreatePlaylist}
                             />
                         </div>
                     </div>
