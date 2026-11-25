@@ -127,7 +127,11 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                         visibility: playlist.id !== playlistId ? "hidden" : "visible"
                     }} 
                     className="PlaylistPaneFolderSelection">
-                    {playlist.id === playlistId && trackPageItems.map((element, index) => (
+                    {playlist.tracks.length === 0
+                    ? 
+                        <h2 className="CreamColor CenterText">{playlist.name} is empty!</h2>
+                    : 
+                    playlist.id === playlistId && trackPageItems.map((element, index) => (
                         <li key={element.track_id} className="PlaylistPaneFolderList">
                             <ListButton
                                 list={playlist.tracks}
@@ -149,7 +153,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                                 onSetTrackQueue={onSetTrackQueue}
                             />
                         </li>
-                    ))}
+                    ))}   
                 </ul>
                 {playlist.id === playlistId && 
                     <div className="RowBetween">
