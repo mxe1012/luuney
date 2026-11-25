@@ -41,6 +41,7 @@ export default function PillTitle({heading, actionIcon, actionLabel, initialValu
                     <div className="MenuActions">
                         <input className="PlaylistMenuInput" value={value} placeholder="Playlist name"
                             onChange={(e) => setValue(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === "Escape") setIsMenuVisible(false); }}
                         />
                         <button type="submit" className="PlaylistMenuAddItemBtn"
                             disabled={value.trim().length === 0}>
