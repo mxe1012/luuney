@@ -339,7 +339,6 @@ describe("Dashboard", () => {
         });
 
         it("adds the current track to an existing playlist only once", async () => {
-            // playlists need a track, since empty playlists are deleted automatically
             localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [makeTrack(9)], "Chill")]));
             render_();
             await flushInitialFetch();
@@ -394,6 +393,21 @@ describe("Dashboard", () => {
 
             expect(stored<Playlist[]>("user_playlists")[0].tracks.map((t) => t.track_id)).toEqual([2]);
             expect(snackbarText()).toBe("Removed track from playlist.");
+        });
+
+        it("keeps a playlist open, and saved, after its last track is removed", () => {
+            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [makeTrack(1)], "Chill")]));
+            render_();
+            fireEvent.click(screen.getByText("Playlists"));
+            fireEvent.click(playlistPane().getByText("Chill").closest("button")!);
+
+            const row = playlistPane().getByText("Track 1").closest(".ListRow") as HTMLElement;
+            fireEvent.click(within(row).getByLabelText("Delete Entry"));
+
+            const playlists = stored<Playlist[]>("user_playlists");
+            expect(playlists).toHaveLength(1);
+            expect(playlists[0].tracks).toEqual([]);
+            expect(playlistPane().getByRole("heading", { level: 2 }).textContent).toBe("Chill");
         });
     });
 
