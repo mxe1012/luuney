@@ -1,28 +1,19 @@
 // @vitest-environment jsdom
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
-import { describe, it, expect, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import TrackSearchList from "../../../../ui/dashboard_components/searchlistpane_components/TrackSearchList";
-import SnackbarProvider from "../../../../hooks/SnackbarContext";
-import type { TrackSearchListProps } from "../../../../utils/types";
+import type { LibraryContextType, TrackSearchListProps } from "../../../../utils/types";
 import { makeTracks } from "../../../fixtures";
+import { splitLibrary, withLibrary } from "../../../library";
 
-function setup(overrides: Partial<TrackSearchListProps> = {}) {
+function setup(overrides: Partial<TrackSearchListProps & LibraryContextType> = {}) {
+    const { library, props: own } = splitLibrary<TrackSearchListProps>(overrides);
     const props: TrackSearchListProps = {
         list: makeTracks(3),
-        onHandleFetch: vi.fn().mockResolvedValue(undefined),
-        onAddToFavorites: vi.fn(),
-        onIsPlaying: vi.fn(),
-        isFavorited: () => false,
-        onSetTrackQueue: vi.fn(),
-        onSetCurrentTrackIndex: vi.fn(),
-        playlists: [],
-        onHandleAddToPlaylist: vi.fn(),
-        onHandlePlayNext: vi.fn(),
-        onHandleCreatePlaylist: vi.fn(),
-        ...overrides,
+        ...own,
     };
-    const utils = render(<TrackSearchList {...props} />, { wrapper: SnackbarProvider });
-    return { ...utils, props };
+    const utils = render(<TrackSearchList {...props} />, { wrapper: withLibrary(library) });
+    return { ...utils, props: { ...props, ...library } };
 }
 
 describe("TrackSearchList", () => {

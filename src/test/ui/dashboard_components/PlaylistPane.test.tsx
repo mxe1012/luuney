@@ -2,11 +2,12 @@
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import PlaylistPane from "../../../ui/dashboard_components/PlaylistPane";
-import SnackbarProvider from "../../../hooks/SnackbarContext";
-import type { PlaylistPaneProps, TrackObject } from "../../../utils/types";
+import type { LibraryContextType, PlaylistPaneProps, TrackObject } from "../../../utils/types";
 import { makePlaylist, makeTrack } from "../../fixtures";
+import { splitLibrary, withLibrary } from "../../library";
 
-function setup(overrides: Partial<PlaylistPaneProps> = {}) {
+function setup(overrides: Partial<PlaylistPaneProps & LibraryContextType> = {}) {
+    const { library, props: own } = splitLibrary<PlaylistPaneProps>(overrides);
     const props: PlaylistPaneProps = {
         recents: [makeTrack(1)],
         favorites: [makeTrack(2)],
@@ -15,23 +16,14 @@ function setup(overrides: Partial<PlaylistPaneProps> = {}) {
         onFavoritesList: vi.fn(),
         onSetPlaylist: vi.fn(),
         onHandleRenamePlaylist: vi.fn(),
-        onHandleCreatePlaylist: vi.fn(),
-        onHandleAddToPlaylist: vi.fn(),
-        onHandlePlayNext: vi.fn(),
-        isFavorited: () => false,
         onDeleteEntry: vi.fn(() => (prev: TrackObject[]) => prev),
         onClearQueue: vi.fn(),
         onDeletePlaylist: vi.fn(() => () => []),
         onDeletePlaylistEntry: vi.fn(),
-        onAddToFavorites: vi.fn(),
-        onHandleFetch: vi.fn().mockResolvedValue(undefined),
-        onSetCurrentTrackIndex: vi.fn(),
-        onIsPlaying: vi.fn(),
-        onSetTrackQueue: vi.fn(),
-        ...overrides,
+        ...own,
     };
-    const utils = render(<PlaylistPane {...props} />, { wrapper: SnackbarProvider });
-    return { ...utils, props };
+    const utils = render(<PlaylistPane {...props} />, { wrapper: withLibrary(library) });
+    return { ...utils, props: { ...props, ...library } };
 }
 
 // The sub-lists are always mounted; "hidden" controls which one is shown.

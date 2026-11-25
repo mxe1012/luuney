@@ -2,15 +2,24 @@
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach } from "vitest";
 import MainAudioPlayer from "../../../../../ui/dashboard_components/audioplayer_components/audioplayerUI_components/MainAudioPlayer";
-import SnackbarProvider from "../../../../../hooks/SnackbarContext";
-import type { AudioPlayerUIProps } from "../../../../../utils/types";
+import type { AudioPlayerUIProps, LibraryContextType } from "../../../../../utils/types";
 import { makeAudioPlayerUIProps } from "../../../../audioPlayerUIProps";
 import { makePlaylist, makeTrack } from "../../../../fixtures";
+import { makeLibrary, withLibrary } from "../../../../library";
 
-function setup(overrides: Partial<AudioPlayerUIProps> = {}) {
-    const props = makeAudioPlayerUIProps(overrides);
-    const utils = render(<MainAudioPlayer {...props} />, { wrapper: SnackbarProvider });
-    return { ...utils, props };
+type PlaylistMenuValues = Pick<LibraryContextType, "playlists" | "onHandleAddToPlaylist" | "onHandleCreatePlaylist">;
+
+// the playlist menu reads its values from LibraryContext, while the favorite button still uses the player's own onAddToFavorites
+function setup(overrides: Partial<AudioPlayerUIProps & PlaylistMenuValues> = {}) {
+    const { playlists, onHandleAddToPlaylist, onHandleCreatePlaylist, ...own } = overrides;
+    const library = makeLibrary({
+        ...(playlists && { playlists }),
+        ...(onHandleAddToPlaylist && { onHandleAddToPlaylist }),
+        ...(onHandleCreatePlaylist && { onHandleCreatePlaylist }),
+    });
+    const props = makeAudioPlayerUIProps(own);
+    const utils = render(<MainAudioPlayer {...props} />, { wrapper: withLibrary(library) });
+    return { ...utils, props: { ...props, playlists: library.playlists, onHandleAddToPlaylist: library.onHandleAddToPlaylist, onHandleCreatePlaylist: library.onHandleCreatePlaylist } };
 }
 
 function playerRoot(container: HTMLElement) {

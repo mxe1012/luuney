@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { PlaylistPaneProps } from "../../utils/types";
+import { useLibrary } from "../../hooks/LibraryContext";
 
 import RecentsList from "./playlistpane_components/RecentsList";
 import FavoritesList from "./playlistpane_components/FavoritesList";
@@ -10,7 +11,9 @@ import PlaylistPaneController from "./playlistpane_components/PlaylistPaneContro
 import EmptyListMessage from "./playlistpane_components/EmptyListMessage";
 import PillTitle from "./playlistpane_components/PillTitle";
 
-export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onHandleRenamePlaylist, onDeleteEntry, onClearQueue, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleCreatePlaylist, onHandleAddToPlaylist, onHandlePlayNext}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, onSetPlaylist, onHandleRenamePlaylist, onDeleteEntry, onClearQueue, onDeletePlaylist, onDeletePlaylistEntry}: PlaylistPaneProps) {
+
+    const { onHandleCreatePlaylist } = useLibrary();
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(true);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -39,20 +42,10 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 : 
                 <RecentsList 
                     list={recents} 
-                    playlists={playlist}
-                    onHandlePlayNext={onHandlePlayNext}
-                    onHandleAddToPlaylist={onHandleAddToPlaylist}
-                    onHandleCreatePlaylist={onHandleCreatePlaylist}
                     onRecentsList={onRecentsList} 
                     onClearQueue={onClearQueue}
-                    onAddToFavorites={onAddToFavorites}
                     onDeleteEntry={onDeleteEntry} 
-                    isFavorited={isFavorited} 
                     visible={isRecentsVisible} 
-                    onHandleFetch={onHandleFetch}
-                    onIsPlaying={onIsPlaying}
-                    onSetTrackQueue={onSetTrackQueue}
-                    onSetCurrentTrackIndex={onSetCurrentTrackIndex} 
                 />
             }
             {favorites.length === 0 && isFavoritesVisible 
@@ -64,18 +57,10 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 : 
                 <FavoritesList 
                     list={favorites}  
-                    playlists={playlist}
-                    onHandlePlayNext={onHandlePlayNext}
-                    onHandleAddToPlaylist={onHandleAddToPlaylist}
-                    onHandleCreatePlaylist={onHandleCreatePlaylist}
                     onFavoritesList={onFavoritesList} 
                     onClearQueue={onClearQueue}
                     visible={isFavoritesVisible}
                     onDeleteEntry={onDeleteEntry} 
-                    onHandleFetch={onHandleFetch} 
-                    onIsPlaying={onIsPlaying}
-                    onSetTrackQueue={onSetTrackQueue} 
-                    onSetCurrentTrackIndex={onSetCurrentTrackIndex}
                 />
             }
             {playlist.length === 0 && isPlaylistSelectionVisible 
@@ -101,19 +86,10 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                     onIsSelectedPlaylist={setIsSelectedPlaylist}
                     visible={isPlaylistSelectionVisible} 
                     onHandleRenamePlaylist={onHandleRenamePlaylist}
-                    isFavorited={isFavorited} 
-                    onAddToFavorites={onAddToFavorites}
-                    onHandleCreatePlaylist={onHandleCreatePlaylist}
-                    onHandleAddToPlaylist={onHandleAddToPlaylist}
-                    onHandlePlayNext={onHandlePlayNext}
                     onDeletePlaylist={onDeletePlaylist} 
                     onDeletePlaylistEntry={onDeletePlaylistEntry}
                     onClearQueue={onClearQueue}
                     onSetIsPlaylistSelectionVisible={setIsPlaylistSelectionVisible}
-                    onHandleFetch={onHandleFetch} 
-                    onIsPlaying={onIsPlaying} 
-                    onSetCurrentTrackIndex={onSetCurrentTrackIndex}
-                    onSetTrackQueue={onSetTrackQueue}
                 />
             }
         </div>

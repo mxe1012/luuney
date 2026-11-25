@@ -104,6 +104,7 @@ Shared test helpers live at the top of `src/test/`:
 
 - `fixtures.ts`: builders for tracks, artists, playlists, and Audius API responses
 - `audioPlayerUIProps.ts`: default props for the player UI components
+- `library.tsx`: a default `LibraryContext` value and a wrapper that provides it, for components that read from the context
 
 A few conventions:
 
@@ -125,7 +126,7 @@ Every push to `main` and every pull request runs the [CI workflow](.github/workf
 src/
 ├── index.tsx              # entry point
 ├── App.tsx                # app shell: dashboard, snackbar provider, footer
-├── hooks/                 # useLocalStorage, usePagination, useMediaSession, usePlayerShortcuts, SnackbarContext
+├── hooks/                 # useLocalStorage, usePagination, useMediaSession, usePlayerShortcuts, SnackbarContext, LibraryContext
 ├── utils/
 │   ├── data.ts            # Audius API requests
 │   ├── helpers.ts         # formatting and small utilities

@@ -3,9 +3,9 @@ import { useState, type SetStateAction } from "react";
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi, type Mock } from "vitest";
 import PlaylistSelectionList from "../../../../ui/dashboard_components/playlistpane_components/PlaylistSelectionList";
-import SnackbarProvider from "../../../../hooks/SnackbarContext";
-import type { Playlist, PlaylistSelectionProps } from "../../../../utils/types";
+import type { LibraryContextType, Playlist, PlaylistSelectionProps } from "../../../../utils/types";
 import { makePlaylist, makeTrack, makeTracks } from "../../../fixtures";
+import { splitLibrary, withLibrary } from "../../../library";
 
 type HarnessProps = Partial<Omit<PlaylistSelectionProps, "list" | "isSelectedPlaylist" | "onIsSelectedPlaylist" | "onSetPlaylist">> & {
     initial: Playlist[];
@@ -34,20 +34,16 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
             onSetIsPlaylistSelectionVisible={vi.fn()}
             onDeletePlaylist={(entry) => (prev) => prev.filter((p) => p.id !== entry.id)}
             onDeletePlaylistEntry={vi.fn()}
-            onHandleFetch={vi.fn().mockResolvedValue(undefined)}
-            onIsPlaying={vi.fn()}
             onHandleRenamePlaylist={(id, name) => setList((prev) => prev.map((p) => (p.id === id ? { ...p, name } : p)))}
-            onHandleCreatePlaylist={vi.fn()}
-            onHandleAddToPlaylist={vi.fn()}
-            onHandlePlayNext={vi.fn()}
             {...rest}
         />
     );
 }
 
-function setup(initial: Playlist[], rest: Partial<HarnessProps> = {}) {
+function setup(initial: Playlist[], overrides: Partial<HarnessProps & LibraryContextType> = {}) {
     const spies = { onSetPlaylist: vi.fn(), onIsSelectedPlaylist: vi.fn() };
-    const utils = render(<Harness initial={initial} spies={spies} {...rest} />, { wrapper: SnackbarProvider });
+    const { library, props: rest } = splitLibrary<HarnessProps>(overrides);
+    const utils = render(<Harness initial={initial} spies={spies} {...rest} />, { wrapper: withLibrary(library) });
     return { ...utils, spies };
 }
 

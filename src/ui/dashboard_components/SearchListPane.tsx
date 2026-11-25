@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 import { fetchTrackByQuery, fetchTracksByUser, fetchUsers } from "../../utils/data";
 
-import type { ArtistObject, SearchListPaneProps, TrackObject } from "../../utils/types";
+import type { ArtistObject, TrackObject } from "../../utils/types";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import { toTrackObjects } from "../../utils/helpers";
@@ -13,7 +13,7 @@ import TrackSearchList from "./searchlistpane_components/TrackSearchList";
 import ArtistSearchList from "./searchlistpane_components/ArtistSearchList";
 import SearchController from "./searchlistpane_components/SearchController";
 
-export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavorites, onIsPlaying, onSetCurrentTrackIndex, onSetTrackQueue, playlists, onHandleAddToPlaylist, onHandleCreatePlaylist, onHandlePlayNext}: SearchListPaneProps) {
+export default function SearchListPane() {
 
     const searchTypes: string[] = ["tracks", "artists"]
     const [searchType, setSearchType] = useState(searchTypes[0]);
@@ -190,16 +190,6 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                 <SkeletonSearchListPane isLoaded={isLoaded}>
                     <TrackSearchList 
                         list={trackList}
-                        playlists={playlists}
-                        onHandlePlayNext={onHandlePlayNext}
-                        onHandleAddToPlaylist={onHandleAddToPlaylist}
-                        onHandleCreatePlaylist={onHandleCreatePlaylist}
-                        onHandleFetch={onHandleFetch}
-                        onAddToFavorites={onAddToFavorites}
-                        onIsPlaying={onIsPlaying}
-                        isFavorited={isFavorited}
-                        onSetCurrentTrackIndex={onSetCurrentTrackIndex}
-                        onSetTrackQueue={onSetTrackQueue}
                     />
                     <ArtistSearchList 
                         list={artistList}

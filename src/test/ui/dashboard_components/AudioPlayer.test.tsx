@@ -3,7 +3,7 @@ import { useState } from "react";
 import { render, cleanup, fireEvent, screen, act } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi, beforeEach } from "vitest";
 import AudioPlayer from "../../../ui/dashboard_components/AudioPlayer";
-import SnackbarProvider from "../../../hooks/SnackbarContext";
+import { makeLibrary, withLibrary } from "../../library";
 import type { AudioPlayerProps, TrackObject } from "../../../utils/types";
 import { makeTrack, makeTracks } from "../../fixtures";
 
@@ -35,10 +35,7 @@ function Harness({ initialIndex = 0, spies, ...rest }: HarnessProps) {
         <AudioPlayer
             track={tracks[index] ?? makeTrack(1)}
             tracks={tracks}
-            playlists={[]}
             isFavorited={false}
-            onHandleCreatePlaylist={vi.fn()}
-            onHandleAddToPlaylist={vi.fn()}
             onAddToFavorites={vi.fn()}
             onRemoveFromQueue={vi.fn()}
             {...rest}
@@ -96,7 +93,7 @@ function setup(props: Partial<HarnessProps> = {}) {
         onHandleFetch: vi.fn().mockResolvedValue(undefined),
         onSetTrackQueue: vi.fn(),
     };
-    const utils = render(<Harness spies={spies} {...props} />, { wrapper: SnackbarProvider });
+    const utils = render(<Harness spies={spies} {...props} />, { wrapper: withLibrary(makeLibrary()) });
     const audio = utils.container.querySelector("audio") as HTMLAudioElement;
     const media = fakeMedia(audio);
     return { ...utils, spies, audio, media };
@@ -337,7 +334,7 @@ describe("AudioPlayer", () => {
         it("restores the saved volume on the slider and the element", () => {
             localStorage.setItem("user_volume", "0.3");
             const spies = { onSetCurrentTrackIndex: vi.fn(), onIsPlaying: vi.fn(), onHandleFetch: vi.fn().mockResolvedValue(undefined), onSetTrackQueue: vi.fn() };
-            const { container } = render(<Harness spies={spies} tracks={[makeTrack(1)]} />, { wrapper: SnackbarProvider });
+            const { container } = render(<Harness spies={spies} tracks={[makeTrack(1)]} />, { wrapper: withLibrary(makeLibrary()) });
 
             expect(mainSlider("Volume").value).toBe("0.3");
             expect((container.querySelector("audio") as HTMLAudioElement).volume).toBe(0.3);
@@ -596,7 +593,7 @@ describe("AudioPlayer", () => {
                 onSetTrackQueue: vi.fn(),
             };
             const { rerender, container } = render(<Harness spies={spies} tracks={makeTracks(2)} />, {
-                wrapper: SnackbarProvider,
+                wrapper: withLibrary(makeLibrary()),
             });
             fakeMedia(container.querySelector("audio") as HTMLAudioElement);
             fireEvent.click(mainButton("Shuffle Off"));

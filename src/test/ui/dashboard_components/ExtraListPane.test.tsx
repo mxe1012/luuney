@@ -1,23 +1,21 @@
 // @vitest-environment jsdom
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
-import { describe, it, expect, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import ExtraListPane from "../../../ui/dashboard_components/ExtraListPane";
-import type { ExtraListPaneProps } from "../../../utils/types";
+import type { LibraryContextType, ExtraListPaneProps } from "../../../utils/types";
 import { makeTrack, makeTracks } from "../../fixtures";
+import { splitLibrary, withLibrary } from "../../library";
 
-function setup(overrides: Partial<ExtraListPaneProps> = {}) {
+function setup(overrides: Partial<ExtraListPaneProps & LibraryContextType> = {}) {
+    const { library, props: own } = splitLibrary<ExtraListPaneProps>(overrides);
     const props: ExtraListPaneProps = {
         list: makeTracks(3),
         heading: "Trending Tracks",
         isLoaded: true,
-        onHandleFetch: vi.fn().mockResolvedValue(undefined),
-        onIsPlaying: vi.fn(),
-        onSetTrackQueue: vi.fn(),
-        onSetCurrentTrackIndex: vi.fn(),
-        ...overrides,
+        ...own,
     };
-    const utils = render(<ExtraListPane {...props} />);
-    return { ...utils, props };
+    const utils = render(<ExtraListPane {...props} />, { wrapper: withLibrary(library) });
+    return { ...utils, props: { ...props, ...library } };
 }
 
 describe("ExtraListPane", () => {

@@ -10,11 +10,14 @@ import CoverImage from "../../CoverImage";
 import ListButton from "./ListButton";
 import PaginationController from "../../PaginationController";
 import { useSnackbar } from "../../../hooks/SnackbarContext";
+import { useLibrary } from "../../../hooks/LibraryContext";
 import PillTitle from "./PillTitle";
 
 const EMPTY_TRACKS: TrackObject[] = [];
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleRenamePlaylist, onHandleCreatePlaylist, onHandleAddToPlaylist, onHandlePlayNext}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onSetPlaylist, onHandleRenamePlaylist}: PlaylistSelectionProps) {
+
+    const { onHandleCreatePlaylist } = useLibrary();
 
     const [playlistId, setPlaylistId] = useState("");
 
@@ -133,21 +136,11 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
                             <ListButton
                                 list={playlist.tracks}
                                 track={element}
-                                playlists={list}
-                                onHandleAddToPlaylist={onHandleAddToPlaylist}
-                                onHandlePlayNext={onHandlePlayNext}
-                                onHandleCreatePlaylist={onHandleCreatePlaylist}
                                 playlist={playlist}
                                 index={trackStart + index}
-                                onHandleFetch={onHandleFetch}
-                                onAddToFavorites={onAddToFavorites}
                                 hasDeleteButton={true}
                                 hasFavoriteButton={true}
-                                isFavorited={isFavorited}
-                                onIsPlaying={onIsPlaying}
                                 onDeletePlaylistEntry={onDeletePlaylistEntry}
-                                onSetCurrentTrackIndex={onSetCurrentTrackIndex}
-                                onSetTrackQueue={onSetTrackQueue}
                             />
                         </li>
                     ))}   

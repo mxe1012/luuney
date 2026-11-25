@@ -16,7 +16,7 @@ const SKIP_PREV_THRESHOLD = 3;
 const STREAM_ERROR_SKIP_DELAY = 1500; // long enough to read the error before the next track's "Loading track..." replaces it
 const SEEK_STEP = 10;
 
-export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onRemoveFromQueue, onIsPlaying}: AudioPlayerProps) {
+export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onAddToFavorites, onRemoveFromQueue, onIsPlaying}: AudioPlayerProps) {
     
     const [currentTime, setCurrentTime] = useLocalStorage<number>("current_track_time", 0);
     const [duration, setDuration] = useState(0);
@@ -383,7 +383,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
             />
             <AudioPlayerUI 
                 track={track}
-                playlists={playlists}
                 duration={duration}
                 currentTime={currentTime}
                 isPlaying={isPlaying}
@@ -407,8 +406,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
                 onHandleVolumeChange={handleVolumeChange}
                 onCycleRepeatMode={cycleRepeatMode}
                 onAddToFavorites={onAddToFavorites}
-                onHandleAddToPlaylist={onHandleAddToPlaylist}
-                onHandleCreatePlaylist={onHandleCreatePlaylist}
                 onHandleUpNextVisibility={handleUpNextVisibility}
             />
             <Visualizer audioRef={audioRef} isPlaying={isPlaying}/>

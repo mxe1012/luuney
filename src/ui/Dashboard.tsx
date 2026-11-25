@@ -4,7 +4,9 @@ import { fetchTrackById, fetchTrackLatest, fetchTrackTrending } from "../utils/d
 
 import AudioPlayer from "./dashboard_components/AudioPlayer";
 
-import type { Playlist, TrackObject } from "../utils/types";
+import type { LibraryContextType, Playlist, TrackObject } from "../utils/types";
+
+import { LibraryContext } from "../hooks/LibraryContext";
 
 import SearchListPane from "./dashboard_components/SearchListPane";
 
@@ -294,88 +296,70 @@ export default function Dashboard() {
         }
     }, [showSnackbar, hideSnackbar]);
 
+    const library: LibraryContextType = {
+        playlists,
+        isFavorited: isListTrackInFavorites,
+        onAddToFavorites: handleAddToFavorites,
+        onHandleAddToPlaylist: handleAddToPlaylist,
+        onHandleCreatePlaylist: handleCreatePlaylist,
+        onHandlePlayNext: handlePlayNext,
+        onHandleFetch: handleFetch,
+        onIsPlaying: setIsPlaying,
+        onSetTrackQueue: handleSetTrackQueue,
+        onSetCurrentTrackIndex: setCurrentTrackIndex,
+    };
+
     return (
-        <>
+        <LibraryContext value={library}>
             <div className="MusicDashboard">
                 <div>
-                    <PlaylistPane 
-                        recents={recents} 
-                        favorites={favorites} 
+                    <PlaylistPane
+                        recents={recents}
+                        favorites={favorites}
                         playlist={playlists}
-                        onRecentsList={setRecents} 
-                        onFavoritesList={setFavorites} 
+                        onRecentsList={setRecents}
+                        onFavoritesList={setFavorites}
                         onSetPlaylist={setPlaylists}
                         onHandleRenamePlaylist={handleRenamePlaylist}
-                        isFavorited={isListTrackInFavorites} 
-                        onHandleAddToPlaylist={handleAddToPlaylist}
-                        onHandlePlayNext={handlePlayNext}
-                        onHandleCreatePlaylist={handleCreatePlaylist}
-                        onDeletePlaylist={handleDeletePlaylist} 
+                        onDeletePlaylist={handleDeletePlaylist}
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}
-                        onDeleteEntry={handleDeleteEntry} 
+                        onDeleteEntry={handleDeleteEntry}
                         onClearQueue={handleClearQueue}
-                        onAddToFavorites={handleAddToFavorites} 
-                        onHandleFetch={handleFetch} 
-                        onIsPlaying={setIsPlaying} 
-                        onSetTrackQueue={handleSetTrackQueue}
-                        onSetCurrentTrackIndex={setCurrentTrackIndex}
                     />
                 </div>
                 <div>
-                    <AudioPlayer 
-                        track={track} 
+                    <AudioPlayer
+                        track={track}
                         tracks={trackQueue}
                         currentTrackIndex={currentTrackIndex}
                         onSetCurrentTrackIndex={setCurrentTrackIndex}
-                        playlists={playlists} 
-                        isPlaying={isPlaying} 
-                        isFavorited={isCurrentTrackFavorited} 
+                        isPlaying={isPlaying}
+                        isFavorited={isCurrentTrackFavorited}
                         isShuffle={isShuffle}
                         shuffleTrackQueue={shuffleTrackQueue}
                         onSetIsShuffle={setIsShuffle}
                         onSetShuffleTrackQueue={setShuffleTrackQueue}
                         onSetTrackQueue={setTrackQueue}
                         onHandleFetch={handleFetch}
-                        onAddToFavorites={handleAddToFavorites} 
+                        onAddToFavorites={handleAddToFavorites}
                         onIsPlaying={setIsPlaying}
-                        onHandleCreatePlaylist={handleCreatePlaylist} 
-                        onHandleAddToPlaylist={handleAddToPlaylist}
                         onRemoveFromQueue={removeFromQueue}
                     />
                 </div>
                 <div>
-                    <SearchListPane 
-                        playlists={playlists}
-                        onHandlePlayNext={handlePlayNext}
-                        onHandleAddToPlaylist={handleAddToPlaylist}
-                        onHandleCreatePlaylist={handleCreatePlaylist}
-                        onHandleFetch={handleFetch} 
-                        isFavorited={isListTrackInFavorites} 
-                        onAddToFavorites={handleAddToFavorites} 
-                        onIsPlaying={setIsPlaying}
-                        onSetCurrentTrackIndex={setCurrentTrackIndex}
-                        onSetTrackQueue={handleSetTrackQueue}
-                    />
+                    <SearchListPane />
                 </div>
             </div>
-            <ExtraListPane 
+            <ExtraListPane
                 isLoaded={isLoadedTrending}
                 list={trending}
                 heading="Trending Tracks (Top 100)"
-                onHandleFetch={handleFetch}
-                onIsPlaying={setIsPlaying}
-                onSetTrackQueue={handleSetTrackQueue}
-                onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
-            <ExtraListPane 
+            <ExtraListPane
                 isLoaded={isLoadedLatest}
                 list={latest}
                 heading="Latest Tracks"
-                onHandleFetch={handleFetch}
-                onIsPlaying={setIsPlaying}
-                onSetTrackQueue={handleSetTrackQueue}
-                onSetCurrentTrackIndex={setCurrentTrackIndex}
             />
-        </>
+        </LibraryContext>
     )
 }

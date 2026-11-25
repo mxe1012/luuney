@@ -2,7 +2,7 @@
 import { render, cleanup } from "@testing-library/react";
 import { describe, it, expect, afterEach } from "vitest";
 import AudioPlayerUI from "../../../../ui/dashboard_components/audioplayer_components/AudioPlayerUI";
-import SnackbarProvider from "../../../../hooks/SnackbarContext";
+import { makeLibrary, withLibrary } from "../../../library";
 import { makeAudioPlayerUIProps } from "../../../audioPlayerUIProps";
 
 describe("AudioPlayerUI", () => {
@@ -11,7 +11,7 @@ describe("AudioPlayerUI", () => {
     });
 
     it("renders both the main and mini players", () => {
-        const { container } = render(<AudioPlayerUI {...makeAudioPlayerUIProps()} />, { wrapper: SnackbarProvider });
+        const { container } = render(<AudioPlayerUI {...makeAudioPlayerUIProps()} />, { wrapper: withLibrary(makeLibrary()) });
 
         expect(container.querySelector(".AudioPlayer")).not.toBeNull();
         expect(container.querySelector(".MiniAudioPlayer")).not.toBeNull();
@@ -19,7 +19,7 @@ describe("AudioPlayerUI", () => {
 
     it("shows exactly one of them depending on scroll position", () => {
         const { container, rerender } = render(<AudioPlayerUI {...makeAudioPlayerUIProps({ isScrolled: false })} />, {
-            wrapper: SnackbarProvider,
+            wrapper: withLibrary(makeLibrary()),
         });
 
         expect(container.querySelector(".AudioPlayer")?.className).toBe("GlassCard AudioPlayer");

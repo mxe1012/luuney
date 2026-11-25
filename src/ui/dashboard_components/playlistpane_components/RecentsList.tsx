@@ -6,7 +6,7 @@ import PaginationController from "../../PaginationController";
 
 import ListButton from "./ListButton";
 
-export default function RecentsList({list, visible, onRecentsList, onAddToFavorites, onDeleteEntry, onClearQueue, isFavorited, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, playlists, onHandleAddToPlaylist, onHandleCreatePlaylist, onHandlePlayNext}: MainListProps) {
+export default function RecentsList({list, visible, onRecentsList, onDeleteEntry, onClearQueue}: MainListProps) {
     
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start } = usePagination(list, 10);
 
@@ -20,21 +20,11 @@ export default function RecentsList({list, visible, onRecentsList, onAddToFavori
                         <ListButton 
                             list={list}
                             track={element}
-                            playlists={playlists}
-                            onHandleAddToPlaylist={onHandleAddToPlaylist}
-                            onHandlePlayNext={onHandlePlayNext}
-                            onHandleCreatePlaylist={onHandleCreatePlaylist}
                             index={start + index}
-                            onHandleFetch={onHandleFetch}
-                            onAddToFavorites={onAddToFavorites}
                             onListDeleteEntry={onRecentsList}
                             onDeleteEntry={onDeleteEntry}
-                            onIsPlaying={onIsPlaying}
-                            isFavorited={isFavorited}
                             hasDeleteButton={true}
                             hasFavoriteButton={true}
-                            onSetTrackQueue={onSetTrackQueue}
-                            onSetCurrentTrackIndex={onSetCurrentTrackIndex}
                         />
                     </li>
                 ))}
