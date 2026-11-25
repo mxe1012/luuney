@@ -18,6 +18,9 @@ function setup(overrides: Partial<MainListProps> = {}) {
         onIsPlaying: vi.fn(),
         onSetTrackQueue: vi.fn(),
         onSetCurrentTrackIndex: vi.fn(),
+        playlists: [],
+        onHandleAddToPlaylist: vi.fn(),
+        onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };
     const utils = render(<RecentsList {...props} />, { wrapper: SnackbarProvider });
@@ -47,11 +50,12 @@ describe("RecentsList", () => {
         expect(listEl(container).className).toBe("PlaylistPaneList hidden");
     });
 
-    it("rows have both favorite and delete buttons", () => {
+    it("rows have a favorite button and a more actions menu with a remove option", () => {
         setup({ list: makeTracks(1) });
 
         expect(screen.getByLabelText("Add to Favorites")).toBeTruthy();
-        expect(screen.getByLabelText("Delete Entry")).toBeTruthy();
+        fireEvent.click(screen.getByLabelText("More actions for Track 1"));
+        expect(screen.getByText("Remove")).toBeTruthy();
     });
 
     it("paginates at 10 tracks per page", () => {
@@ -80,7 +84,8 @@ describe("RecentsList", () => {
     it("deleting a row updates the recents list", () => {
         const { props } = setup();
 
-        fireEvent.click(screen.getAllByLabelText("Delete Entry")[0]);
+        fireEvent.click(screen.getByLabelText("More actions for Track 1"));
+        fireEvent.click(screen.getByText("Remove"));
 
         const updater = vi.mocked(props.onRecentsList!).mock.calls[0][0] as (prev: TrackObject[]) => TrackObject[];
         expect(updater(props.list)).toEqual([props.list[1], props.list[2]]);
