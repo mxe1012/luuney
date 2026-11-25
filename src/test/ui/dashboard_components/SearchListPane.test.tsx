@@ -29,6 +29,7 @@ function setup(overrides: Partial<SearchListPaneProps> = {}) {
         onSetTrackQueue: vi.fn(),
         playlists: [],
         onHandleAddToPlaylist: vi.fn(),
+        onHandlePlayNext: vi.fn(),
         onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };

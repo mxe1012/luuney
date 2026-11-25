@@ -17,6 +17,7 @@ function setup(overrides: Partial<PlaylistPaneProps> = {}) {
         onHandleRenamePlaylist: vi.fn(),
         onHandleCreatePlaylist: vi.fn(),
         onHandleAddToPlaylist: vi.fn(),
+        onHandlePlayNext: vi.fn(),
         isFavorited: () => false,
         onDeleteEntry: vi.fn(() => (prev: TrackObject[]) => prev),
         onClearQueue: vi.fn(),
