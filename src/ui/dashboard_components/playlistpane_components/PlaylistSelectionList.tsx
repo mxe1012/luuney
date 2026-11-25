@@ -121,7 +121,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
             />
             {list.map((playlist) => (
                 <Fragment key={playlist.id}>
-                {playlist.tracks.length === 0 && <h2 className="CreamColor CenterText">{playlist.name} is empty!</h2>}
+                {playlist.id === playlistId && playlist.tracks.length === 0 && <h2 className="CreamColor CenterText">{playlist.name} is empty!</h2>}
                 <ul  
                     style={{
                         display: playlist.id !== playlistId ? "none" : "",

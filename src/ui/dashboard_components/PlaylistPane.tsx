@@ -90,7 +90,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                 />
                 <EmptyListMessage 
                     listName="Playlists"
-                    extraMessage="Click the + icon to create a new playlist or add to an exsiting playlist!"
+                    extraMessage="Click the + icon to create a new playlist or add to an existing playlist!"
                 />
                 </> 
                 : 

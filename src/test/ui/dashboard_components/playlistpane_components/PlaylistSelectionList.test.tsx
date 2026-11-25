@@ -160,6 +160,16 @@ describe("PlaylistSelectionList", () => {
 
             expect(onHandleCreatePlaylist).toHaveBeenCalledWith("Road Trip");
         });
+
+        it("closes the menu once the playlist is created", () => {
+            setup(PLAYLISTS);
+            fireEvent.click(screen.getByLabelText("create playlist"));
+
+            fireEvent.change(screen.getByPlaceholderText("Playlist name"), { target: { value: "Road Trip" } });
+            fireEvent.click(document.querySelector(".PlaylistMenu.OpensDown button") as HTMLButtonElement);
+
+            expect((document.querySelector(".PlaylistMenu.OpensDown") as HTMLElement).classList.contains("hidden")).toBe(true);
+        });
     });
 
     describe("renaming a playlist", () => {
@@ -240,6 +250,51 @@ describe("PlaylistSelectionList", () => {
             expect(menu().classList.contains("hidden")).toBe(true);
         });
 
+        it("pressing Enter saves the name and closes the menu", () => {
+            const onHandleRenamePlaylist = vi.fn();
+            setup(PLAYLISTS, { onHandleRenamePlaylist });
+            openRenameMenu("Chill");
+
+            fireEvent.change(input(), { target: { value: "Late Night" } });
+            // jsdom doesn't submit a form when Enter is pressed, so submit it the way the browser would
+            fireEvent.submit(input().form!);
+
+            expect(onHandleRenamePlaylist).toHaveBeenCalledWith("a", "Late Night");
+            expect(menu().classList.contains("hidden")).toBe(true);
+        });
+
+        it("Enter is saved by the save button, not the pencil button", () => {
+            setup(PLAYLISTS);
+            openRenameMenu("Chill");
+
+            expect((screen.getByLabelText("rename playlist") as HTMLButtonElement).type).toBe("button");
+            expect(saveButton().type).toBe("submit");
+        });
+
+        it("does not save a blank name when the form is submitted", () => {
+            const onHandleRenamePlaylist = vi.fn();
+            setup(PLAYLISTS, { onHandleRenamePlaylist });
+            openRenameMenu("Chill");
+
+            fireEvent.change(input(), { target: { value: "   " } });
+            fireEvent.submit(input().form!);
+
+            expect(onHandleRenamePlaylist).not.toHaveBeenCalled();
+            expect(menu().classList.contains("hidden")).toBe(false);
+        });
+
+        it("closes on Escape without saving", () => {
+            const onHandleRenamePlaylist = vi.fn();
+            setup(PLAYLISTS, { onHandleRenamePlaylist });
+            openRenameMenu("Chill");
+
+            fireEvent.change(input(), { target: { value: "Late Night" } });
+            fireEvent.keyDown(input(), { key: "Escape" });
+
+            expect(menu().classList.contains("hidden")).toBe(true);
+            expect(onHandleRenamePlaylist).not.toHaveBeenCalled();
+        });
+
         it("opens with the playlist's current name, even after typing something else last time", () => {
             setup(PLAYLISTS);
             openRenameMenu("Chill");
@@ -270,6 +325,15 @@ describe("PlaylistSelectionList", () => {
             expect(screen.getByText("Track 1")).toBeTruthy();
             expect(screen.getByText("Track 2")).toBeTruthy();
             expect(screen.queryByText("Track 3")).toBeNull();
+        });
+
+        it("shows the empty message only for the open playlist", () => {
+            setup([makePlaylist("x", [], "Empty One"), makePlaylist("y", [], "Empty Two")]);
+
+            open("Empty Two");
+
+            expect(screen.getByText("Empty Two is empty!")).toBeTruthy();
+            expect(screen.queryByText("Empty One is empty!")).toBeNull();
         });
 
         it("tracks have a favorite button and a more actions menu with a remove option", () => {
