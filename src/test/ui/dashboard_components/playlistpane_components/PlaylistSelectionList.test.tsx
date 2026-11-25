@@ -327,6 +327,15 @@ describe("PlaylistSelectionList", () => {
             expect(screen.queryByText("Track 3")).toBeNull();
         });
 
+        it("shows the empty message only for the open playlist", () => {
+            setup([makePlaylist("x", [], "Empty One"), makePlaylist("y", [], "Empty Two")]);
+
+            open("Empty Two");
+
+            expect(screen.getByText("Empty Two is empty!")).toBeTruthy();
+            expect(screen.queryByText("Empty One is empty!")).toBeNull();
+        });
+
         it("tracks have a favorite button and a more actions menu with a remove option", () => {
             setup([makePlaylist("x", [makeTrack(9)], "Solo")]);
             open("Solo");
