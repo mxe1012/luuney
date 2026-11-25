@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useSnackbar } from "../hooks/SnackbarContext";
 import type { AddToPlaylistProps } from "../utils/types";
+import { useLibrary } from "../hooks/LibraryContext";
 
-export default function AddToPlaylist({track, playlists, onHandleAddToPlaylist, onHandleCreatePlaylist}: AddToPlaylistProps) {
+export default function AddToPlaylist({track}: AddToPlaylistProps) {
+
+    const { playlists, onHandleAddToPlaylist, onHandleCreatePlaylist } = useLibrary();
 
     const [playlistName, setPlaylistName] = useState("");
 
