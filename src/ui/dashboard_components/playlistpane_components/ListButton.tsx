@@ -12,7 +12,7 @@ import AddToPlaylist from "../../AddToPlaylist";
 const MENU_SPACE = 280;
 const MENU_GAP = 10;
 
-export default function ListButton({list, track, playlist, index, playlists, onHandleFetch, onIsPlaying, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, onHandleAddToPlaylist, onHandleCreatePlaylist, hasDeleteButton, hasFavoriteButton, onSetTrackQueue, onSetCurrentTrackIndex}: ListButtonProps) {
+export default function ListButton({list, track, playlist, index, playlists, onHandleFetch, onIsPlaying, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, onHandleAddToPlaylist, onHandleCreatePlaylist, hasDeleteButton, hasFavoriteButton, onSetTrackQueue, onSetCurrentTrackIndex, onHandlePlayNext}: ListButtonProps) {
 
     const [isActionMenuVisible, setIsActionMenuVisible] = useState(false);
     const [menuPosition, setMenuPosition] = useState<CSSProperties>({});
@@ -59,6 +59,11 @@ export default function ListButton({list, track, playlist, index, playlists, onH
             ? { top: rect.bottom + MENU_GAP, right }
             : { bottom: clientHeight - rect.top + MENU_GAP, right });
         setIsActionMenuVisible(!isActionMenuVisible);
+    }
+
+    function handlePlayNext() {
+        onHandlePlayNext(track);
+        setIsActionMenuVisible(false);
     }
 
     function handleRemove() {
@@ -122,6 +127,9 @@ export default function ListButton({list, track, playlist, index, playlists, onH
                         onHandleAddToPlaylist={onHandleAddToPlaylist}
                         onHandleCreatePlaylist={onHandleCreatePlaylist}
                     />
+                    <button className="PlaylistMenuItem" onClick={handlePlayNext}>
+                        Play Next
+                    </button>
                     {hasDeleteButton && 
                         <button className="PlaylistMenuItem" onClick={handleRemove}>
                             Remove
