@@ -175,6 +175,20 @@ export interface SnackbarContextType {
     hideSnackbar: () => void;
 }
 
+// the library actions that the lists, their items and the player's playlist menu all need, provided by Dashboard
+export interface LibraryContextType {
+    playlists: Playlist[];
+    isFavorited: (entry: TrackObject) => boolean;
+    onAddToFavorites: (entry: TrackObject) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
+    onHandlePlayNext: (entry: TrackObject) => void;
+    onHandleFetch: (id: number) => Promise<void>;
+    onIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+    onSetTrackQueue: (list: TrackObject[]) => void;
+    onSetCurrentTrackIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
 export interface Playlist {
     id: string;
     name: string;
