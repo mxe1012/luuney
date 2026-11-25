@@ -1,6 +1,6 @@
 import type { AudioPlayerProps } from "../../utils/types";
 
-import { useRef, useState, useEffect, type ChangeEvent, useEffectEvent } from "react";
+import { useRef, useState, useEffect, type ChangeEvent } from "react";
 
 import { useSnackbar } from "../../hooks/SnackbarContext";
 import { shuffleWithPlayingFirst } from "../../utils/helpers";
@@ -9,12 +9,12 @@ import Visualizer from "./audioplayer_components/Visualizer";
 import UpNextList from "./audioplayer_components/UpNextList";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useMediaSession } from "../../hooks/useMediaSession";
+import { usePlayerShortcuts } from "../../hooks/usePlayerShortcuts";
 
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
 const STREAM_ERROR_SKIP_DELAY = 1500; // long enough to read the error before the next track's "Loading track..." replaces it
 const SEEK_STEP = 10;
-const VOLUME_SHORTCUT_STEP = 0.05;
 
 export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurrentTrackIndex, playlists, isPlaying, isFavorited, isShuffle, shuffleTrackQueue, onSetIsShuffle, onSetShuffleTrackQueue, onSetTrackQueue, onHandleFetch, onHandleCreatePlaylist, onHandleAddToPlaylist, onAddToFavorites, onRemoveFromQueue, onIsPlaying}: AudioPlayerProps) {
     
@@ -48,37 +48,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const restoredTime = useRef(currentTime);
     // with no saved track there is nothing to restore, so the first track picked still autoplays
     const hasRestoredPosition = useRef(!track.url);
-
-    const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
-        const target = event.target as HTMLElement;
-        // letters typed into a text field, such as the search box, are not shortcuts; the sliders are range inputs, so they still allow them
-        const isTyping = target.isContentEditable || target.tagName === "TEXTAREA" || target.tagName === "SELECT"
-            || (target instanceof HTMLInputElement && target.type !== "range");
-
-        // browser shortcuts such as Ctrl+M are left alone
-        if (isTyping || event.ctrlKey || event.metaKey || event.altKey) return;
-
-        if (event.key === " ") {
-            // stops the page from scrolling, and a focused button from also being clicked, which would undo the toggle
-            event.preventDefault();
-            // holding the key down does not toggle repeatedly
-            if (!event.repeat) handleTogglePlay();
-        }
-
-        if (event.key.toLowerCase() === "m" && !event.repeat) handleToggleMute();
-
-        // "=" is the unshifted "+" key, so the volume can be raised without holding Shift
-        if (event.key === "+" || event.key === "=") handleShortcutVolumeChange(VOLUME_SHORTCUT_STEP);
-        if (event.key === "-") handleShortcutVolumeChange(-VOLUME_SHORTCUT_STEP);
-
-        // a focused slider already moves itself with the arrow keys, so seeking as well would do both
-        const isSlider = target instanceof HTMLInputElement && target.type === "range";
-        if (isSlider) return;
-
-        // seeking keeps going while an arrow key is held down
-        if (event.key === "ArrowLeft") handleRewind();
-        if (event.key === "ArrowRight") handleFastForward();
-    });
 
     const cycleRepeatMode = () => {
         const nextMode = REPEAT_MODES[(REPEAT_MODES.indexOf(repeatMode) + 1) % REPEAT_MODES.length];
@@ -387,12 +356,13 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => onKeyDown(event);
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
+    usePlayerShortcuts({
+        onTogglePlay: handleTogglePlay,
+        onToggleMute: handleToggleMute,
+        onChangeVolume: handleShortcutVolumeChange,
+        onRewind: handleRewind,
+        onFastForward: handleFastForward,
+    });
 
     return (
         <>
