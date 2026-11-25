@@ -130,7 +130,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     }
     return (
         <>
-            <div ref={renameWrapperRef} className="RowCenter PlaylistMenuWrapper" style={{gap: '6px'}}>
+            <div ref={renameWrapperRef} className="PlaylistMenuWrapper PlaylistTitleCard">
                 <h2 className="CreamColor CenterText NoMargin">{selectedPlaylistName}</h2>
                 <button className="ListActionBtn"
                     onClick={() => {setIsRenameMenuVisible(!isRenameMenuVisible); setRenameValue(selectedPlaylistName)}}
