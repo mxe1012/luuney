@@ -202,6 +202,32 @@ export default function Dashboard() {
         else setTrackQueue(filteredQueue);
     }
 
+    function handlePlayNext(entry: TrackObject) {
+        const activeQueue = isShuffle ? shuffleTrackQueue : trackQueue;
+        showSnackbar(`Playing next:\n${entry.title}\n${entry.handle}`);
+
+        // with no queue, e.g. after a reload, the playing track starts one so the entry has a place after it
+        if (activeQueue.length === 0) {
+            setTrackQueue([track, entry]);
+            setCurrentTrackIndex(0);
+            return;
+        }
+
+        // a track already in the queue moves up instead of appearing twice; the playing track stays where it is
+        const existingIndex = activeQueue.findIndex((element) => element.track_id === entry.track_id);
+        if (existingIndex === currentTrackIndex) return;
+
+        const queue = existingIndex === -1 ? activeQueue : activeQueue.filter((_, index) => index !== existingIndex);
+        const playingIndex = existingIndex !== -1 && existingIndex < currentTrackIndex ? currentTrackIndex - 1 : currentTrackIndex;
+
+        const updatedQueue = queue.toSpliced(playingIndex + 1, 0, entry);
+        setCurrentTrackIndex(playingIndex);
+
+        // while shuffled only the shuffle queue changes, since changing trackQueue would reshuffle it
+        if (isShuffle) setShuffleTrackQueue(updatedQueue);
+        else setTrackQueue(updatedQueue);
+    }
+
     function handleDeleteEntry(list: TrackObject[], entry: TrackObject) {
         showSnackbar("Removed track from list.");
         const source = list === recents ? "recents" : list === favorites ? "favorites" : null;
@@ -282,6 +308,7 @@ export default function Dashboard() {
                         onHandleRenamePlaylist={handleRenamePlaylist}
                         isFavorited={isListTrackInFavorites} 
                         onHandleAddToPlaylist={handleAddToPlaylist}
+                        onHandlePlayNext={handlePlayNext}
                         onHandleCreatePlaylist={handleCreatePlaylist}
                         onDeletePlaylist={handleDeletePlaylist} 
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}
@@ -319,6 +346,7 @@ export default function Dashboard() {
                 <div>
                     <SearchListPane 
                         playlists={playlists}
+                        onHandlePlayNext={handlePlayNext}
                         onHandleAddToPlaylist={handleAddToPlaylist}
                         onHandleCreatePlaylist={handleCreatePlaylist}
                         onHandleFetch={handleFetch} 
