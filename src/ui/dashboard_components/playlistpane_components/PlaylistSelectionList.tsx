@@ -43,16 +43,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     } = usePagination(selectedPlaylist, 10);
 
     useEffect(() => {
-        list.map((playlist) => {
-            if (playlist.tracks.length === 0) {
-                onSetPlaylist(onDeletePlaylist(playlist))
-                onIsSelectedPlaylist(false)
-                onSetIsPlaylistSelectionVisible(true)
-            }
-        })
-    }, [list, onDeletePlaylist, onSetPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible])
-
-    useEffect(() => {
         const handleMouseDown = (e: MouseEvent) => {
             if (!renameWrapperRef.current?.contains(e.target as Node)) {
                 setIsRenameMenuVisible(false)
