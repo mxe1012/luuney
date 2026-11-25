@@ -2,9 +2,9 @@
 import { render, cleanup, fireEvent, screen, act } from "@testing-library/react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import SearchListPane from "../../../ui/dashboard_components/SearchListPane";
-import SnackbarProvider from "../../../hooks/SnackbarContext";
-import type { SearchListPaneProps } from "../../../utils/types";
+import type { LibraryContextType } from "../../../utils/types";
 import { makeApiTrack, makeApiUser } from "../../fixtures";
+import { makeLibrary, withLibrary } from "../../library";
 import { fetchTrackByQuery, fetchTracksByUser, fetchUsers } from "../../../utils/data";
 
 vi.mock("../../../utils/data", () => ({
@@ -19,22 +19,10 @@ const mockFetchTracksByUser = vi.mocked(fetchTracksByUser);
 
 const DEBOUNCE_MS = 600;
 
-function setup(overrides: Partial<SearchListPaneProps> = {}) {
-    const props: SearchListPaneProps = {
-        onHandleFetch: vi.fn().mockResolvedValue(undefined),
-        isFavorited: () => false,
-        onAddToFavorites: vi.fn(),
-        onIsPlaying: vi.fn(),
-        onSetCurrentTrackIndex: vi.fn(),
-        onSetTrackQueue: vi.fn(),
-        playlists: [],
-        onHandleAddToPlaylist: vi.fn(),
-        onHandlePlayNext: vi.fn(),
-        onHandleCreatePlaylist: vi.fn(),
-        ...overrides,
-    };
-    const utils = render(<SearchListPane {...props} />, { wrapper: SnackbarProvider });
-    return { ...utils, props };
+function setup(overrides: Partial<LibraryContextType> = {}) {
+    const library = makeLibrary(overrides);
+    const utils = render(<SearchListPane />, { wrapper: withLibrary(library) });
+    return { ...utils, props: library };
 }
 
 function input() {
