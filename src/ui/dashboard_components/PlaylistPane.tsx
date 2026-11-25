@@ -9,7 +9,7 @@ import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionLi
 import PlaylistPaneController from "./playlistpane_components/PlaylistPaneController";
 import EmptyListMessage from "./playlistpane_components/EmptyListMessage";
 
-export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onHandleRenamePlaylist, onDeleteEntry, onClearQueue, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: PlaylistPaneProps) {
+export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onHandleRenamePlaylist, onDeleteEntry, onClearQueue, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleCreatePlaylist}: PlaylistPaneProps) {
 
     const [isRecentsVisible, setIsRecentsVisible] = useState(true);
     const [isFavoritesVisible, setIsFavoritesVisible] = useState(false);
@@ -85,6 +85,7 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
                     onHandleRenamePlaylist={onHandleRenamePlaylist}
                     isFavorited={isFavorited} 
                     onAddToFavorites={onAddToFavorites}
+                    onHandleCreatePlaylist={onHandleCreatePlaylist}
                     onDeletePlaylist={onDeletePlaylist} 
                     onDeletePlaylistEntry={onDeletePlaylistEntry}
                     onClearQueue={onClearQueue}
