@@ -286,3 +286,11 @@ export interface UpNextListProps {
     isUpNextVisible: boolean;
     onRemoveFromQueue: (entry: TrackObject) => void;
 }
+
+export interface PillTitleProps {
+    heading: string;
+    actionIcon: string;
+    actionLabel: string;
+    initialValue: string;
+    onSubmit: (name: string) => void;
+}
