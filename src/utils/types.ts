@@ -315,6 +315,23 @@ export interface PillTitleProps {
     onSubmit: (name: string) => void;
 }
 
+export interface MediaSessionHandlers {
+    onTogglePlay: () => void | Promise<void>;
+    onSkipNext: () => void;
+    onSkipPrev: () => void;
+    onRewind: () => void;
+    onFastForward: () => void;
+    onSeekTo: (time: number) => void;
+}
+
+export interface PlayerShortcutHandlers {
+    onTogglePlay: () => void | Promise<void>;
+    onToggleMute: () => void;
+    onChangeVolume: (delta: number) => void;
+    onRewind: () => void;
+    onFastForward: () => void;
+}
+
 export interface AddToPlaylistProps {
     track: TrackObject;
     playlists: Playlist[];

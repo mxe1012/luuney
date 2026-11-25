@@ -125,7 +125,7 @@ Every push to `main` and every pull request runs the [CI workflow](.github/workf
 src/
 ├── index.tsx              # entry point
 ├── App.tsx                # app shell: dashboard, snackbar provider, footer
-├── hooks/                 # useLocalStorage, usePagination, SnackbarContext
+├── hooks/                 # useLocalStorage, usePagination, useMediaSession, usePlayerShortcuts, SnackbarContext
 ├── utils/
 │   ├── data.ts            # Audius API requests
 │   ├── helpers.ts         # formatting and small utilities
