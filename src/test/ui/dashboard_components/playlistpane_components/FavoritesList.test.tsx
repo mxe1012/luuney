@@ -2,28 +2,21 @@
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import FavoritesList from "../../../../ui/dashboard_components/playlistpane_components/FavoritesList";
-import SnackbarProvider from "../../../../hooks/SnackbarContext";
-import type { MainListProps, TrackObject } from "../../../../utils/types";
+import type { LibraryContextType, MainListProps, TrackObject } from "../../../../utils/types";
 import { makeTracks } from "../../../fixtures";
+import { splitLibrary, withLibrary } from "../../../library";
 
-function setup(overrides: Partial<MainListProps> = {}) {
+function setup(overrides: Partial<MainListProps & LibraryContextType> = {}) {
+    const { library, props: own } = splitLibrary<MainListProps>(overrides);
     const props: MainListProps = {
         list: makeTracks(3),
         visible: true,
         onFavoritesList: vi.fn(),
         onDeleteEntry: vi.fn((_list, entry) => (prev: TrackObject[]) => prev.filter((t) => t.track_id !== entry.track_id)),
-        onHandleFetch: vi.fn().mockResolvedValue(undefined),
-        onIsPlaying: vi.fn(),
-        onSetTrackQueue: vi.fn(),
-        onSetCurrentTrackIndex: vi.fn(),
-        playlists: [],
-        onHandleAddToPlaylist: vi.fn(),
-        onHandlePlayNext: vi.fn(),
-        onHandleCreatePlaylist: vi.fn(),
-        ...overrides,
+        ...own,
     };
-    const utils = render(<FavoritesList {...props} />, { wrapper: SnackbarProvider });
-    return { ...utils, props };
+    const utils = render(<FavoritesList {...props} />, { wrapper: withLibrary(library) });
+    return { ...utils, props: { ...props, ...library } };
 }
 
 describe("FavoritesList", () => {
