@@ -38,6 +38,7 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
             onIsPlaying={vi.fn()}
             onHandleRenamePlaylist={(id, name) => setList((prev) => prev.map((p) => (p.id === id ? { ...p, name } : p)))}
             onHandleCreatePlaylist={vi.fn()}
+            onHandleAddToPlaylist={vi.fn()}
             {...rest}
         />
     );
@@ -270,12 +271,13 @@ describe("PlaylistSelectionList", () => {
             expect(screen.queryByText("Track 3")).toBeNull();
         });
 
-        it("tracks have favorite and delete buttons", () => {
+        it("tracks have a favorite button and a more actions menu with a remove option", () => {
             setup([makePlaylist("x", [makeTrack(9)], "Solo")]);
             open("Solo");
 
             expect(screen.getByLabelText("Add to Favorites")).toBeTruthy();
-            expect(screen.getByLabelText("Delete Entry")).toBeTruthy();
+            fireEvent.click(screen.getByLabelText("More actions for Track 9"));
+            expect(screen.getByText("Remove")).toBeTruthy();
         });
 
         it("playing a track queues that playlist's tracks", () => {
@@ -297,7 +299,8 @@ describe("PlaylistSelectionList", () => {
             setup(PLAYLISTS, { onDeletePlaylistEntry });
             open("Workout");
 
-            fireEvent.click(screen.getByLabelText("Delete Entry"));
+            fireEvent.click(screen.getByLabelText("More actions for Track 3"));
+            fireEvent.click(screen.getByText("Remove"));
 
             expect(onDeletePlaylistEntry).toHaveBeenCalledWith("b", PLAYLISTS[1].tracks[0]);
         });

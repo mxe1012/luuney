@@ -130,3 +130,17 @@
     bottom: auto;
     top: calc(100% + 10px);
 }
+
+@keyframes floatingMenuIn {
+    from { opacity: 0; transform: translateY(6px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* the list item menu is placed against the window next to its button, so it is not clipped by the scrolling list */
+.PlaylistMenu.Floating {
+    position: fixed;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    animation-name: floatingMenuIn;
+}

@@ -61,6 +61,9 @@ export interface SearchListPaneProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetTrackQueue?: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
+    playlists: Playlist[];
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
 }
 
 export interface PlaylistPaneProps {
@@ -82,6 +85,7 @@ export interface PlaylistPaneProps {
     onSetCurrentTrackIndex:  React.Dispatch<React.SetStateAction<number>>;
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetTrackQueue: (list: TrackObject[]) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
 }
 
 export interface PlaylistPaneControllerProps {
@@ -108,6 +112,9 @@ export interface MainListProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
     onSetTrackQueue?: (list: TrackObject[]) => void;
+    playlists: Playlist[];
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
 }
 
 export interface PlaylistSelectionProps {
@@ -130,6 +137,7 @@ export interface PlaylistSelectionProps {
     onIsPlaying:  React.Dispatch<React.SetStateAction<boolean>>;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
     onSetTrackQueue?: (list: TrackObject[]) => void;
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
 }
 
 export interface AudioPlayerButtonProps {
@@ -181,6 +189,9 @@ export interface ListButtonProps {
     onListDeleteEntry?: React.Dispatch<React.SetStateAction<TrackObject[]>>;
     onDeleteEntry?: (list: TrackObject[], entry: TrackObject) => (prev: TrackObject[]) => TrackObject[];
     onDeletePlaylistEntry?: (playlistId: string, entry: TrackObject) => void
+    playlists: Playlist[];
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
     onSetTrackQueue?: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
     hasDeleteButton: boolean;
@@ -221,6 +232,9 @@ export interface TrackSearchListProps {
     isFavorited: (entry: TrackObject) => boolean;
     onSetTrackQueue?: (list: TrackObject[]) => void;
     onSetCurrentTrackIndex?:  React.Dispatch<React.SetStateAction<number>>;
+    playlists: Playlist[];
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry?: TrackObject) => void;
 }
 
 export interface ArtistSearchListProps {
@@ -293,4 +307,11 @@ export interface PillTitleProps {
     actionLabel: string;
     initialValue: string;
     onSubmit: (name: string) => void;
+}
+
+export interface AddToPlaylistProps {
+    track: TrackObject;
+    playlists: Playlist[];
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
 }

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useRef } from "react";
-import { useSnackbar } from "../../../../hooks/SnackbarContext";
 import { formatTime, switchVolumeIcon } from "../../../../utils/helpers";
 import type { AudioPlayerUIProps } from "../../../../utils/types";
 import CoverImage from "../../../CoverImage";
 import AudioPlayerButton from "../AudioPlayerButton";
 import AudioPlayerModeButton from "../AudioPlayerModeButton";
+import AddToPlaylist from "../../../AddToPlaylist";
 
 export default function MainAudioPlayer({
     track,
@@ -37,14 +37,11 @@ export default function MainAudioPlayer({
     onHandleCreatePlaylist,
     onHandleUpNextVisibility}: AudioPlayerUIProps) {
 
-    const [playlistName, setPlaylistName] = useState("");
     const [isPlaylistMenuVisible, setIsPlaylistMenuVisible] = useState(false);
     
     const playlistWrapperRef = useRef<HTMLDivElement>(null);
     
     const isLongTitle = track.title.length >= 22;
-
-    const { showSnackbar } = useSnackbar();
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -76,37 +73,12 @@ export default function MainAudioPlayer({
                         <div
                         ref={playlistWrapperRef} 
                         className={isPlaylistMenuVisible ? "PlaylistMenu" : "PlaylistMenu hidden"}>
-                            <div className="MenuActions">
-                                <input className="PlaylistMenuInput" value={playlistName} placeholder="Playlist" 
-                                    onChange={(e) => {
-                                        setPlaylistName(e.target.value)
-                                    }} 
-                                    onClick={(e) => e.stopPropagation()} 
-                                />
-                                <button className="PlaylistMenuAddItemBtn" 
-                                    disabled={playlistName.trim().length === 0}
-                                    onClick={() => { 
-                                        onHandleCreatePlaylist(playlistName, track);
-                                        setPlaylistName("");
-                                        showSnackbar("Playlist created!");
-                                    }}>
-                                        +
-                                </button>
-                            </div>
-                            <div>
-                                <ul className="PlaylistMenuList">
-                                {playlists.map((element) => (
-                                    <li key={element.id}> 
-                                        <button className="PlaylistMenuItem" onClick={() => {
-                                            onHandleAddToPlaylist(element.id, track);
-                                            showSnackbar("Track added to " + element.name + "!")
-                                        }}>
-                                            <p className="NoMargin ListText">{element.name}</p>
-                                        </button>
-                                    </li>
-                                ))}
-                                </ul>
-                            </div>
+                            <AddToPlaylist
+                                track={track}
+                                playlists={playlists}
+                                onHandleAddToPlaylist={onHandleAddToPlaylist}
+                                onHandleCreatePlaylist={onHandleCreatePlaylist}
+                            />
                         </div>
                     </div>
                     <button className="ActionBtn" onClick={() => onAddToFavorites(track)} aria-label="favorite">

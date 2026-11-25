@@ -16,6 +16,9 @@ function setup(overrides: Partial<MainListProps> = {}) {
         onIsPlaying: vi.fn(),
         onSetTrackQueue: vi.fn(),
         onSetCurrentTrackIndex: vi.fn(),
+        playlists: [],
+        onHandleAddToPlaylist: vi.fn(),
+        onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };
     const utils = render(<FavoritesList {...props} />, { wrapper: SnackbarProvider });
@@ -40,10 +43,11 @@ describe("FavoritesList", () => {
         expect(container.querySelector("ul")?.className).toBe("PlaylistPaneList hidden");
     });
 
-    it("rows have a delete button but no favorite button", () => {
+    it("rows have a more actions menu with a remove option but no favorite button", () => {
         setup({ list: makeTracks(1) });
 
-        expect(screen.getByLabelText("Delete Entry")).toBeTruthy();
+        fireEvent.click(screen.getByLabelText("More actions for Track 1"));
+        expect(screen.getByText("Remove")).toBeTruthy();
         expect(screen.queryByLabelText(/Favorites/)).toBeNull();
     });
 
@@ -60,7 +64,8 @@ describe("FavoritesList", () => {
     it("deleting a row updates the favorites list", () => {
         const { props } = setup();
 
-        fireEvent.click(screen.getAllByLabelText("Delete Entry")[2]);
+        fireEvent.click(screen.getByLabelText("More actions for Track 3"));
+        fireEvent.click(screen.getByText("Remove"));
 
         const updater = vi.mocked(props.onFavoritesList!).mock.calls[0][0] as (prev: TrackObject[]) => TrackObject[];
         expect(updater(props.list)).toEqual([props.list[0], props.list[1]]);

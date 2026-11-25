@@ -2,6 +2,7 @@
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import TrackSearchList from "../../../../ui/dashboard_components/searchlistpane_components/TrackSearchList";
+import SnackbarProvider from "../../../../hooks/SnackbarContext";
 import type { TrackSearchListProps } from "../../../../utils/types";
 import { makeTracks } from "../../../fixtures";
 
@@ -14,9 +15,12 @@ function setup(overrides: Partial<TrackSearchListProps> = {}) {
         isFavorited: () => false,
         onSetTrackQueue: vi.fn(),
         onSetCurrentTrackIndex: vi.fn(),
+        playlists: [],
+        onHandleAddToPlaylist: vi.fn(),
+        onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };
-    const utils = render(<TrackSearchList {...props} />);
+    const utils = render(<TrackSearchList {...props} />, { wrapper: SnackbarProvider });
     return { ...utils, props };
 }
 
@@ -31,12 +35,15 @@ describe("TrackSearchList", () => {
         expect((container.querySelector("ul") as HTMLElement).style.display).toBe("none");
     });
 
-    it("renders each result with a favorite button and no delete button", () => {
+    it("renders each result with a favorite button and a more actions menu without a remove option", () => {
         setup();
 
         expect(screen.getByText("Track 1")).toBeTruthy();
         expect(screen.getAllByLabelText("Add to Favorites")).toHaveLength(3);
-        expect(screen.queryByLabelText("Delete Entry")).toBeNull();
+
+        fireEvent.click(screen.getByLabelText("More actions for Track 1"));
+        expect(screen.getByPlaceholderText("Playlist")).toBeTruthy();
+        expect(screen.queryByText("Remove")).toBeNull();
     });
 
     it("reflects favorite state per track", () => {

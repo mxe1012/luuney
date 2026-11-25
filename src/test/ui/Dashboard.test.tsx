@@ -295,7 +295,8 @@ describe("Dashboard", () => {
             fireEvent.click(screen.getByText("Favorites"));
 
             const row = screen.getByText("Track 1").closest(".ListRow") as HTMLElement;
-            fireEvent.click(within(row).getByLabelText("Delete Entry"));
+            fireEvent.click(within(row).getByLabelText(/^More actions for/));
+            fireEvent.click(screen.getByText("Remove"));
 
             expect(stored<TrackObject[]>("favorite_tracks").map((t) => t.track_id)).toEqual([2]);
             expect(snackbarText()).toBe("Removed track from list.");
@@ -389,10 +390,24 @@ describe("Dashboard", () => {
             fireEvent.click(playlistPane().getByText("Chill").closest("button")!);
 
             const row = playlistPane().getByText("Track 1").closest(".ListRow") as HTMLElement;
-            fireEvent.click(within(row).getByLabelText("Delete Entry"));
+            fireEvent.click(within(row).getByLabelText(/^More actions for/));
+            fireEvent.click(screen.getByText("Remove"));
 
             expect(stored<Playlist[]>("user_playlists")[0].tracks.map((t) => t.track_id)).toEqual([2]);
             expect(snackbarText()).toBe("Removed track from playlist.");
+        });
+
+        it("adds a track from Recents to a playlist through its more actions menu", () => {
+            localStorage.setItem("recent_tracks", JSON.stringify([makeTrack(1), makeTrack(2)]));
+            localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [], "Chill")]));
+            render_();
+
+            const row = playlistPane().getByText("Track 2").closest(".ListRow") as HTMLElement;
+            fireEvent.click(within(row).getByLabelText("More actions for Track 2"));
+            fireEvent.click(within(document.querySelector(".PlaylistMenu.Floating") as HTMLElement).getByText("Chill"));
+
+            expect(stored<Playlist[]>("user_playlists")[0].tracks.map((t) => t.track_id)).toEqual([2]);
+            expect(snackbarText()).toBe("Track added to Chill!");
         });
 
         it("keeps a playlist open, and saved, after its last track is removed", () => {
@@ -402,7 +417,8 @@ describe("Dashboard", () => {
             fireEvent.click(playlistPane().getByText("Chill").closest("button")!);
 
             const row = playlistPane().getByText("Track 1").closest(".ListRow") as HTMLElement;
-            fireEvent.click(within(row).getByLabelText("Delete Entry"));
+            fireEvent.click(within(row).getByLabelText(/^More actions for/));
+            fireEvent.click(screen.getByText("Remove"));
 
             const playlists = stored<Playlist[]>("user_playlists");
             expect(playlists).toHaveLength(1);
@@ -437,7 +453,8 @@ describe("Dashboard", () => {
         }
 
         function deleteFromPane(title: string) {
-            fireEvent.click(within(shownRow(title)).getByLabelText("Delete Entry"));
+            fireEvent.click(within(shownRow(title)).getByLabelText(/^More actions for/));
+            fireEvent.click(screen.getByText("Remove"));
         }
 
         async function endTrack() {

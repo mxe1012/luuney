@@ -27,6 +27,9 @@ function setup(overrides: Partial<SearchListPaneProps> = {}) {
         onIsPlaying: vi.fn(),
         onSetCurrentTrackIndex: vi.fn(),
         onSetTrackQueue: vi.fn(),
+        playlists: [],
+        onHandleAddToPlaylist: vi.fn(),
+        onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };
     const utils = render(<SearchListPane {...props} />, { wrapper: SnackbarProvider });
