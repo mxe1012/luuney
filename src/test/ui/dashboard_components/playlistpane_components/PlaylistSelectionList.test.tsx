@@ -39,6 +39,7 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
             onHandleRenamePlaylist={(id, name) => setList((prev) => prev.map((p) => (p.id === id ? { ...p, name } : p)))}
             onHandleCreatePlaylist={vi.fn()}
             onHandleAddToPlaylist={vi.fn()}
+            onHandlePlayNext={vi.fn()}
             {...rest}
         />
     );

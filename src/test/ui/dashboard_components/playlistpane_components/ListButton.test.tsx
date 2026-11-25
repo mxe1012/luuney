@@ -18,6 +18,7 @@ function setup(overrides: Partial<ListButtonProps> = {}) {
         hasFavoriteButton: false,
         playlists: [],
         onHandleAddToPlaylist: vi.fn(),
+        onHandlePlayNext: vi.fn(),
         onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };
@@ -193,6 +194,25 @@ describe("ListButton", () => {
             fireEvent.click(button);
             expect(actionMenu()?.style.top).toBe("");
             expect(actionMenu()?.style.bottom).toBe("50px");
+        });
+
+        it("plays the track next and closes the menu", () => {
+            const onHandlePlayNext = vi.fn();
+            const { props } = setup({ onHandlePlayNext });
+            openActionMenu();
+
+            fireEvent.click(screen.getByText("Play Next"));
+
+            expect(onHandlePlayNext).toHaveBeenCalledWith(props.track);
+            expect(actionMenu()).toBeNull();
+        });
+
+        it("lists Play Next before Remove", () => {
+            setup({ hasDeleteButton: true });
+            openActionMenu();
+
+            const items = Array.from(actionMenu()!.querySelectorAll(":scope > .PlaylistMenuItem")).map((item) => item.textContent?.trim());
+            expect(items).toEqual(["Play Next", "Remove"]);
         });
 
         it("removes the entry from a list via onDeleteEntry + onListDeleteEntry", () => {

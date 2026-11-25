@@ -18,6 +18,7 @@ function setup(overrides: Partial<MainListProps> = {}) {
         onSetCurrentTrackIndex: vi.fn(),
         playlists: [],
         onHandleAddToPlaylist: vi.fn(),
+        onHandlePlayNext: vi.fn(),
         onHandleCreatePlaylist: vi.fn(),
         ...overrides,
     };
