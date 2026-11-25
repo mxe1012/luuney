@@ -6,7 +6,6 @@ import { makeTrack } from "./fixtures";
 export function makeAudioPlayerUIProps(overrides: Partial<AudioPlayerUIProps> = {}): AudioPlayerUIProps {
     return {
         track: makeTrack(1),
-        playlists: [],
         duration: 200,
         currentTime: 65,
         isPlaying: false,
@@ -30,8 +29,6 @@ export function makeAudioPlayerUIProps(overrides: Partial<AudioPlayerUIProps> = 
         onHandleVolumeChange: vi.fn(),
         onCycleRepeatMode: vi.fn(),
         onAddToFavorites: vi.fn(),
-        onHandleAddToPlaylist: vi.fn(),
-        onHandleCreatePlaylist: vi.fn(),
         onHandleUpNextVisibility: vi.fn(),
         ...overrides,
     };
