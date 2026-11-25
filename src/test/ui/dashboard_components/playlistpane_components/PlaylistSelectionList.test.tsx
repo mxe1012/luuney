@@ -37,6 +37,7 @@ function Harness({ initial, spies, ...rest }: HarnessProps) {
             onHandleFetch={vi.fn().mockResolvedValue(undefined)}
             onIsPlaying={vi.fn()}
             onHandleRenamePlaylist={(id, name) => setList((prev) => prev.map((p) => (p.id === id ? { ...p, name } : p)))}
+            onHandleCreatePlaylist={vi.fn()}
             {...rest}
         />
     );
@@ -134,6 +135,28 @@ describe("PlaylistSelectionList", () => {
             expect(screen.queryByText("List 10")).toBeNull();
             fireEvent.click(screen.getByAltText("next").closest("button")!);
             expect(screen.getByText("List 10")).toBeTruthy();
+        });
+    });
+
+    describe("creating a playlist", () => {
+        it("the plus button opens an empty name menu", () => {
+            setup(PLAYLISTS);
+
+            fireEvent.click(screen.getByLabelText("create playlist"));
+
+            expect((document.querySelector(".PlaylistMenu.OpensDown") as HTMLElement).classList.contains("hidden")).toBe(false);
+            expect((screen.getByPlaceholderText("Playlist name") as HTMLInputElement).value).toBe("");
+        });
+
+        it("creates a playlist with the trimmed name", () => {
+            const onHandleCreatePlaylist = vi.fn();
+            setup(PLAYLISTS, { onHandleCreatePlaylist });
+            fireEvent.click(screen.getByLabelText("create playlist"));
+
+            fireEvent.change(screen.getByPlaceholderText("Playlist name"), { target: { value: "  Road Trip  " } });
+            fireEvent.click(document.querySelector(".PlaylistMenu.OpensDown button") as HTMLButtonElement);
+
+            expect(onHandleCreatePlaylist).toHaveBeenCalledWith("Road Trip");
         });
     });
 
