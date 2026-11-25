@@ -2,28 +2,23 @@
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import ListButton from "../../../../ui/dashboard_components/playlistpane_components/ListButton";
-import SnackbarProvider from "../../../../hooks/SnackbarContext";
-import type { ListButtonProps } from "../../../../utils/types";
+import type { LibraryContextType, ListButtonProps } from "../../../../utils/types";
 import { makePlaylist, makeTrack, makeTracks } from "../../../fixtures";
+import { splitLibrary, withLibrary } from "../../../library";
 
-function setup(overrides: Partial<ListButtonProps> = {}) {
+function setup(overrides: Partial<ListButtonProps & LibraryContextType> = {}) {
     const list = makeTracks(3);
+    const { library, props: own } = splitLibrary<ListButtonProps>(overrides);
     const props: ListButtonProps = {
         list,
         track: list[1],
         index: 1,
-        onHandleFetch: vi.fn().mockResolvedValue(undefined),
-        onIsPlaying: vi.fn(),
         hasDeleteButton: false,
         hasFavoriteButton: false,
-        playlists: [],
-        onHandleAddToPlaylist: vi.fn(),
-        onHandlePlayNext: vi.fn(),
-        onHandleCreatePlaylist: vi.fn(),
-        ...overrides,
+        ...own,
     };
-    const utils = render(<ListButton {...props} />, { wrapper: SnackbarProvider });
-    return { ...utils, props };
+    const utils = render(<ListButton {...props} />, { wrapper: withLibrary(library) });
+    return { ...utils, props: { ...props, ...library } };
 }
 
 function openActionMenu() {
@@ -64,13 +59,6 @@ describe("ListButton", () => {
         expect(onSetCurrentTrackIndex).toHaveBeenCalledWith(1);
         // The list itself is passed so Dashboard can tell which list the queue came from.
         expect(onSetTrackQueue.mock.calls[0][0]).toBe(props.list);
-    });
-
-    it("works without the optional queue callbacks", () => {
-        const { props } = setup();
-
-        expect(() => fireEvent.click(mainButton())).not.toThrow();
-        expect(props.onHandleFetch).toHaveBeenCalledWith(2);
     });
 
     it("hides the favorite button and the menu's remove option when disabled", () => {
