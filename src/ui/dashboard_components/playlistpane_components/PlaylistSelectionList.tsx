@@ -14,12 +14,14 @@ import { MiniIcon } from "../../Containers";
 
 const EMPTY_TRACKS: TrackObject[] = [];
 
-export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleRenamePlaylist}: PlaylistSelectionProps) {
+export default function PlaylistSelectionList({list, visible, isSelectedPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible, onDeletePlaylist, onDeletePlaylistEntry, onClearQueue, onAddToFavorites, isFavorited, onSetPlaylist, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleRenamePlaylist, onHandleCreatePlaylist}: PlaylistSelectionProps) {
 
     const [playlistId, setPlaylistId] = useState("");
 
+    const [isCreateMenuVisible, setIsCreateMenuVisible] = useState(false);
     const [isRenameMenuVisible, setIsRenameMenuVisible] = useState(false);
 
+    const [createValue, setCreateValue] = useState("");
     const [renameValue, setRenameValue] = useState("");
 
     const renameWrapperRef = useRef<HTMLDivElement>(null);
@@ -46,6 +48,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
         const handleMouseDown = (e: MouseEvent) => {
             if (!renameWrapperRef.current?.contains(e.target as Node)) {
                 setIsRenameMenuVisible(false)
+                setIsCreateMenuVisible(false);
             };
         };
 
@@ -56,6 +59,26 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     if(!isSelectedPlaylist) {
         return (
             <>
+                <div ref={renameWrapperRef} className="PlaylistMenuWrapper PlaylistTitleCard">
+                    <h2 className="CreamColor CenterText NoMargin">Create Playlist</h2>
+                    <button className="ListActionBtn"
+                        onClick={() => {setIsCreateMenuVisible(!isCreateMenuVisible); setCreateValue("")}}
+                        aria-label="create playlist">
+                        <MiniIcon src="/assets/audio_player_icons/plus.svg" size={16} />
+                    </button>
+                    <div className={isCreateMenuVisible ? "PlaylistMenu OpensDown" : "PlaylistMenu OpensDown hidden"}>
+                        <div className="MenuActions">
+                            <input className="PlaylistMenuInput" value={createValue} placeholder="Playlist name"
+                                onChange={(e) => setCreateValue(e.target.value)}
+                            />
+                            <button className="PlaylistMenuAddItemBtn" 
+                                disabled={createValue.trim().length === 0}
+                                onClick={() => onHandleCreatePlaylist(createValue.trim())}>
+                                    <MiniIcon src="/assets/check.svg" size={12} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <ul className={visible ? "PlaylistPaneFolderList" : "PlaylistPaneFolderList hidden"}>
                     {pageItems.map((playlist) => (
                         <li key={playlist.id} className="PlaylistPaneFolderList">
