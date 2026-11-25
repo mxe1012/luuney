@@ -281,6 +281,7 @@ export default function Dashboard() {
                         onSetPlaylist={setPlaylists}
                         onHandleRenamePlaylist={handleRenamePlaylist}
                         isFavorited={isListTrackInFavorites} 
+                        onHandleCreatePlaylist={handleCreatePlaylist}
                         onDeletePlaylist={handleDeletePlaylist} 
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}
                         onDeleteEntry={handleDeleteEntry} 
