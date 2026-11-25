@@ -294,3 +294,10 @@ export interface PillTitleProps {
     initialValue: string;
     onSubmit: (name: string) => void;
 }
+
+export interface AddToPlaylistProps {
+    track: TrackObject;
+    playlists: Playlist[];
+    onHandleAddToPlaylist: (playlistId: string, entry: TrackObject) => void;
+    onHandleCreatePlaylist: (name: string, entry: TrackObject) => void;
+}
