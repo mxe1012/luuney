@@ -705,6 +705,68 @@ describe("Dashboard", () => {
             });
         });
 
+        describe("playing a track next", () => {
+            function playNextFromPane(title: string) {
+                fireEvent.click(within(shownRow(title)).getByLabelText(/^More actions for/));
+                fireEvent.click(screen.getByText("Play Next"));
+            }
+
+            it("moves a queued track to right after the playing one, and plays it next", async () => {
+                await playFromFavorites("Track 1");
+
+                playNextFromPane("Track 4");
+
+                expect(upNextTitles()).toEqual(["Track 4", "Track 2", "Track 3"]);
+                expect(snackbarText()).toBe("Playing next:\nTrack 4\nartist4");
+
+                await endTrack();
+                expect(mockFetchTrackById).toHaveBeenLastCalledWith(4);
+            });
+
+            it("inserts a track from another list after the playing one", async () => {
+                localStorage.setItem("user_playlists", JSON.stringify([makePlaylist("p1", [makeTrack(9)], "Chill")]));
+                await playFromFavorites("Track 1");
+                fireEvent.click(screen.getByText("Playlists"));
+                fireEvent.click(playlistPane().getByText("Chill").closest("button")!);
+
+                playNextFromPane("Track 9");
+
+                expect(upNextTitles()).toEqual(["Track 9", "Track 2", "Track 3", "Track 4"]);
+            });
+
+            it("leaves the queue alone for the track that is already playing", async () => {
+                await playFromFavorites("Track 1");
+
+                playNextFromPane("Track 1");
+
+                expect(upNextTitles()).toEqual(["Track 2", "Track 3", "Track 4"]);
+            });
+
+            it("starts a queue from the playing track when there is none, e.g. after a reload", async () => {
+                localStorage.setItem("current_track", JSON.stringify(makeTrack(1)));
+                render_();
+                await flushInitialFetch();
+                fireEvent.click(screen.getByText("Favorites"));
+
+                playNextFromPane("Track 3");
+
+                expect(upNextTitles()).toEqual(["Track 3"]);
+
+                await endTrack();
+                expect(mockFetchTrackById).toHaveBeenLastCalledWith(3);
+            });
+
+            it("while shuffled, only changes the shuffled order", async () => {
+                await playFromFavorites("Track 1");
+                enableShuffle();
+                expect(upNextTitles()).toEqual(["Track 4", "Track 3", "Track 2"]);
+
+                playNextFromPane("Track 2");
+
+                expect(upNextTitles()).toEqual(["Track 2", "Track 4", "Track 3"]);
+            });
+        });
+
         describe("while shuffled", () => {
             it("keeps the shuffled order and the playing track", async () => {
                 await playFromFavorites("Track 1");
