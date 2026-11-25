@@ -8,6 +8,7 @@ import FavoritesList from "./playlistpane_components/FavoritesList";
 import PlaylistSelectionList from "./playlistpane_components/PlaylistSelectionList";
 import PlaylistPaneController from "./playlistpane_components/PlaylistPaneController";
 import EmptyListMessage from "./playlistpane_components/EmptyListMessage";
+import PillTitle from "./playlistpane_components/PillTitle";
 
 export default function PlaylistPane({recents, favorites, playlist, onFavoritesList, onRecentsList, isFavorited, onSetPlaylist, onHandleRenamePlaylist, onDeleteEntry, onClearQueue, onDeletePlaylist, onDeletePlaylistEntry, onAddToFavorites, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, onHandleCreatePlaylist, onHandleAddToPlaylist, onHandlePlayNext}: PlaylistPaneProps) {
 
@@ -79,10 +80,19 @@ export default function PlaylistPane({recents, favorites, playlist, onFavoritesL
             }
             {playlist.length === 0 && isPlaylistSelectionVisible 
                 ? 
+                <>
+                <PillTitle
+                    heading="Create Playlist"
+                    actionIcon="/assets/audio_player_icons/plus.svg"
+                    actionLabel="create playlist"
+                    initialValue=""
+                    onSubmit={(name) => onHandleCreatePlaylist(name)}
+                />
                 <EmptyListMessage 
                     listName="Playlists"
                     extraMessage="Click the + icon to create a new playlist or add to an exsiting playlist!"
-                /> 
+                />
+                </> 
                 : 
                 <PlaylistSelectionList 
                     list={playlist} 
