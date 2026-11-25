@@ -121,17 +121,14 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
             />
             {list.map((playlist) => (
                 <Fragment key={playlist.id}>
+                {playlist.tracks.length === 0 && <h2 className="CreamColor CenterText">{playlist.name} is empty!</h2>}
                 <ul  
                     style={{
                         display: playlist.id !== playlistId ? "none" : "",
                         visibility: playlist.id !== playlistId ? "hidden" : "visible"
                     }} 
                     className="PlaylistPaneFolderSelection">
-                    {playlist.tracks.length === 0
-                    ? 
-                        <h2 className="CreamColor CenterText">{playlist.name} is empty!</h2>
-                    : 
-                    playlist.id === playlistId && trackPageItems.map((element, index) => (
+                    {playlist.id === playlistId && trackPageItems.map((element, index) => (
                         <li key={element.track_id} className="PlaylistPaneFolderList">
                             <ListButton
                                 list={playlist.tracks}
