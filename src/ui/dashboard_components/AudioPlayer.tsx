@@ -8,6 +8,7 @@ import AudioPlayerUI from "./audioplayer_components/AudioPlayerUI";
 import Visualizer from "./audioplayer_components/Visualizer";
 import UpNextList from "./audioplayer_components/UpNextList";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useMediaSession } from "../../hooks/useMediaSession";
 
 const SCROLL_THRESHOLD = 555; 
 const SKIP_PREV_THRESHOLD = 3;
@@ -47,19 +48,6 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
     const restoredTime = useRef(currentTime);
     // with no saved track there is nothing to restore, so the first track picked still autoplays
     const hasRestoredPosition = useRef(!track.url);
-
-    const onMediaAction = useEffectEvent(({ action, seekTime }: MediaSessionActionDetails) => {
-        if (action === "play") handleTogglePlay();
-        if (action === "pause") handleTogglePlay();
-        if (action === "nexttrack") handleSkipNext();
-        if (action === "previoustrack") handleSkipPrev();
-        if (action === "seekbackward") handleRewind();
-        if (action === "seekforward") handleFastForward();
-        if (action === "seekto" && seekTime !== undefined && audioRef.current) {
-            audioRef.current.currentTime = seekTime;
-            setCurrentTime(seekTime);
-        }
-    });
 
     const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
         const target = event.target as HTMLElement;
@@ -186,6 +174,14 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
         audio.currentTime = newTime;
     
         setCurrentTime(newTime);
+    }
+
+    function handleSeekTo(time: number) {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        audio.currentTime = time;
+        setCurrentTime(time);
     }
 
     function handleFastForward() {
@@ -376,46 +372,19 @@ export default function AudioPlayer({track, tracks, currentTrackIndex, onSetCurr
 
     }, [])
 
-    useEffect(() => {
-        if (!track.url) return;
-
-        if ("mediaSession" in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: track.title,
-                artist: track.handle,
-                artwork: [{ src: track.artwork, sizes: "480x480" }],
-            });
-        }
-    }, [track])
-    
-    useEffect(() => {
-        if (!("mediaSession" in navigator)) return;
-
-        // setPositionState throws on an invalid duration or a position past the end,
-        // which can happen briefly before a new track's duration has loaded.
-        if (!Number.isFinite(duration) || duration <= 0) return;
-
-        navigator.mediaSession.setPositionState({
-            duration,
-            position: Math.min(Math.max(currentTime, 0), duration),
-        });
-    }, [currentTime, duration])
+    useMediaSession(track, currentTime, duration, {
+        onTogglePlay: handleTogglePlay,
+        onSkipNext: handleSkipNext,
+        onSkipPrev: handleSkipPrev,
+        onRewind: handleRewind,
+        onFastForward: handleFastForward,
+        onSeekTo: handleSeekTo,
+    });
 
     // the element always starts at full volume, so the saved volume is applied to it once it mounts
     useEffect(() => {
         if (audioRef.current) audioRef.current.volume = volume;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (!("mediaSession" in navigator)) return;
-
-        const actions: MediaSessionAction[] = [
-            "play", "pause", "nexttrack", "previoustrack", "seekbackward", "seekforward", "seekto"
-        ];
-        actions.forEach((action) => navigator.mediaSession.setActionHandler(action, (details) => onMediaAction(details)));
-
-        return () => actions.forEach((action) => navigator.mediaSession.setActionHandler(action, null));
     }, []);
 
     useEffect(() => {
