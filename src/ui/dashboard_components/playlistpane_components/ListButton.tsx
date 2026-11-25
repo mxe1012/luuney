@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 
 import type { ListButtonProps } from "../../../utils/types";
+import { useLibrary } from "../../../hooks/LibraryContext";
 
 import { formatTime } from "../../../utils/helpers";
 
@@ -12,7 +13,9 @@ import AddToPlaylist from "../../AddToPlaylist";
 const MENU_SPACE = 280;
 const MENU_GAP = 10;
 
-export default function ListButton({list, track, playlist, index, playlists, onHandleFetch, onIsPlaying, onAddToFavorites, isFavorited, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, onHandleAddToPlaylist, onHandleCreatePlaylist, hasDeleteButton, hasFavoriteButton, onSetTrackQueue, onSetCurrentTrackIndex, onHandlePlayNext}: ListButtonProps) {
+export default function ListButton({list, track, playlist, index, onListDeleteEntry, onDeleteEntry, onDeletePlaylistEntry, hasDeleteButton, hasFavoriteButton}: ListButtonProps) {
+
+    const { onHandleFetch, onIsPlaying, onAddToFavorites, isFavorited, onSetTrackQueue, onSetCurrentTrackIndex, onHandlePlayNext } = useLibrary();
 
     const [isActionMenuVisible, setIsActionMenuVisible] = useState(false);
     const [menuPosition, setMenuPosition] = useState<CSSProperties>({});
@@ -83,8 +86,8 @@ export default function ListButton({list, track, playlist, index, playlists, onH
                     <button className="PlaylistButton" onClick={() => {
                         onHandleFetch(track.track_id);
                         onIsPlaying(false);
-                        onSetCurrentTrackIndex?.(index);
-                        onSetTrackQueue?.(list)
+                        onSetCurrentTrackIndex(index);
+                        onSetTrackQueue(list)
                         }}>
                             <div className="ListItem">
                                 <div className="ListCover">
@@ -102,12 +105,12 @@ export default function ListButton({list, track, playlist, index, playlists, onH
                 </div>
                     <div className="ListActions">
                         {hasFavoriteButton && 
-                            <button className="ListActionBtn" aria-label={isFavorited?.(track) ? "Remove from Favorites" : "Add to Favorites"} 
+                            <button className="ListActionBtn" aria-label={isFavorited(track) ? "Remove from Favorites" : "Add to Favorites"} 
                                 onClick={() => {
-                                    onAddToFavorites?.(track)
+                                    onAddToFavorites(track)
                                 }}
                                 >
-                                <img src={isFavorited?.(track) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="Favorite"/>
+                                <img src={isFavorited(track) ? "/assets/favorite_icons/favorited.svg" : "/assets/favorite_icons/not_favorited.svg"} alt="Favorite"/>
                             </button>
                         }
                         <button ref={actionButtonRef} className="ListActionBtn" 
@@ -123,9 +126,6 @@ export default function ListButton({list, track, playlist, index, playlists, onH
                 <div ref={actionMenuRef} className="PlaylistMenu Floating" style={menuPosition}>
                     <AddToPlaylist
                         track={track}
-                        playlists={playlists}
-                        onHandleAddToPlaylist={onHandleAddToPlaylist}
-                        onHandleCreatePlaylist={onHandleCreatePlaylist}
                     />
                     <button className="PlaylistMenuItem" onClick={handlePlayNext}>
                         Play Next
