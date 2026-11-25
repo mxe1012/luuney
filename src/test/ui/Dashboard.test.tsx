@@ -423,7 +423,8 @@ describe("Dashboard", () => {
             const playlists = stored<Playlist[]>("user_playlists");
             expect(playlists).toHaveLength(1);
             expect(playlists[0].tracks).toEqual([]);
-            expect(playlistPane().getByRole("heading", { level: 2 }).textContent).toBe("Chill");
+            expect(playlistPane().getByRole("heading", { level: 2, name: "Chill" })).toBeTruthy();
+            expect(playlistPane().getByText("Chill is empty!")).toBeTruthy();
         });
     });
 
