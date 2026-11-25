@@ -142,7 +142,7 @@ export default function Dashboard() {
         }
     }
 
-    function handleCreatePlaylist(name: string, entry: TrackObject) {
+    function handleCreatePlaylist(name: string, entry?: TrackObject) {
         const trimmed = name.trim();
 
         setPlaylists(prev => [
@@ -150,7 +150,7 @@ export default function Dashboard() {
             {
                 id: crypto.randomUUID(),
                 name: trimmed,
-                tracks: [entry],
+                tracks: entry ? [entry] : [],
             },
         ]);
     }
