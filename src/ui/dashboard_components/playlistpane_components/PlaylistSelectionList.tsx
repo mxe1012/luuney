@@ -43,16 +43,6 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     } = usePagination(selectedPlaylist, 10);
 
     useEffect(() => {
-        list.map((playlist) => {
-            if (playlist.tracks.length === 0) {
-                onSetPlaylist(onDeletePlaylist(playlist))
-                onIsSelectedPlaylist(false)
-                onSetIsPlaylistSelectionVisible(true)
-            }
-        })
-    }, [list, onDeletePlaylist, onSetPlaylist, onIsSelectedPlaylist, onSetIsPlaylistSelectionVisible])
-
-    useEffect(() => {
         const handleMouseDown = (e: MouseEvent) => {
             if (!renameWrapperRef.current?.contains(e.target as Node)) {
                 setIsRenameMenuVisible(false)
@@ -130,7 +120,7 @@ export default function PlaylistSelectionList({list, visible, isSelectedPlaylist
     }
     return (
         <>
-            <div ref={renameWrapperRef} className="RowCenter PlaylistMenuWrapper" style={{gap: '6px'}}>
+            <div ref={renameWrapperRef} className="PlaylistMenuWrapper PlaylistTitleCard">
                 <h2 className="CreamColor CenterText NoMargin">{selectedPlaylistName}</h2>
                 <button className="ListActionBtn"
                     onClick={() => {setIsRenameMenuVisible(!isRenameMenuVisible); setRenameValue(selectedPlaylistName)}}

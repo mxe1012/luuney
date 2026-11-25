@@ -7,7 +7,7 @@ export default function SearchController({searchType, searchTypes, searchTrack, 
             <div className="SearchController">
                 <input 
                     className="SearchInput"
-                    size={14}
+                    size={12}
                     value={searchType === "tracks" ? searchTrack : searchArtist} 
                     placeholder={searchType === "tracks" ? "Search Tracks..." : "Search Artists..."}
                     onChange={searchType === "tracks" ? onHandleSearchTracks : onHandleSearchArtists}>
