@@ -1,11 +1,14 @@
 import usePagination from "../../hooks/usePagination";
 import { formatTime } from "../../utils/helpers";
 import type { ExtraListPaneProps } from "../../utils/types";
+import { useLibrary } from "../../hooks/LibraryContext";
 import CoverImage from "../CoverImage";
 import PaginationController from "../PaginationController";
 import SkeletonExtraListPane from "../skeletons/SkeletonExtraListPane";
 
-export default function ExtraListPane({list, heading, isLoaded, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: ExtraListPaneProps) {
+export default function ExtraListPane({list, heading, isLoaded}: ExtraListPaneProps) {
+
+    const { onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex } = useLibrary();
 
     const { pageItems, page, pageCount, hasPrev, hasNext, start, next, prev } = usePagination(list, 10);
 
