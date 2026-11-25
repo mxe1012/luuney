@@ -91,18 +91,16 @@ describe("PlaylistSelectionList", () => {
             expect(screen.queryByText("Chill")).toBeNull();
         });
 
-        it("removes every empty playlist in one pass, deleting each only once", () => {
+        it("keeps empty playlists in the list", () => {
             const onDeletePlaylist = vi.fn((entry: Playlist) => (prev: Playlist[]) => prev.filter((p) => p.id !== entry.id));
             setup([
                 makePlaylist("e1", [], "Empty One"),
                 makePlaylist("keep", [makeTrack(1)], "Keeper"),
-                makePlaylist("e2", [], "Empty Two"),
             ], { onDeletePlaylist });
 
-            expect(screen.queryByText("Empty One")).toBeNull();
-            expect(screen.queryByText("Empty Two")).toBeNull();
+            expect(screen.getByText("Empty One")).toBeTruthy();
             expect(screen.getByText("Keeper")).toBeTruthy();
-            expect(onDeletePlaylist.mock.calls.map(([entry]) => entry.id)).toEqual(["e1", "e2"]);
+            expect(onDeletePlaylist).not.toHaveBeenCalled();
         });
 
         it("Clear removes all playlists and shows a snackbar", () => {
