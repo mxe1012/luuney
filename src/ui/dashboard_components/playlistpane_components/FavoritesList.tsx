@@ -6,7 +6,7 @@ import PaginationController from "../../PaginationController";
 
 import ListButton from "./ListButton";
 
-export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onClearQueue, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex}: MainListProps) {
+export default function FavoritesList({list, visible, onFavoritesList, onDeleteEntry, onClearQueue, onHandleFetch, onIsPlaying, onSetTrackQueue, onSetCurrentTrackIndex, playlists, onHandleAddToPlaylist, onHandleCreatePlaylist}: MainListProps) {
     
     const { pageItems, page, pageCount, hasPrev, hasNext, next, prev, start} = usePagination(list, 10);
 
@@ -20,6 +20,9 @@ export default function FavoritesList({list, visible, onFavoritesList, onDeleteE
                         <ListButton 
                             list={list}
                             track={element}
+                            playlists={playlists}
+                            onHandleAddToPlaylist={onHandleAddToPlaylist}
+                            onHandleCreatePlaylist={onHandleCreatePlaylist}
                             index={start + index}
                             onHandleFetch={onHandleFetch}
                             onListDeleteEntry={onFavoritesList}

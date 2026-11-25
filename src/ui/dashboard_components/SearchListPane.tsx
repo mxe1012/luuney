@@ -13,7 +13,7 @@ import TrackSearchList from "./searchlistpane_components/TrackSearchList";
 import ArtistSearchList from "./searchlistpane_components/ArtistSearchList";
 import SearchController from "./searchlistpane_components/SearchController";
 
-export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavorites, onIsPlaying, onSetCurrentTrackIndex, onSetTrackQueue}: SearchListPaneProps) {
+export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavorites, onIsPlaying, onSetCurrentTrackIndex, onSetTrackQueue, playlists, onHandleAddToPlaylist, onHandleCreatePlaylist}: SearchListPaneProps) {
 
     const searchTypes: string[] = ["tracks", "artists"]
     const [searchType, setSearchType] = useState(searchTypes[0]);
@@ -190,6 +190,9 @@ export default function SearchListPane({onHandleFetch, isFavorited, onAddToFavor
                 <SkeletonSearchListPane isLoaded={isLoaded}>
                     <TrackSearchList 
                         list={trackList}
+                        playlists={playlists}
+                        onHandleAddToPlaylist={onHandleAddToPlaylist}
+                        onHandleCreatePlaylist={onHandleCreatePlaylist}
                         onHandleFetch={onHandleFetch}
                         onAddToFavorites={onAddToFavorites}
                         onIsPlaying={onIsPlaying}

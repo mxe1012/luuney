@@ -281,6 +281,7 @@ export default function Dashboard() {
                         onSetPlaylist={setPlaylists}
                         onHandleRenamePlaylist={handleRenamePlaylist}
                         isFavorited={isListTrackInFavorites} 
+                        onHandleAddToPlaylist={handleAddToPlaylist}
                         onHandleCreatePlaylist={handleCreatePlaylist}
                         onDeletePlaylist={handleDeletePlaylist} 
                         onDeletePlaylistEntry={handleDeletePlaylistEntry}
@@ -317,6 +318,9 @@ export default function Dashboard() {
                 </div>
                 <div>
                     <SearchListPane 
+                        playlists={playlists}
+                        onHandleAddToPlaylist={handleAddToPlaylist}
+                        onHandleCreatePlaylist={handleCreatePlaylist}
                         onHandleFetch={handleFetch} 
                         isFavorited={isListTrackInFavorites} 
                         onAddToFavorites={handleAddToFavorites} 
